@@ -1,0 +1,57 @@
+{
+  "event": "login.submit",
+  "messages": [
+    {
+      "version": "v0.9",
+      "updateComponents": {
+        "surfaceId": "login",
+        "components": [
+          {
+            "id": "root",
+            "component": "Container",
+            "maxW": "container.sm",
+            "py": "10",
+            "children": ["done"]
+          },
+          {
+            "id": "done",
+            "component": "Flex",
+            "direction": "column",
+            "align": "center",
+            "gap": "4",
+            "bg": "gray.700",
+            "p": "8",
+            "borderRadius": "xl",
+            "textAlign": "center",
+            "children": ["done-icon", "done-title", "done-text"]
+          },
+          {
+            "id": "done-icon",
+            "component": "Icon",
+            "name": "checkCircle",
+            "color": "green.300",
+            "boxSize": "12"
+          },
+          {
+            "id": "done-title",
+            "component": "Heading",
+            "text": "С возвращением!",
+            "as": "h1",
+            "size": "lg"
+          },
+          {
+            "id": "done-text",
+            "component": "Text",
+            "text": {
+              "call": "formatString",
+              "args": {
+                "value": "Вы вошли как ${/form/email}"
+              }
+            },
+            "color": "gray.400"
+          }
+        ]
+      }
+    }
+  ]
+}

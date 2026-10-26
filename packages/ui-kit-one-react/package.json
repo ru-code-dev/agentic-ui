@@ -1,0 +1,61 @@
+{
+  "name": "@agentic-ui/ui-kit-one-react",
+  "version": "0.1.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "author": "Shterenberg Zakhar Gennadievich <shternberg.inbox@gmail.com>",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "development": "./src/index.ts",
+      "default": "./dist/index.mjs"
+    }
+  },
+  "scripts": {
+    "typecheck": "tsgo -p tsconfig.json && tsgo -p tsconfig.test.json",
+    "test": "vp test run",
+    "build": "tsdown",
+    "docs": "tsdown && node scripts/build-mapping.ts"
+  },
+  "dependencies": {
+    "@a2ui/react": "0.14.0",
+    "@a2ui/web_core": "0.14.0",
+    "@agentic-ui/ui-kit-one-catalog": "workspace:*",
+    "zod": "3.25.76"
+  },
+  "devDependencies": {
+    "@chakra-ui/descendant": "2.1.4",
+    "@chakra-ui/icons": "1.1.7",
+    "@chakra-ui/react": "1.8.9",
+    "@emotion/react": "11.14.0",
+    "@emotion/styled": "11.14.1",
+    "@testing-library/dom": "10.4.2",
+    "@testing-library/react": "16.3.3",
+    "@testing-library/user-event": "14.6.8",
+    "@types/jsdom": "21.1.7",
+    "@types/node": "24.12.4",
+    "@types/react": "18.3.31",
+    "@types/react-dom": "18.3.7",
+    "framer-motion": "6.5.1",
+    "jsdom": "26.1.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "tsdown": "0.20.3",
+    "vite-plus": "0.2.2"
+  },
+  "peerDependencies": {
+    "@chakra-ui/icons": "1.1.7",
+    "@chakra-ui/react": "1.8.9",
+    "@emotion/react": "^11.0.0",
+    "@emotion/styled": "^11.0.0",
+    "framer-motion": "6.5.1",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0"
+  }
+}

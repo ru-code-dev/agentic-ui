@@ -1,0 +1,75 @@
+diff --git a/dist/chakra-ui-react.cjs.dev.js b/dist/chakra-ui-react.cjs.dev.js
+index 2a57d8a3bb49c967bb2468051726cb8902e625f1..ce13e3e9a221f8a3686ab644bc7af84db32e44ca 100644
+--- a/dist/chakra-ui-react.cjs.dev.js
++++ b/dist/chakra-ui-react.cjs.dev.js
+@@ -1,5 +1,7 @@
+ 'use strict';
+ 
++var ReactForPatch = require('react');
++
+ Object.defineProperty(exports, '__esModule', { value: true });
+ 
+ var provider = require('@chakra-ui/provider');
+@@ -48,9 +50,10 @@ var tooltip = require('@chakra-ui/tooltip');
+ var transition = require('@chakra-ui/transition');
+ var visuallyHidden = require('@chakra-ui/visually-hidden');
+ 
+-var ChakraProvider = provider.ChakraProvider;
+-ChakraProvider.defaultProps = {
+-  theme: theme.theme
++/* agentic-ui patch: React 18.3 deprecates defaultProps on function components; the default
++   theme is applied here when `theme` is undefined (React's defaultProps rule). */
++var ChakraProvider = function ChakraProvider(props) {
++  return ReactForPatch.createElement(provider.ChakraProvider, props.theme === undefined ? Object.assign({}, props, { theme: theme.theme }) : props);
+ };
+ 
+ /**
+diff --git a/dist/chakra-ui-react.cjs.prod.js b/dist/chakra-ui-react.cjs.prod.js
+index 2a57d8a3bb49c967bb2468051726cb8902e625f1..ce13e3e9a221f8a3686ab644bc7af84db32e44ca 100644
+--- a/dist/chakra-ui-react.cjs.prod.js
++++ b/dist/chakra-ui-react.cjs.prod.js
+@@ -1,5 +1,7 @@
+ 'use strict';
+ 
++var ReactForPatch = require('react');
++
+ Object.defineProperty(exports, '__esModule', { value: true });
+ 
+ var provider = require('@chakra-ui/provider');
+@@ -48,9 +50,10 @@ var tooltip = require('@chakra-ui/tooltip');
+ var transition = require('@chakra-ui/transition');
+ var visuallyHidden = require('@chakra-ui/visually-hidden');
+ 
+-var ChakraProvider = provider.ChakraProvider;
+-ChakraProvider.defaultProps = {
+-  theme: theme.theme
++/* agentic-ui patch: React 18.3 deprecates defaultProps on function components; the default
++   theme is applied here when `theme` is undefined (React's defaultProps rule). */
++var ChakraProvider = function ChakraProvider(props) {
++  return ReactForPatch.createElement(provider.ChakraProvider, props.theme === undefined ? Object.assign({}, props, { theme: theme.theme }) : props);
+ };
+ 
+ /**
+diff --git a/dist/chakra-ui-react.esm.js b/dist/chakra-ui-react.esm.js
+index 8791127afd955e3a40dc995b12d924ed4953a6fe..f06f8b8186c2781fc66b4a2c576aa2a640504d4a 100644
+--- a/dist/chakra-ui-react.esm.js
++++ b/dist/chakra-ui-react.esm.js
+@@ -1,3 +1,4 @@
++import * as ReactForPatch from 'react';
+ import { ChakraProvider as ChakraProvider$1 } from '@chakra-ui/provider';
+ import { theme as theme$1, isChakraTheme } from '@chakra-ui/theme';
+ export * from '@chakra-ui/theme';
+@@ -45,9 +46,10 @@ export * from '@chakra-ui/tooltip';
+ export * from '@chakra-ui/transition';
+ export * from '@chakra-ui/visually-hidden';
+ 
+-var ChakraProvider = ChakraProvider$1;
+-ChakraProvider.defaultProps = {
+-  theme: theme$1
++/* agentic-ui patch: React 18.3 deprecates defaultProps on function components; the default
++   theme is applied here when `theme` is undefined (React's defaultProps rule). */
++var ChakraProvider = function ChakraProvider(props) {
++  return ReactForPatch.createElement(ChakraProvider$1, props.theme === undefined ? Object.assign({}, props, { theme: theme$1 }) : props);
+ };
+ 
+ /**

@@ -1,0 +1,41 @@
+{
+  "name": "Switch",
+  "description": "Переключатель настройки.",
+  "messages": [
+    {
+      "version": "v0.9",
+      "createSurface": {
+        "surfaceId": "switch",
+        "catalogId": "urn:agentic-ui:catalog:ui-kit-one:v1",
+        "sendDataModel": true
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateDataModel": {
+        "surfaceId": "switch",
+        "path": "/settings",
+        "value": {
+          "pushPayments": true
+        }
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateComponents": {
+        "surfaceId": "switch",
+        "components": [
+          {
+            "id": "root",
+            "component": "Switch",
+            "label": "Уведомления о платежах",
+            "value": {
+              "path": "/settings/pushPayments"
+            },
+            "colorScheme": "green"
+          }
+        ]
+      }
+    }
+  ]
+}

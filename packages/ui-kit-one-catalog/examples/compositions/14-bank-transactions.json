@@ -1,0 +1,178 @@
+{
+  "name": "Операции по карте",
+  "description": "История операций: дата, получатель, сумма и статус.",
+  "messages": [
+    {
+      "version": "v0.9",
+      "createSurface": {
+        "surfaceId": "transactions",
+        "catalogId": "urn:agentic-ui:catalog:ui-kit-one:v1"
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateDataModel": {
+        "surfaceId": "transactions",
+        "path": "/transactions",
+        "value": [
+          {
+            "id": "t1",
+            "date": "2026-10-24",
+            "merchant": "Пятёрочка",
+            "amount": -1840.5,
+            "status": "Исполнена"
+          },
+          {
+            "id": "t2",
+            "date": "2026-10-24",
+            "merchant": "Яндекс Такси",
+            "amount": -612,
+            "status": "В обработке"
+          },
+          {
+            "id": "t3",
+            "date": "2026-10-23",
+            "merchant": "Зарплата ООО «Вектор»",
+            "amount": 95000,
+            "status": "Исполнена"
+          },
+          {
+            "id": "t4",
+            "date": "2026-10-22",
+            "merchant": "Ozon",
+            "amount": -4399,
+            "status": "Отменена"
+          }
+        ]
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateComponents": {
+        "surfaceId": "transactions",
+        "components": [
+          {
+            "id": "root",
+            "component": "Container",
+            "maxW": "container.lg",
+            "py": "8",
+            "children": ["stack"]
+          },
+          {
+            "id": "stack",
+            "component": "Flex",
+            "direction": "column",
+            "gap": "4",
+            "children": ["head", "table", "statuses"]
+          },
+          {
+            "id": "head",
+            "component": "Flex",
+            "justify": "space-between",
+            "align": "center",
+            "children": ["title", "export"]
+          },
+          {
+            "id": "title",
+            "component": "Heading",
+            "text": "Операции по карте •• 4821",
+            "as": "h1",
+            "size": "lg"
+          },
+          {
+            "id": "export",
+            "component": "Button",
+            "label": "Выписка",
+            "variant": "outline",
+            "leftIcon": "download",
+            "action": {
+              "event": {
+                "name": "transaction.open",
+                "context": {
+                  "scope": "statement"
+                }
+              }
+            }
+          },
+          {
+            "id": "table",
+            "component": "Table",
+            "variant": "striped",
+            "rows": {
+              "path": "/transactions"
+            },
+            "columns": [
+              {
+                "header": "Дата",
+                "key": "date",
+                "format": "date"
+              },
+              {
+                "header": "Получатель",
+                "key": "merchant"
+              },
+              {
+                "header": "Статус",
+                "key": "status"
+              },
+              {
+                "header": "Сумма",
+                "key": "amount",
+                "format": "currency",
+                "align": "right"
+              }
+            ]
+          },
+          {
+            "id": "statuses",
+            "component": "List",
+            "spacing": "2",
+            "children": {
+              "componentId": "status-row",
+              "path": "/transactions"
+            }
+          },
+          {
+            "id": "status-row",
+            "component": "Flex",
+            "justify": "space-between",
+            "align": "center",
+            "children": ["status-merchant", "status-tag", "status-open"]
+          },
+          {
+            "id": "status-merchant",
+            "component": "Text",
+            "text": {
+              "path": "merchant"
+            }
+          },
+          {
+            "id": "status-tag",
+            "component": "Tag",
+            "label": {
+              "path": "status"
+            },
+            "size": "sm"
+          },
+          {
+            "id": "status-open",
+            "component": "Button",
+            "label": "Детали",
+            "size": "sm",
+            "variant": "ghost",
+            "action": {
+              "event": {
+                "name": "transaction.open",
+                "context": {
+                  "transactionId": {
+                    "path": "id"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

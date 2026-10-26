@@ -1,0 +1,56 @@
+{
+  "name": "@agentic-ui/ui-kit-one-catalog",
+  "version": "0.1.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "author": "Shterenberg Zakhar Gennadievich <shternberg.inbox@gmail.com>",
+  "files": [
+    "dist",
+    "src",
+    "examples"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "development": "./src/index.ts",
+      "default": "./dist/index.mjs"
+    },
+    "./prompt": {
+      "types": "./src/prompt/index.ts",
+      "development": "./src/prompt/index.ts",
+      "default": "./dist/prompt/index.mjs"
+    },
+    "./catalog.json": "./dist/catalog.json",
+    "./system-prompt.md": "./dist/system-prompt.md",
+    "./examples/*": "./examples/*",
+    "./src/*": "./src/*",
+    "./docs": {
+      "types": "./src/docs/index.ts",
+      "development": "./src/docs/index.ts",
+      "default": "./dist/docs/index.mjs"
+    }
+  },
+  "scripts": {
+    "typecheck": "tsgo -p tsconfig.json && tsgo -p tsconfig.node.json",
+    "test": "vp test run",
+    "build": "tsdown && node scripts/build-json.ts && node scripts/build-prompt.ts && node scripts/build-docs.ts",
+    "catalog:json": "node scripts/build-json.ts",
+    "catalog:prompt": "node scripts/build-prompt.ts",
+    "validate": "node scripts/validate.ts",
+    "docs": "node scripts/build-docs.ts"
+  },
+  "dependencies": {
+    "@a2ui/agent": "0.0.2",
+    "@a2ui/web_core": "0.14.0",
+    "zod": "3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "24.12.4",
+    "ajv": "8.20.0",
+    "ajv-formats": "3.0.1",
+    "tsdown": "0.20.3",
+    "vite-plus": "0.2.2"
+  }
+}

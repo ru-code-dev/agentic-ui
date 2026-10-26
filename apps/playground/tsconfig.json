@@ -1,0 +1,18 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "module": "Preserve",
+    "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "types": ["node", "vite/client"],
+    "paths": {
+      "~/*": ["./src/*"],
+      // See packages/ui-kit-one-react/tsconfig.json: Chakra v1 declarations import this raw `.ts` file.
+      "@chakra-ui/descendant/src/*": [
+        "../../packages/ui-kit-one-react/node_modules/@chakra-ui/descendant/dist/declarations/src/*"
+      ]
+    }
+  },
+  "include": ["src", "e2e", "vite.config.ts", "playwright.config.ts"]
+}

@@ -1,0 +1,62 @@
+{
+  "event": "loan.apply",
+  "messages": [
+    {
+      "version": "v0.9",
+      "updateDataModel": {
+        "surfaceId": "loan",
+        "path": "/status",
+        "value": "Заявка № 2026-10-4471 принята. Деньги поступят на расчётный счёт после подписания договора."
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateComponents": {
+        "surfaceId": "loan",
+        "components": [
+          {
+            "id": "root",
+            "component": "Container",
+            "maxW": "container.md",
+            "py": "8",
+            "children": ["done"]
+          },
+          {
+            "id": "done",
+            "component": "Flex",
+            "direction": "column",
+            "align": "center",
+            "gap": "4",
+            "bg": "gray.700",
+            "p": "8",
+            "borderRadius": "xl",
+            "textAlign": "center",
+            "children": ["done-icon", "done-title", "done-text"]
+          },
+          {
+            "id": "done-icon",
+            "component": "Icon",
+            "name": "checkCircle",
+            "color": "green.300",
+            "boxSize": "12"
+          },
+          {
+            "id": "done-title",
+            "component": "Heading",
+            "text": "Заявка принята",
+            "as": "h1",
+            "size": "lg"
+          },
+          {
+            "id": "done-text",
+            "component": "Text",
+            "text": {
+              "path": "/status"
+            },
+            "color": "gray.300"
+          }
+        ]
+      }
+    }
+  ]
+}

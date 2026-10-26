@@ -1,0 +1,68 @@
+{
+  "event": "fraud.block",
+  "messages": [
+    {
+      "version": "v0.9",
+      "updateComponents": {
+        "surfaceId": "fraud",
+        "components": [
+          {
+            "id": "root",
+            "component": "Container",
+            "maxW": "container.sm",
+            "py": "8",
+            "children": ["done"]
+          },
+          {
+            "id": "done",
+            "component": "Flex",
+            "direction": "column",
+            "align": "center",
+            "gap": "4",
+            "bg": "gray.700",
+            "p": "8",
+            "borderRadius": "xl",
+            "textAlign": "center",
+            "children": ["done-icon", "done-title", "done-text", "done-reissue"]
+          },
+          {
+            "id": "done-icon",
+            "component": "Icon",
+            "name": "lock",
+            "color": "red.300",
+            "boxSize": "12"
+          },
+          {
+            "id": "done-title",
+            "component": "Heading",
+            "text": "Карта заблокирована",
+            "as": "h1",
+            "size": "lg"
+          },
+          {
+            "id": "done-text",
+            "component": "Text",
+            "text": {
+              "call": "formatString",
+              "args": {
+                "value": "Карта ${/operation/card} заблокирована, списание отменено. Деньги вернутся в течение 3 дней."
+              }
+            },
+            "color": "gray.300"
+          },
+          {
+            "id": "done-reissue",
+            "component": "Button",
+            "label": "Перевыпустить карту",
+            "colorScheme": "blue",
+            "action": {
+              "event": {
+                "name": "card.reissue"
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

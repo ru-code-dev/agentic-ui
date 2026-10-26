@@ -1,0 +1,317 @@
+{
+  "name": "Тарифы",
+  "description": "Три тарифа обслуживания карточками: цена, возможности, выбор.",
+  "messages": [
+    {
+      "version": "v0.9",
+      "createSurface": {
+        "surfaceId": "pricing",
+        "catalogId": "urn:agentic-ui:catalog:ui-kit-one:v1"
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateDataModel": {
+        "surfaceId": "pricing",
+        "path": "/plans",
+        "value": {
+          "basic": {
+            "name": "Базовый",
+            "price": 0,
+            "features": [
+              {
+                "text": "Бесплатная карта"
+              },
+              {
+                "text": "Кешбэк 1%"
+              },
+              {
+                "text": "Переводы до 100 000 ₽"
+              }
+            ]
+          },
+          "plus": {
+            "name": "Плюс",
+            "price": 299,
+            "features": [
+              {
+                "text": "Кешбэк до 5%"
+              },
+              {
+                "text": "Переводы без лимита"
+              },
+              {
+                "text": "Снятие наличных без комиссии"
+              }
+            ]
+          },
+          "premium": {
+            "name": "Премиум",
+            "price": 1990,
+            "features": [
+              {
+                "text": "Персональный менеджер"
+              },
+              {
+                "text": "Бизнес-залы"
+              },
+              {
+                "text": "Страховка путешествий"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateComponents": {
+        "surfaceId": "pricing",
+        "components": [
+          {
+            "id": "root",
+            "component": "Container",
+            "maxW": "container.lg",
+            "py": "8",
+            "children": ["stack"]
+          },
+          {
+            "id": "stack",
+            "component": "Flex",
+            "direction": "column",
+            "gap": "6",
+            "children": ["title", "grid"]
+          },
+          {
+            "id": "title",
+            "component": "Heading",
+            "text": "Выберите тариф",
+            "as": "h1",
+            "size": "lg",
+            "textAlign": "center"
+          },
+          {
+            "id": "grid",
+            "component": "Grid",
+            "minChildWidth": "3xs",
+            "gap": "5",
+            "children": ["basic-card", "plus-card", "premium-card"]
+          },
+          {
+            "id": "feature",
+            "component": "Text",
+            "text": {
+              "path": "text"
+            },
+            "color": "gray.300"
+          },
+          {
+            "id": "basic-card",
+            "component": "Flex",
+            "direction": "column",
+            "gap": "4",
+            "bg": "gray.700",
+            "p": "5",
+            "borderRadius": "xl",
+            "borderWidth": "1px",
+            "borderColor": "whiteAlpha.100",
+            "children": ["basic-head", "basic-price", "basic-features", "basic-select"]
+          },
+          {
+            "id": "basic-head",
+            "component": "Flex",
+            "justify": "space-between",
+            "align": "center",
+            "children": ["basic-name"]
+          },
+          {
+            "id": "basic-name",
+            "component": "Heading",
+            "text": {
+              "path": "/plans/basic/name"
+            },
+            "as": "h2",
+            "size": "md"
+          },
+          {
+            "id": "basic-price",
+            "component": "Text",
+            "text": {
+              "call": "formatString",
+              "args": {
+                "value": "${formatCurrency(value: ${/plans/basic/price}, currency: 'RUB', decimals: 0)} в месяц"
+              }
+            },
+            "fontSize": "2xl",
+            "fontWeight": "bold"
+          },
+          {
+            "id": "basic-features",
+            "component": "List",
+            "variant": "unordered",
+            "spacing": "2",
+            "children": {
+              "componentId": "feature",
+              "path": "/plans/basic/features"
+            }
+          },
+          {
+            "id": "basic-select",
+            "component": "Button",
+            "label": "Выбрать",
+            "colorScheme": "gray",
+            "variant": "outline",
+            "isFullWidth": true,
+            "action": {
+              "event": {
+                "name": "plan.select",
+                "context": {
+                  "plan": "basic"
+                }
+              }
+            }
+          },
+          {
+            "id": "plus-card",
+            "component": "Flex",
+            "direction": "column",
+            "gap": "4",
+            "bg": "gray.700",
+            "p": "5",
+            "borderRadius": "xl",
+            "borderWidth": "2px",
+            "borderColor": "blue.400",
+            "children": ["plus-head", "plus-price", "plus-features", "plus-select"]
+          },
+          {
+            "id": "plus-head",
+            "component": "Flex",
+            "justify": "space-between",
+            "align": "center",
+            "children": ["plus-name", "plus-tag"]
+          },
+          {
+            "id": "plus-name",
+            "component": "Heading",
+            "text": {
+              "path": "/plans/plus/name"
+            },
+            "as": "h2",
+            "size": "md"
+          },
+          {
+            "id": "plus-tag",
+            "component": "Tag",
+            "label": "Популярный",
+            "colorScheme": "blue",
+            "variant": "solid"
+          },
+          {
+            "id": "plus-price",
+            "component": "Text",
+            "text": {
+              "call": "formatString",
+              "args": {
+                "value": "${formatCurrency(value: ${/plans/plus/price}, currency: 'RUB', decimals: 0)} в месяц"
+              }
+            },
+            "fontSize": "2xl",
+            "fontWeight": "bold"
+          },
+          {
+            "id": "plus-features",
+            "component": "List",
+            "variant": "unordered",
+            "spacing": "2",
+            "children": {
+              "componentId": "feature",
+              "path": "/plans/plus/features"
+            }
+          },
+          {
+            "id": "plus-select",
+            "component": "Button",
+            "label": "Выбрать",
+            "colorScheme": "blue",
+            "variant": "solid",
+            "isFullWidth": true,
+            "action": {
+              "event": {
+                "name": "plan.select",
+                "context": {
+                  "plan": "plus"
+                }
+              }
+            }
+          },
+          {
+            "id": "premium-card",
+            "component": "Flex",
+            "direction": "column",
+            "gap": "4",
+            "bg": "gray.700",
+            "p": "5",
+            "borderRadius": "xl",
+            "borderWidth": "1px",
+            "borderColor": "whiteAlpha.100",
+            "children": ["premium-head", "premium-price", "premium-features", "premium-select"]
+          },
+          {
+            "id": "premium-head",
+            "component": "Flex",
+            "justify": "space-between",
+            "align": "center",
+            "children": ["premium-name"]
+          },
+          {
+            "id": "premium-name",
+            "component": "Heading",
+            "text": {
+              "path": "/plans/premium/name"
+            },
+            "as": "h2",
+            "size": "md"
+          },
+          {
+            "id": "premium-price",
+            "component": "Text",
+            "text": {
+              "call": "formatString",
+              "args": {
+                "value": "${formatCurrency(value: ${/plans/premium/price}, currency: 'RUB', decimals: 0)} в месяц"
+              }
+            },
+            "fontSize": "2xl",
+            "fontWeight": "bold"
+          },
+          {
+            "id": "premium-features",
+            "component": "List",
+            "variant": "unordered",
+            "spacing": "2",
+            "children": {
+              "componentId": "feature",
+              "path": "/plans/premium/features"
+            }
+          },
+          {
+            "id": "premium-select",
+            "component": "Button",
+            "label": "Выбрать",
+            "colorScheme": "gray",
+            "variant": "outline",
+            "isFullWidth": true,
+            "action": {
+              "event": {
+                "name": "plan.select",
+                "context": {
+                  "plan": "premium"
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

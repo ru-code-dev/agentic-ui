@@ -1,0 +1,19 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "ignorePatterns": [
+    "dist",
+    "node_modules",
+    "*.tsbuildinfo",
+    "pnpm-lock.yaml",
+    "test-results",
+    "playwright-report",
+    "patches",
+    "docs/SPEC.md",
+    "docs/DECISIONS.md",
+    "docs/reports",
+    "packages/ui-kit-one-catalog/CONTRACTS.md",
+    "packages/ui-kit-one-react/MAPPING.md",
+    "apps/playground/public/tokenizers"
+  ],
+  "sortPackageJson": {}
+}

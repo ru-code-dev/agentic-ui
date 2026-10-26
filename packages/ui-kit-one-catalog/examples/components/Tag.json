@@ -1,0 +1,28 @@
+{
+  "name": "Tag",
+  "description": "Метка статуса.",
+  "messages": [
+    {
+      "version": "v0.9",
+      "createSurface": {
+        "surfaceId": "tag",
+        "catalogId": "urn:agentic-ui:catalog:ui-kit-one:v1"
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateComponents": {
+        "surfaceId": "tag",
+        "components": [
+          {
+            "id": "root",
+            "component": "Tag",
+            "label": "Исполнен",
+            "colorScheme": "green",
+            "variant": "subtle"
+          }
+        ]
+      }
+    }
+  ]
+}

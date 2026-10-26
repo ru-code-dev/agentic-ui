@@ -1,0 +1,96 @@
+diff --git a/dist/chakra-ui-modal.cjs.dev.js b/dist/chakra-ui-modal.cjs.dev.js
+index d3fac1aefb6ae3a52477742b20d031a88eabdc39..7919ea08351f1479db3d257e2e64f5d83f75c140 100644
+--- a/dist/chakra-ui-modal.cjs.dev.js
++++ b/dist/chakra-ui-modal.cjs.dev.js
+@@ -326,7 +326,17 @@ var _createContext$1 = reactUtils.createContext({
+  * It doesn't render any DOM node.
+  */
+ 
+-var Modal = function Modal(props) {
++/* agentic-ui patch: React 18.3 deprecates defaultProps on function components; the same
++   defaults are applied here, only for props that are undefined (React's defaultProps rule). */
++function applyDefaultProps(props, defaults) {
++  var result = Object.assign({}, props);
++  Object.keys(defaults).forEach(function (key) {
++    if (result[key] === undefined) result[key] = defaults[key];
++  });
++  return result;
++}
++var Modal = function Modal(rawProps) {
++  var props = applyDefaultProps(rawProps, modalDefaultProps);
+   var portalProps = props.portalProps,
+       children = props.children,
+       autoFocus = props.autoFocus,
+@@ -364,7 +374,7 @@ var Modal = function Modal(props) {
+     onExitComplete: onCloseComplete
+   }, context.isOpen && /*#__PURE__*/React__namespace.createElement(portal.Portal, portalProps, children))));
+ };
+-Modal.defaultProps = {
++var modalDefaultProps = {
+   lockFocusAcrossFrames: true,
+   returnFocusOnClose: true,
+   scrollBehavior: "outside",
+diff --git a/dist/chakra-ui-modal.cjs.prod.js b/dist/chakra-ui-modal.cjs.prod.js
+index d3fac1aefb6ae3a52477742b20d031a88eabdc39..7919ea08351f1479db3d257e2e64f5d83f75c140 100644
+--- a/dist/chakra-ui-modal.cjs.prod.js
++++ b/dist/chakra-ui-modal.cjs.prod.js
+@@ -326,7 +326,17 @@ var _createContext$1 = reactUtils.createContext({
+  * It doesn't render any DOM node.
+  */
+ 
+-var Modal = function Modal(props) {
++/* agentic-ui patch: React 18.3 deprecates defaultProps on function components; the same
++   defaults are applied here, only for props that are undefined (React's defaultProps rule). */
++function applyDefaultProps(props, defaults) {
++  var result = Object.assign({}, props);
++  Object.keys(defaults).forEach(function (key) {
++    if (result[key] === undefined) result[key] = defaults[key];
++  });
++  return result;
++}
++var Modal = function Modal(rawProps) {
++  var props = applyDefaultProps(rawProps, modalDefaultProps);
+   var portalProps = props.portalProps,
+       children = props.children,
+       autoFocus = props.autoFocus,
+@@ -364,7 +374,7 @@ var Modal = function Modal(props) {
+     onExitComplete: onCloseComplete
+   }, context.isOpen && /*#__PURE__*/React__namespace.createElement(portal.Portal, portalProps, children))));
+ };
+-Modal.defaultProps = {
++var modalDefaultProps = {
+   lockFocusAcrossFrames: true,
+   returnFocusOnClose: true,
+   scrollBehavior: "outside",
+diff --git a/dist/chakra-ui-modal.esm.js b/dist/chakra-ui-modal.esm.js
+index 926bbd98dcaae530990d2fb1051e07253021f710..bd0a8e52820421455a9c08033154de5bc815b6f5 100644
+--- a/dist/chakra-ui-modal.esm.js
++++ b/dist/chakra-ui-modal.esm.js
+@@ -303,7 +303,17 @@ var _createContext$1 = createContext({
+  * It doesn't render any DOM node.
+  */
+ 
+-var Modal = function Modal(props) {
++/* agentic-ui patch: React 18.3 deprecates defaultProps on function components; the same
++   defaults are applied here, only for props that are undefined (React's defaultProps rule). */
++function applyDefaultProps(props, defaults) {
++  var result = Object.assign({}, props);
++  Object.keys(defaults).forEach(function (key) {
++    if (result[key] === undefined) result[key] = defaults[key];
++  });
++  return result;
++}
++var Modal = function Modal(rawProps) {
++  var props = applyDefaultProps(rawProps, modalDefaultProps);
+   var portalProps = props.portalProps,
+       children = props.children,
+       autoFocus = props.autoFocus,
+@@ -341,7 +351,7 @@ var Modal = function Modal(props) {
+     onExitComplete: onCloseComplete
+   }, context.isOpen && /*#__PURE__*/React.createElement(Portal, portalProps, children))));
+ };
+-Modal.defaultProps = {
++var modalDefaultProps = {
+   lockFocusAcrossFrames: true,
+   returnFocusOnClose: true,
+   scrollBehavior: "outside",

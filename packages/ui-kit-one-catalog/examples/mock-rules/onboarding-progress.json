@@ -1,0 +1,13 @@
+{
+  "event": "onboarding.continue",
+  "messages": [
+    {
+      "version": "v0.9",
+      "updateDataModel": {
+        "surfaceId": "onboarding",
+        "path": "/progress",
+        "value": "Все 5 шагов выполнены — счёт откроется в течение часа"
+      }
+    }
+  ]
+}

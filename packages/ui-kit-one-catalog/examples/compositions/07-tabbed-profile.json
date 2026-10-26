@@ -1,0 +1,278 @@
+{
+  "name": "Профиль с вкладками",
+  "description": "Профиль клиента: обзор, безопасность и активность во вкладках.",
+  "messages": [
+    {
+      "version": "v0.9",
+      "createSurface": {
+        "surfaceId": "profile",
+        "catalogId": "urn:agentic-ui:catalog:ui-kit-one:v1",
+        "sendDataModel": true
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateDataModel": {
+        "surfaceId": "profile",
+        "path": "/profile",
+        "value": {
+          "name": "Анна Смирнова",
+          "phone": "+7 999 123-45-67",
+          "email": "anna@example.ru",
+          "city": "Москва",
+          "since": "2019",
+          "lastLogin": "24.10.2026, 09:41",
+          "device": "iPhone 15, iOS 18",
+          "twoFactor": "Включена",
+          "ops": 128,
+          "spent": 96420.5
+        }
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateDataModel": {
+        "surfaceId": "profile",
+        "path": "/ui",
+        "value": {
+          "tab": 0
+        }
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateComponents": {
+        "surfaceId": "profile",
+        "components": [
+          {
+            "id": "root",
+            "component": "Container",
+            "maxW": "container.md",
+            "py": "8",
+            "children": ["stack"]
+          },
+          {
+            "id": "stack",
+            "component": "Flex",
+            "direction": "column",
+            "gap": "5",
+            "children": ["header", "tabs"]
+          },
+          {
+            "id": "header",
+            "component": "Flex",
+            "align": "center",
+            "gap": "4",
+            "children": ["avatar", "who", "edit"]
+          },
+          {
+            "id": "avatar",
+            "component": "Avatar",
+            "name": {
+              "path": "/profile/name"
+            },
+            "size": "lg"
+          },
+          {
+            "id": "who",
+            "component": "Flex",
+            "direction": "column",
+            "w": "full",
+            "children": ["name", "client"]
+          },
+          {
+            "id": "name",
+            "component": "Heading",
+            "text": {
+              "path": "/profile/name"
+            },
+            "as": "h1",
+            "size": "md"
+          },
+          {
+            "id": "client",
+            "component": "Text",
+            "text": {
+              "call": "formatString",
+              "args": {
+                "value": "Клиент с ${/profile/since} года"
+              }
+            },
+            "color": "gray.400",
+            "fontSize": "sm"
+          },
+          {
+            "id": "edit",
+            "component": "Button",
+            "label": "Редактировать",
+            "variant": "outline",
+            "leftIcon": "edit",
+            "action": {
+              "event": {
+                "name": "profile.edit"
+              }
+            }
+          },
+          {
+            "id": "tabs",
+            "component": "Tabs",
+            "selectedIndex": {
+              "path": "/ui/tab"
+            },
+            "tabs": [
+              {
+                "title": "Обзор",
+                "child": "overview"
+              },
+              {
+                "title": "Безопасность",
+                "child": "security"
+              },
+              {
+                "title": "Активность",
+                "child": "activity"
+              }
+            ]
+          },
+          {
+            "id": "overview",
+            "component": "Grid",
+            "columns": 2,
+            "gap": "4",
+            "children": ["phone-l", "phone", "email-l", "email", "city-l", "city"]
+          },
+          {
+            "id": "phone-l",
+            "component": "Text",
+            "text": "Телефон",
+            "color": "gray.400"
+          },
+          {
+            "id": "phone",
+            "component": "Text",
+            "text": {
+              "path": "/profile/phone"
+            }
+          },
+          {
+            "id": "email-l",
+            "component": "Text",
+            "text": "Почта",
+            "color": "gray.400"
+          },
+          {
+            "id": "email",
+            "component": "Text",
+            "text": {
+              "path": "/profile/email"
+            }
+          },
+          {
+            "id": "city-l",
+            "component": "Text",
+            "text": "Город",
+            "color": "gray.400"
+          },
+          {
+            "id": "city",
+            "component": "Text",
+            "text": {
+              "path": "/profile/city"
+            }
+          },
+          {
+            "id": "security",
+            "component": "Grid",
+            "columns": 2,
+            "gap": "4",
+            "children": ["login-l", "login", "device-l", "device", "tfa-l", "tfa"]
+          },
+          {
+            "id": "login-l",
+            "component": "Text",
+            "text": "Последний вход",
+            "color": "gray.400"
+          },
+          {
+            "id": "login",
+            "component": "Text",
+            "text": {
+              "path": "/profile/lastLogin"
+            }
+          },
+          {
+            "id": "device-l",
+            "component": "Text",
+            "text": "Устройство",
+            "color": "gray.400"
+          },
+          {
+            "id": "device",
+            "component": "Text",
+            "text": {
+              "path": "/profile/device"
+            }
+          },
+          {
+            "id": "tfa-l",
+            "component": "Text",
+            "text": "Двухфакторная защита",
+            "color": "gray.400"
+          },
+          {
+            "id": "tfa",
+            "component": "Text",
+            "text": {
+              "path": "/profile/twoFactor"
+            },
+            "color": "green.300"
+          },
+          {
+            "id": "activity",
+            "component": "Grid",
+            "columns": 2,
+            "gap": "4",
+            "children": ["ops-l", "ops", "spent-l", "spent"]
+          },
+          {
+            "id": "ops-l",
+            "component": "Text",
+            "text": "Операций за месяц",
+            "color": "gray.400"
+          },
+          {
+            "id": "ops",
+            "component": "Text",
+            "text": {
+              "call": "formatNumber",
+              "args": {
+                "value": {
+                  "path": "/profile/ops"
+                }
+              }
+            }
+          },
+          {
+            "id": "spent-l",
+            "component": "Text",
+            "text": "Потрачено",
+            "color": "gray.400"
+          },
+          {
+            "id": "spent",
+            "component": "Text",
+            "text": {
+              "call": "formatCurrency",
+              "args": {
+                "value": {
+                  "path": "/profile/spent"
+                },
+                "currency": "RUB"
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

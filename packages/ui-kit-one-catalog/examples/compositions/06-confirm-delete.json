@@ -1,0 +1,146 @@
+{
+  "name": "Подтверждение удаления",
+  "description": "Кнопка открывает модальное окно подтверждения удаления шаблона.",
+  "messages": [
+    {
+      "version": "v0.9",
+      "createSurface": {
+        "surfaceId": "template",
+        "catalogId": "urn:agentic-ui:catalog:ui-kit-one:v1",
+        "sendDataModel": true
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateDataModel": {
+        "surfaceId": "template",
+        "path": "/template",
+        "value": {
+          "id": "tpl-42",
+          "name": "Квартплата"
+        }
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateComponents": {
+        "surfaceId": "template",
+        "components": [
+          {
+            "id": "root",
+            "component": "Container",
+            "maxW": "container.sm",
+            "py": "8",
+            "children": ["card"]
+          },
+          {
+            "id": "card",
+            "component": "Flex",
+            "justify": "space-between",
+            "align": "center",
+            "bg": "gray.700",
+            "p": "5",
+            "borderRadius": "xl",
+            "borderWidth": "1px",
+            "borderColor": "whiteAlpha.100",
+            "children": ["info", "modal"]
+          },
+          {
+            "id": "info",
+            "component": "Flex",
+            "direction": "column",
+            "children": ["name", "hint"]
+          },
+          {
+            "id": "name",
+            "component": "Text",
+            "text": {
+              "call": "formatString",
+              "args": {
+                "value": "Шаблон «${/template/name}»"
+              }
+            },
+            "fontWeight": "semibold"
+          },
+          {
+            "id": "hint",
+            "component": "Text",
+            "text": "Ежемесячный платёж ЖКХ",
+            "fontSize": "sm",
+            "color": "gray.400"
+          },
+          {
+            "id": "modal",
+            "component": "Modal",
+            "trigger": "delete-button",
+            "content": "confirm",
+            "title": "Удалить шаблон?"
+          },
+          {
+            "id": "delete-button",
+            "component": "Button",
+            "label": "Удалить",
+            "variant": "outline",
+            "colorScheme": "red",
+            "leftIcon": "delete",
+            "action": {
+              "event": {
+                "name": "modal.open",
+                "context": {
+                  "modal": "delete-template"
+                }
+              }
+            }
+          },
+          {
+            "id": "confirm",
+            "component": "Flex",
+            "direction": "column",
+            "gap": "5",
+            "children": ["warning", "actions"]
+          },
+          {
+            "id": "warning",
+            "component": "Text",
+            "text": "Шаблон нельзя будет восстановить. Запланированные платежи по нему отменятся.",
+            "color": "gray.300"
+          },
+          {
+            "id": "actions",
+            "component": "Flex",
+            "justify": "flex-end",
+            "gap": "3",
+            "children": ["cancel", "delete"]
+          },
+          {
+            "id": "cancel",
+            "component": "Button",
+            "label": "Отмена",
+            "variant": "ghost",
+            "action": {
+              "event": {
+                "name": "modal.cancel"
+              }
+            }
+          },
+          {
+            "id": "delete",
+            "component": "Button",
+            "label": "Удалить шаблон",
+            "colorScheme": "red",
+            "action": {
+              "event": {
+                "name": "item.delete",
+                "context": {
+                  "templateId": {
+                    "path": "/template/id"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

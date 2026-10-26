@@ -1,0 +1,46 @@
+{
+  "name": "Modal",
+  "description": "Кнопка открывает модальное окно с текстом.",
+  "messages": [
+    {
+      "version": "v0.9",
+      "createSurface": {
+        "surfaceId": "modal",
+        "catalogId": "urn:agentic-ui:catalog:ui-kit-one:v1"
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateComponents": {
+        "surfaceId": "modal",
+        "components": [
+          {
+            "id": "root",
+            "component": "Modal",
+            "trigger": "open-button",
+            "content": "body",
+            "title": "Детали перевода"
+          },
+          {
+            "id": "open-button",
+            "component": "Button",
+            "label": "Показать детали",
+            "action": {
+              "event": {
+                "name": "modal.open",
+                "context": {
+                  "modal": "transfer-details"
+                }
+              }
+            }
+          },
+          {
+            "id": "body",
+            "component": "Text",
+            "text": "Перевод 15 000 ₽ будет зачислен в течение минуты."
+          }
+        ]
+      }
+    }
+  ]
+}

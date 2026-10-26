@@ -1,0 +1,18 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "module": "Preserve",
+    "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "types": [],
+    // Chakra v1's tabs/menu/accordion/pin-input declarations import this raw `.ts` source file;
+    // point the specifier at its published declarations instead.
+    "paths": {
+      "@chakra-ui/descendant/src/*": [
+        "./node_modules/@chakra-ui/descendant/dist/declarations/src/*"
+      ]
+    }
+  },
+  "include": ["src"]
+}

@@ -1,0 +1,299 @@
+{
+  "name": "Обзор счетов",
+  "description": "Главный экран банка: клиент и карточки балансов по счетам.",
+  "messages": [
+    {
+      "version": "v0.9",
+      "createSurface": {
+        "surfaceId": "overview",
+        "catalogId": "urn:agentic-ui:catalog:ui-kit-one:v1"
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateDataModel": {
+        "surfaceId": "overview",
+        "path": "/client",
+        "value": {
+          "name": "Анна Смирнова",
+          "segment": "Премиум"
+        }
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateDataModel": {
+        "surfaceId": "overview",
+        "path": "/accounts",
+        "value": {
+          "current": {
+            "title": "Расчётный счёт",
+            "balance": 184250.5,
+            "note": "•• 4821"
+          },
+          "savings": {
+            "title": "Накопительный",
+            "balance": 640000,
+            "note": "16% годовых"
+          },
+          "card": {
+            "title": "Кредитная карта",
+            "balance": -12480,
+            "note": "Лимит 300 000 ₽"
+          }
+        }
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateComponents": {
+        "surfaceId": "overview",
+        "components": [
+          {
+            "id": "root",
+            "component": "Container",
+            "maxW": "container.lg",
+            "py": "8",
+            "children": ["stack"]
+          },
+          {
+            "id": "stack",
+            "component": "Flex",
+            "direction": "column",
+            "gap": "6",
+            "children": ["header", "grid"]
+          },
+          {
+            "id": "header",
+            "component": "Flex",
+            "align": "center",
+            "gap": "4",
+            "children": ["avatar", "hello", "segment"]
+          },
+          {
+            "id": "avatar",
+            "component": "Avatar",
+            "name": {
+              "path": "/client/name"
+            },
+            "size": "md"
+          },
+          {
+            "id": "hello",
+            "component": "Heading",
+            "text": {
+              "call": "formatString",
+              "args": {
+                "value": "Добрый день, ${/client/name}"
+              }
+            },
+            "as": "h1",
+            "size": "md"
+          },
+          {
+            "id": "segment",
+            "component": "Tag",
+            "label": {
+              "path": "/client/segment"
+            },
+            "colorScheme": "yellow"
+          },
+          {
+            "id": "grid",
+            "component": "Grid",
+            "minChildWidth": "3xs",
+            "gap": "4",
+            "children": ["current", "savings", "card"]
+          },
+          {
+            "id": "current",
+            "component": "Flex",
+            "direction": "column",
+            "align": "flex-start",
+            "gap": "2",
+            "bg": "gray.700",
+            "p": "5",
+            "borderRadius": "xl",
+            "borderWidth": "1px",
+            "borderColor": "whiteAlpha.100",
+            "children": ["current-title", "current-balance", "current-note", "current-open"]
+          },
+          {
+            "id": "current-title",
+            "component": "Text",
+            "text": {
+              "path": "/accounts/current/title"
+            },
+            "color": "gray.400",
+            "fontSize": "sm"
+          },
+          {
+            "id": "current-balance",
+            "component": "Heading",
+            "text": {
+              "call": "formatCurrency",
+              "args": {
+                "value": {
+                  "path": "/accounts/current/balance"
+                },
+                "currency": "RUB"
+              }
+            },
+            "as": "h2",
+            "size": "lg"
+          },
+          {
+            "id": "current-note",
+            "component": "Tag",
+            "label": {
+              "path": "/accounts/current/note"
+            },
+            "size": "sm",
+            "colorScheme": "gray"
+          },
+          {
+            "id": "current-open",
+            "component": "Button",
+            "label": "Подробнее",
+            "variant": "link",
+            "colorScheme": "blue",
+            "rightIcon": "chevronRight",
+            "action": {
+              "event": {
+                "name": "account.open",
+                "context": {
+                  "account": "current"
+                }
+              }
+            }
+          },
+          {
+            "id": "savings",
+            "component": "Flex",
+            "direction": "column",
+            "align": "flex-start",
+            "gap": "2",
+            "bg": "gray.700",
+            "p": "5",
+            "borderRadius": "xl",
+            "borderWidth": "1px",
+            "borderColor": "whiteAlpha.100",
+            "children": ["savings-title", "savings-balance", "savings-note", "savings-open"]
+          },
+          {
+            "id": "savings-title",
+            "component": "Text",
+            "text": {
+              "path": "/accounts/savings/title"
+            },
+            "color": "gray.400",
+            "fontSize": "sm"
+          },
+          {
+            "id": "savings-balance",
+            "component": "Heading",
+            "text": {
+              "call": "formatCurrency",
+              "args": {
+                "value": {
+                  "path": "/accounts/savings/balance"
+                },
+                "currency": "RUB"
+              }
+            },
+            "as": "h2",
+            "size": "lg"
+          },
+          {
+            "id": "savings-note",
+            "component": "Tag",
+            "label": {
+              "path": "/accounts/savings/note"
+            },
+            "size": "sm",
+            "colorScheme": "green"
+          },
+          {
+            "id": "savings-open",
+            "component": "Button",
+            "label": "Подробнее",
+            "variant": "link",
+            "colorScheme": "blue",
+            "rightIcon": "chevronRight",
+            "action": {
+              "event": {
+                "name": "account.open",
+                "context": {
+                  "account": "savings"
+                }
+              }
+            }
+          },
+          {
+            "id": "card",
+            "component": "Flex",
+            "direction": "column",
+            "align": "flex-start",
+            "gap": "2",
+            "bg": "gray.700",
+            "p": "5",
+            "borderRadius": "xl",
+            "borderWidth": "1px",
+            "borderColor": "whiteAlpha.100",
+            "children": ["card-title", "card-balance", "card-note", "card-open"]
+          },
+          {
+            "id": "card-title",
+            "component": "Text",
+            "text": {
+              "path": "/accounts/card/title"
+            },
+            "color": "gray.400",
+            "fontSize": "sm"
+          },
+          {
+            "id": "card-balance",
+            "component": "Heading",
+            "text": {
+              "call": "formatCurrency",
+              "args": {
+                "value": {
+                  "path": "/accounts/card/balance"
+                },
+                "currency": "RUB"
+              }
+            },
+            "as": "h2",
+            "size": "lg",
+            "color": "red.300"
+          },
+          {
+            "id": "card-note",
+            "component": "Tag",
+            "label": {
+              "path": "/accounts/card/note"
+            },
+            "size": "sm",
+            "colorScheme": "gray"
+          },
+          {
+            "id": "card-open",
+            "component": "Button",
+            "label": "Подробнее",
+            "variant": "link",
+            "colorScheme": "blue",
+            "rightIcon": "chevronRight",
+            "action": {
+              "event": {
+                "name": "account.open",
+                "context": {
+                  "account": "card"
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

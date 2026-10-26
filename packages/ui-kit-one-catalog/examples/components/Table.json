@@ -1,0 +1,71 @@
+{
+  "name": "Table",
+  "description": "Таблица операций: дата, получатель, сумма в рублях.",
+  "messages": [
+    {
+      "version": "v0.9",
+      "createSurface": {
+        "surfaceId": "table",
+        "catalogId": "urn:agentic-ui:catalog:ui-kit-one:v1"
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateDataModel": {
+        "surfaceId": "table",
+        "path": "/transactions",
+        "value": [
+          {
+            "date": "2026-10-24",
+            "merchant": "Пятёрочка",
+            "amount": -1840.5
+          },
+          {
+            "date": "2026-10-23",
+            "merchant": "Зарплата",
+            "amount": 95000
+          },
+          {
+            "date": "2026-10-22",
+            "merchant": "Яндекс Такси",
+            "amount": -612
+          }
+        ]
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateComponents": {
+        "surfaceId": "table",
+        "components": [
+          {
+            "id": "root",
+            "component": "Table",
+            "variant": "striped",
+            "rows": {
+              "path": "/transactions"
+            },
+            "caption": "Последние операции",
+            "columns": [
+              {
+                "header": "Дата",
+                "key": "date",
+                "format": "date"
+              },
+              {
+                "header": "Получатель",
+                "key": "merchant"
+              },
+              {
+                "header": "Сумма",
+                "key": "amount",
+                "format": "currency",
+                "align": "right"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

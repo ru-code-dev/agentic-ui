@@ -1,0 +1,48 @@
+packages:
+  - "packages/*"
+  - "apps/*"
+
+# Any unmet peer fails the install; every exception is named below.
+strictPeerDependencies: true
+
+peerDependencyRules:
+  # `vite` resolves to vite-plus-core (same rule as ru-code): its version string is 0.2.2,
+  # so every `vite@^x` peer of a Vite plugin would otherwise read as unmet.
+  allowAny:
+    - vite
+  allowedVersions:
+    vite: "*"
+    # Chakra UI v1.8.9 pins these React 16/17-era packages. They run on React 18
+    # (proven by the renderer's Modal tests: focus lock, scroll lock, portal).
+    "react-remove-scroll>react": "18"
+    "react-remove-scroll>@types/react": "18"
+    "react-focus-lock>react": "18"
+    "@reach/alert>react": "18"
+    "@reach/alert>react-dom": "18"
+    "@reach/utils>react": "18"
+    "@reach/utils>react-dom": "18"
+    "@reach/visually-hidden>react": "18"
+    "@reach/visually-hidden>react-dom": "18"
+
+overrides:
+  # One `vite` everywhere — the core vite-plus ships — same rule as ru-code: the override covers
+  # dependencies, the extension below makes vite-plus provide it so vitest's `vite` peer resolves to it.
+  vite: npm:@voidzero-dev/vite-plus-core@0.2.2
+  # @chakra-ui/icons@1.1.7 lists `@types/react@^17` as a dependency; one React type version only.
+  "@chakra-ui/icons>@types/react": 18.3.31
+
+packageExtensions:
+  vite-plus@*:
+    dependencies:
+      vite: npm:@voidzero-dev/vite-plus-core@0.2.2
+
+# Chakra UI v1 under React 18.3 — behavior unchanged, each patch documents itself inline:
+# - modal, portal, react (ChakraProvider): React 18.3 warns on `defaultProps` of function
+#   components (a React 19 removal); the same defaults are applied inside the component.
+# - toast: the Toaster was created at import time (portal appended to body + legacy
+#   ReactDOM.render) — a host-page side effect of importing Chakra; it is now created on first use.
+patchedDependencies:
+  "@chakra-ui/modal@1.11.1": patches/@chakra-ui__modal@1.11.1.patch
+  "@chakra-ui/portal@1.3.10": patches/@chakra-ui__portal@1.3.10.patch
+  "@chakra-ui/react@1.8.9": patches/@chakra-ui__react@1.8.9.patch
+  "@chakra-ui/toast@1.5.9": patches/@chakra-ui__toast@1.5.9.patch

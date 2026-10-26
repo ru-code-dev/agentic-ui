@@ -1,0 +1,9 @@
+{
+  // The contract itself: browser-safe, no Node types.
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2023"],
+    "types": []
+  },
+  "include": ["src"]
+}

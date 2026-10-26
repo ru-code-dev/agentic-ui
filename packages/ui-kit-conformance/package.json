@@ -1,0 +1,8 @@
+{
+  "name": "@agentic-ui/ui-kit-conformance",
+  "version": "0.1.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "author": "Shterenberg Zakhar Gennadievich <shternberg.inbox@gmail.com>",
+  "type": "module"
+}

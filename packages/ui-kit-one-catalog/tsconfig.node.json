@@ -1,0 +1,9 @@
+{
+  // Scripts, tests and build configs run on Node.
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2023"],
+    "types": ["node"]
+  },
+  "include": ["src", "scripts", "tests", "tsdown.config.ts", "vite.config.ts"]
+}

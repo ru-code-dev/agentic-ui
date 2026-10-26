@@ -1,0 +1,28 @@
+{
+  "name": "Heading",
+  "description": "Заголовок страницы.",
+  "messages": [
+    {
+      "version": "v0.9",
+      "createSurface": {
+        "surfaceId": "heading",
+        "catalogId": "urn:agentic-ui:catalog:ui-kit-one:v1"
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateComponents": {
+        "surfaceId": "heading",
+        "components": [
+          {
+            "id": "root",
+            "component": "Heading",
+            "text": "Мои счета",
+            "as": "h1",
+            "size": "xl"
+          }
+        ]
+      }
+    }
+  ]
+}

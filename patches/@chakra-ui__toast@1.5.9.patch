@@ -1,0 +1,81 @@
+diff --git a/dist/chakra-ui-toast.cjs.dev.js b/dist/chakra-ui-toast.cjs.dev.js
+index 472d654178023a0a9c3e406567d86688059bacab..c269bc5521c5b378b425dffcde6ab80516255445 100644
+--- a/dist/chakra-ui-toast.cjs.dev.js
++++ b/dist/chakra-ui-toast.cjs.dev.js
+@@ -534,7 +534,21 @@ function Toaster() {
+   }), portal);
+ };
+ 
+-var toast = new Toaster();
++/* agentic-ui patch: the Toaster used to be created at import time, which appends a portal to
++   document.body and calls the legacy ReactDOM.render as a side effect of importing Chakra.
++   It is now created on first use; the public `toast` API is unchanged. */
++var toasterInstance;
++function getToaster() {
++  if (!toasterInstance) toasterInstance = new Toaster();
++  return toasterInstance;
++}
++var toast = {
++  notify: function (message, options) { return getToaster().notify(message, options); },
++  close: function (id, position) { return getToaster().close(id, position); },
++  closeAll: function (options) { return getToaster().closeAll(options); },
++  update: function (id, options) { return getToaster().update(id, options); },
++  isActive: function (id) { return getToaster().isActive(id); }
++};
+ 
+ function getToastPlacement(position, dir) {
+   var _logical$dir;
+diff --git a/dist/chakra-ui-toast.cjs.prod.js b/dist/chakra-ui-toast.cjs.prod.js
+index 472d654178023a0a9c3e406567d86688059bacab..c269bc5521c5b378b425dffcde6ab80516255445 100644
+--- a/dist/chakra-ui-toast.cjs.prod.js
++++ b/dist/chakra-ui-toast.cjs.prod.js
+@@ -534,7 +534,21 @@ function Toaster() {
+   }), portal);
+ };
+ 
+-var toast = new Toaster();
++/* agentic-ui patch: the Toaster used to be created at import time, which appends a portal to
++   document.body and calls the legacy ReactDOM.render as a side effect of importing Chakra.
++   It is now created on first use; the public `toast` API is unchanged. */
++var toasterInstance;
++function getToaster() {
++  if (!toasterInstance) toasterInstance = new Toaster();
++  return toasterInstance;
++}
++var toast = {
++  notify: function (message, options) { return getToaster().notify(message, options); },
++  close: function (id, position) { return getToaster().close(id, position); },
++  closeAll: function (options) { return getToaster().closeAll(options); },
++  update: function (id, options) { return getToaster().update(id, options); },
++  isActive: function (id) { return getToaster().isActive(id); }
++};
+ 
+ function getToastPlacement(position, dir) {
+   var _logical$dir;
+diff --git a/dist/chakra-ui-toast.esm.js b/dist/chakra-ui-toast.esm.js
+index 465c444b38b06ced6265d9c28fc7aebdcaf7771d..cc3872016d78b29141d62f39c4ca54755faf1c27 100644
+--- a/dist/chakra-ui-toast.esm.js
++++ b/dist/chakra-ui-toast.esm.js
+@@ -506,7 +506,21 @@ function Toaster() {
+   }), portal);
+ };
+ 
+-var toast = new Toaster();
++/* agentic-ui patch: the Toaster used to be created at import time, which appends a portal to
++   document.body and calls the legacy ReactDOM.render as a side effect of importing Chakra.
++   It is now created on first use; the public `toast` API is unchanged. */
++var toasterInstance;
++function getToaster() {
++  if (!toasterInstance) toasterInstance = new Toaster();
++  return toasterInstance;
++}
++var toast = {
++  notify: function (message, options) { return getToaster().notify(message, options); },
++  close: function (id, position) { return getToaster().close(id, position); },
++  closeAll: function (options) { return getToaster().closeAll(options); },
++  update: function (id, options) { return getToaster().update(id, options); },
++  isActive: function (id) { return getToaster().isActive(id); }
++};
+ 
+ function getToastPlacement(position, dir) {
+   var _logical$dir;

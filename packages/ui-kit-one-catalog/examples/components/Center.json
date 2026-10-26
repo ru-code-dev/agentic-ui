@@ -1,0 +1,36 @@
+{
+  "name": "Center",
+  "description": "Центрирует содержимое по горизонтали и вертикали.",
+  "messages": [
+    {
+      "version": "v0.9",
+      "createSurface": {
+        "surfaceId": "center",
+        "catalogId": "urn:agentic-ui:catalog:ui-kit-one:v1"
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateComponents": {
+        "surfaceId": "center",
+        "components": [
+          {
+            "id": "root",
+            "component": "Center",
+            "p": "8",
+            "bg": "gray.700",
+            "borderRadius": "xl",
+            "children": ["icon"]
+          },
+          {
+            "id": "icon",
+            "component": "Icon",
+            "name": "checkCircle",
+            "color": "green.300",
+            "boxSize": "12"
+          }
+        ]
+      }
+    }
+  ]
+}

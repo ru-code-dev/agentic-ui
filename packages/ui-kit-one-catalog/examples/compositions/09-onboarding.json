@@ -1,0 +1,172 @@
+{
+  "name": "Онбординг",
+  "description": "Пять шагов открытия счёта: кнопка активна, когда все шаги отмечены.",
+  "messages": [
+    {
+      "version": "v0.9",
+      "createSurface": {
+        "surfaceId": "onboarding",
+        "catalogId": "urn:agentic-ui:catalog:ui-kit-one:v1",
+        "sendDataModel": true
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateDataModel": {
+        "surfaceId": "onboarding",
+        "path": "/steps",
+        "value": {
+          "passport": true,
+          "selfie": false,
+          "address": false,
+          "tax": false,
+          "terms": false
+        }
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateDataModel": {
+        "surfaceId": "onboarding",
+        "path": "/progress",
+        "value": "Шаг 1 из 5 выполнен"
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateComponents": {
+        "surfaceId": "onboarding",
+        "components": [
+          {
+            "id": "root",
+            "component": "Container",
+            "maxW": "container.sm",
+            "py": "8",
+            "children": ["card"]
+          },
+          {
+            "id": "card",
+            "component": "Flex",
+            "direction": "column",
+            "gap": "4",
+            "bg": "gray.700",
+            "p": "8",
+            "borderRadius": "xl",
+            "borderWidth": "1px",
+            "borderColor": "whiteAlpha.100",
+            "children": [
+              "title",
+              "progress",
+              "passport",
+              "selfie",
+              "address",
+              "tax",
+              "terms",
+              "continue"
+            ]
+          },
+          {
+            "id": "title",
+            "component": "Heading",
+            "text": "Осталось несколько шагов",
+            "as": "h1",
+            "size": "md"
+          },
+          {
+            "id": "progress",
+            "component": "Text",
+            "text": {
+              "path": "/progress"
+            },
+            "color": "blue.300",
+            "fontWeight": "medium"
+          },
+          {
+            "id": "passport",
+            "component": "Checkbox",
+            "label": "Паспорт загружен",
+            "value": {
+              "path": "/steps/passport"
+            },
+            "colorScheme": "green"
+          },
+          {
+            "id": "selfie",
+            "component": "Checkbox",
+            "label": "Селфи с паспортом",
+            "value": {
+              "path": "/steps/selfie"
+            },
+            "colorScheme": "green"
+          },
+          {
+            "id": "address",
+            "component": "Checkbox",
+            "label": "Адрес регистрации подтверждён",
+            "value": {
+              "path": "/steps/address"
+            },
+            "colorScheme": "green"
+          },
+          {
+            "id": "tax",
+            "component": "Checkbox",
+            "label": "ИНН указан",
+            "value": {
+              "path": "/steps/tax"
+            },
+            "colorScheme": "green"
+          },
+          {
+            "id": "terms",
+            "component": "Checkbox",
+            "label": "Условия обслуживания приняты",
+            "value": {
+              "path": "/steps/terms"
+            },
+            "colorScheme": "green"
+          },
+          {
+            "id": "continue",
+            "component": "Button",
+            "label": "Продолжить",
+            "colorScheme": "green",
+            "isFullWidth": true,
+            "action": {
+              "event": {
+                "name": "onboarding.continue"
+              }
+            },
+            "checks": [
+              {
+                "condition": {
+                  "call": "and",
+                  "args": {
+                    "values": [
+                      {
+                        "path": "/steps/passport"
+                      },
+                      {
+                        "path": "/steps/selfie"
+                      },
+                      {
+                        "path": "/steps/address"
+                      },
+                      {
+                        "path": "/steps/tax"
+                      },
+                      {
+                        "path": "/steps/terms"
+                      }
+                    ]
+                  }
+                },
+                "message": "Отметьте все шаги"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

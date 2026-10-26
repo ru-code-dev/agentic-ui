@@ -1,0 +1,96 @@
+diff --git a/dist/chakra-ui-portal.cjs.dev.js b/dist/chakra-ui-portal.cjs.dev.js
+index 9a697fe3e5f865ef05b7d34e0a0ca2b967d9e646..29c1b5325d62a563e05636b7cecb0ea8b2cbe8ab 100644
+--- a/dist/chakra-ui-portal.cjs.dev.js
++++ b/dist/chakra-ui-portal.cjs.dev.js
+@@ -191,7 +191,17 @@ var ContainerPortal = function ContainerPortal(props) {
+  *
+  * @see Docs https://chakra-ui.com/portal
+  */
+-function Portal(props) {
++/* agentic-ui patch: React 18.3 deprecates defaultProps on function components; the same
++   defaults are applied here, only for props that are undefined (React's defaultProps rule). */
++function applyDefaultProps(props, defaults) {
++  var result = Object.assign({}, props);
++  Object.keys(defaults).forEach(function (key) {
++    if (result[key] === undefined) result[key] = defaults[key];
++  });
++  return result;
++}
++function Portal(rawProps) {
++  var props = applyDefaultProps(rawProps, portalDefaultProps);
+   var containerRef = props.containerRef,
+       rest = _objectWithoutPropertiesLoose(props, _excluded);
+ 
+@@ -199,7 +209,7 @@ function Portal(props) {
+     containerRef: containerRef
+   }, rest)) : /*#__PURE__*/React__namespace.createElement(DefaultPortal, rest);
+ }
+-Portal.defaultProps = {
++var portalDefaultProps = {
+   appendToParentPortal: true
+ };
+ Portal.className = PORTAL_CLASSNAME;
+diff --git a/dist/chakra-ui-portal.cjs.prod.js b/dist/chakra-ui-portal.cjs.prod.js
+index 9a697fe3e5f865ef05b7d34e0a0ca2b967d9e646..29c1b5325d62a563e05636b7cecb0ea8b2cbe8ab 100644
+--- a/dist/chakra-ui-portal.cjs.prod.js
++++ b/dist/chakra-ui-portal.cjs.prod.js
+@@ -191,7 +191,17 @@ var ContainerPortal = function ContainerPortal(props) {
+  *
+  * @see Docs https://chakra-ui.com/portal
+  */
+-function Portal(props) {
++/* agentic-ui patch: React 18.3 deprecates defaultProps on function components; the same
++   defaults are applied here, only for props that are undefined (React's defaultProps rule). */
++function applyDefaultProps(props, defaults) {
++  var result = Object.assign({}, props);
++  Object.keys(defaults).forEach(function (key) {
++    if (result[key] === undefined) result[key] = defaults[key];
++  });
++  return result;
++}
++function Portal(rawProps) {
++  var props = applyDefaultProps(rawProps, portalDefaultProps);
+   var containerRef = props.containerRef,
+       rest = _objectWithoutPropertiesLoose(props, _excluded);
+ 
+@@ -199,7 +209,7 @@ function Portal(props) {
+     containerRef: containerRef
+   }, rest)) : /*#__PURE__*/React__namespace.createElement(DefaultPortal, rest);
+ }
+-Portal.defaultProps = {
++var portalDefaultProps = {
+   appendToParentPortal: true
+ };
+ Portal.className = PORTAL_CLASSNAME;
+diff --git a/dist/chakra-ui-portal.esm.js b/dist/chakra-ui-portal.esm.js
+index f8b93838ec1f8d32adc104bb8cd9bda4f1cf2f24..09a18c23c23c47e1137dbc7561959a5a69b29a42 100644
+--- a/dist/chakra-ui-portal.esm.js
++++ b/dist/chakra-ui-portal.esm.js
+@@ -167,7 +167,17 @@ var ContainerPortal = function ContainerPortal(props) {
+  *
+  * @see Docs https://chakra-ui.com/portal
+  */
+-function Portal(props) {
++/* agentic-ui patch: React 18.3 deprecates defaultProps on function components; the same
++   defaults are applied here, only for props that are undefined (React's defaultProps rule). */
++function applyDefaultProps(props, defaults) {
++  var result = Object.assign({}, props);
++  Object.keys(defaults).forEach(function (key) {
++    if (result[key] === undefined) result[key] = defaults[key];
++  });
++  return result;
++}
++function Portal(rawProps) {
++  var props = applyDefaultProps(rawProps, portalDefaultProps);
+   var containerRef = props.containerRef,
+       rest = _objectWithoutPropertiesLoose(props, _excluded);
+ 
+@@ -175,7 +185,7 @@ function Portal(props) {
+     containerRef: containerRef
+   }, rest)) : /*#__PURE__*/React.createElement(DefaultPortal, rest);
+ }
+-Portal.defaultProps = {
++var portalDefaultProps = {
+   appendToParentPortal: true
+ };
+ Portal.className = PORTAL_CLASSNAME;

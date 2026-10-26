@@ -1,0 +1,34 @@
+{
+  "name": "@agentic-ui/root",
+  "private": true,
+  "license": "UNLICENSED",
+  "author": "Shterenberg Zakhar Gennadievich <shternberg.inbox@gmail.com>",
+  "type": "module",
+  "scripts": {
+    "dev": "vp run @agentic-ui/playground#dev",
+    "build": "vp run -r build",
+    "typecheck": "vp run -r typecheck",
+    "lint": "vp lint -c .oxlintrc.json --report-unused-disable-directives",
+    "fmt": "vp fmt -c .oxfmtrc.json",
+    "fmt:check": "vp fmt --check -c .oxfmtrc.json",
+    "test": "vp run -r test",
+    "conformance": "vp run @agentic-ui/ui-kit-conformance#test",
+    "e2e": "vp run -r build && vp run @agentic-ui/playground#e2e",
+    "e2e:update": "vp run -r build && vp run @agentic-ui/playground#e2e:update",
+    "validate": "vp run @agentic-ui/ui-kit-one-catalog#validate",
+    "catalog:json": "vp run @agentic-ui/ui-kit-one-catalog#catalog:json",
+    "catalog:prompt": "vp run @agentic-ui/ui-kit-one-catalog#catalog:prompt",
+    "docs": "vp run -r docs",
+    "check": "vp run -w check:size && vp run -w fmt:check && vp run -w lint && vp run -w typecheck && vp run -w test && vp run -w validate && vp run -w build && vp run @agentic-ui/playground#e2e",
+    "check:size": "node scripts/check-size.ts"
+  },
+  "devDependencies": {
+    "@typescript/native-preview": "7.0.0-dev.20260604.1",
+    "oxlint": "1.63.0",
+    "vite-plus": "0.2.2"
+  },
+  "engines": {
+    "node": "24.x"
+  },
+  "packageManager": "pnpm@10.15.0"
+}

@@ -1,0 +1,121 @@
+import type { ComponentApi, FunctionApi } from "@a2ui/web_core/v0_9";
+import type { z } from "zod";
+import {
+  CATALOG_ID,
+  CATALOG_INSTRUCTIONS,
+  COMPONENT_APIS,
+  FUNCTION_APIS,
+  PROTOCOL_VERSION,
+  TWO_WAY_BINDINGS,
+} from "../src/index.ts";
+import { StylePropsSchema } from "../src/style-props.ts";
+import { tokensSection } from "./contracts-tokens.ts";
+import { readExamples } from "./examples.ts";
+import { cell, propDoc, propsTable } from "../src/docs/prop-docs.ts";
+
+const styleShape = StylePropsSchema.shape as Record<string, z.ZodTypeAny>;
+/** True when `schema` is the shared style prop `name` (spread into a layout component). */
+const isStyleProp = (name: string, schema: z.ZodTypeAny) => styleShape[name] === schema;
+
+function componentSection(api: ComponentApi): string {
+  const shape = (api.schema as z.AnyZodObject).shape as Record<string, z.ZodTypeAny>;
+  const hasStyleProps = Object.entries(shape).some(([name, schema]) => isStyleProp(name, schema));
+  const props = Object.entries(shape)
+    .filter(([name, schema]) => !isStyleProp(name, schema))
+    .map(([name, schema]) => propDoc(name, schema));
+  const actions = props.filter((p) => p.type === "Action").map((p) => `\`${p.name}\``);
+  const twoWay = (TWO_WAY_BINDINGS[api.name] ?? []).map((name) => `\`${name}\``);
+  const example = readExamples("components").find((candidate) => candidate.name === api.name);
+  const parts = [
+    `### ${api.name}`,
+    api.schema.description ?? "",
+    propsTable(props),
+    ...props
+      .filter((p) => p.items !== undefined)
+      .map((p) => `Items of \`${p.name}\`:\n\n${propsTable(p.items ?? [])}`),
+    hasStyleProps ? "Also accepts the [style props](#style-props)." : "",
+    [
+      `- Two-way bindings: ${twoWay.length > 0 ? twoWay.join(", ") : "none"}`,
+      `- Actions: ${actions.length > 0 ? actions.join(", ") : "none"}`,
+      `- Checks: ${"checks" in shape ? "yes (`checks`)" : "no"}`,
+    ].join("\n"),
+    example === undefined
+      ? ""
+      : `Example (\`examples/components/${api.name}.json\`):\n\n\`\`\`json\n${JSON.stringify(example.messages, null, 2)}\n\`\`\``,
+  ];
+  return parts.filter((part) => part !== "").join("\n\n");
+}
+
+function functionRow(api: FunctionApi): string {
+  const shape = (api.schema as z.AnyZodObject).shape as Record<string, z.ZodTypeAny> | undefined;
+  const args = Object.entries(shape ?? {}).map(([name, schema]) => {
+    const doc = propDoc(name, schema);
+    return `\`${name}${doc.required ? "" : "?"}\``;
+  });
+  return `| \`${api.name}\` | ${args.join(", ")} | ${api.returnType} | ${cell(api.description ?? "")} |`;
+}
+
+const NAMING = `## Naming: passthrough first
+
+Prop names and enum values equal the kit's (Chakra UI v1) wherever a prop is plain data — \`fontSize\`, \`fontWeight\`, \`textAlign\`, \`colorScheme\`, \`variant\`, \`size\`, \`spacing\`, \`direction\`, \`align\`, \`justify\`, \`maxW\`, \`p\`, \`bg\`, … — so renderers pass them through unchanged. Omitted props take the kit's defaults.
+
+Exceptions, where A2UI needs a different shape:
+
+| Contract prop | Why | Kit |
+|---|---|---|
+| \`text\` (Text, Heading), \`label\` (Button, Tag, inputs) | A2UI reserves \`children\` for component references | \`children\` |
+| \`children\` (ChildList), \`child\`, \`trigger\`, \`content\`, \`tabs[].child\` | component ids or templates, resolved by the renderer | rendered components |
+| \`value\` (Input, Checkbox, Switch, RadioGroup), Modal \`open\`, Tabs \`selectedIndex\` | two-way data-model bindings | \`value\`/\`isChecked\`, \`isOpen\`, \`index\` + change handlers |
+| \`action\`, \`checks\` | A2UI actions and validation rules | \`onClick\`, disabled/invalid state and messages |
+| \`leftIcon\`, \`rightIcon\`, Icon \`name\` | kit-neutral icon names | icon components |
+| Grid \`columns\` | equal columns instead of raw \`templateColumns\` | SimpleGrid \`columns\` |
+| List \`variant\`, Table \`columns\`/\`rows\`, RadioGroup \`options\` | structured data rendered as kit parts | list, table and radio components |
+`;
+
+const STYLING_POLICY = `## Styling policy
+
+Components accept token values only. There is no \`sx\`, \`__css\`, raw CSS string or responsive object/array syntax in v1:
+
+- **Validation**: every styling value is an enum in the catalog, so the agent's output is checked before it renders.
+- **Brand safety**: agents can only pick from the kit's palette, spacing and type scale; a fork changes the values in one file (\`src/tokens.ts\`).
+- **Security**: no arbitrary CSS means no fixed full-screen overlays, \`url()\` fetches or content injection through styles.
+
+### Style props
+
+Box, Center, Container, Flex and Grid accept these props:
+
+${propsTable(Object.entries(styleShape).map(([name, schema]) => propDoc(name, schema)))}`;
+
+/** CONTRACTS.md: the human- and agent-readable reference of the ui-kit-one contract. */
+export function renderContractsMarkdown(): string {
+  return (
+    [
+      "# ui-kit-one contracts",
+      "> Generated by `pnpm docs` from `packages/ui-kit-one-catalog/src`. Do not edit by hand.",
+      `Catalog id \`${CATALOG_ID}\` · A2UI protocol ${PROTOCOL_VERSION} · ${COMPONENT_APIS.length} components · ${FUNCTION_APIS.length} functions.`,
+      "## Components",
+      [
+        "| Component | Purpose |",
+        "|---|---|",
+        ...COMPONENT_APIS.map(
+          (api) =>
+            `| [${api.name}](#${api.name.toLowerCase()}) | ${cell(api.schema.description ?? "")} |`,
+        ),
+      ].join("\n"),
+      ...COMPONENT_APIS.map(componentSection),
+      NAMING,
+      STYLING_POLICY,
+      `## Catalog rules\n\nShipped in the catalog document (\`instructions\`), so every system prompt carries them:\n\n\`\`\`text\n${CATALOG_INSTRUCTIONS}\n\`\`\``,
+      [
+        "## Functions",
+        'A2UI basic functions, implemented by `@a2ui/web_core` in every renderer. Call them in dynamic props: `{ "call": "formatCurrency", "args": { "value": { "path": "/amount" }, "currency": "RUB" } }`. Formatting uses the renderer locale (ui-kit-one-react: `ru-RU`).',
+        [
+          "| Function | Args | Returns | Description |",
+          "|---|---|---|---|",
+          ...FUNCTION_APIS.map(functionRow),
+        ].join("\n"),
+      ].join("\n\n"),
+      tokensSection(),
+    ].join("\n\n") + "\n"
+  );
+}

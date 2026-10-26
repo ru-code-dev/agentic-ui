@@ -1,0 +1,29 @@
+{
+  "name": "Text",
+  "description": "Абзац текста с размером, цветом и насыщенностью.",
+  "messages": [
+    {
+      "version": "v0.9",
+      "createSurface": {
+        "surfaceId": "text",
+        "catalogId": "urn:agentic-ui:catalog:ui-kit-one:v1"
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateComponents": {
+        "surfaceId": "text",
+        "components": [
+          {
+            "id": "root",
+            "component": "Text",
+            "text": "Добро пожаловать в интернет-банк",
+            "fontSize": "lg",
+            "color": "blue.300",
+            "fontWeight": "semibold"
+          }
+        ]
+      }
+    }
+  ]
+}
