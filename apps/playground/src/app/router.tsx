@@ -1,4 +1,5 @@
 import { useSyncExternalStore, type AnchorHTMLAttributes, type MouseEvent } from "react";
+import { toAppPath, toUrlPath } from "./base-path.ts";
 
 const listeners = new Set<() => void>();
 const notify = () => {
@@ -8,8 +9,8 @@ window.addEventListener("popstate", notify);
 
 /** Client-side navigation with the History API (the production server falls back to index.html). */
 export function navigate(to: string): void {
-  if (to === location.pathname) return;
-  history.pushState(null, "", to);
+  if (to === toAppPath(location.pathname)) return;
+  history.pushState(null, "", toUrlPath(to));
   notify();
 }
 
@@ -19,7 +20,7 @@ export function usePathname(): string {
       listeners.add(listener);
       return () => listeners.delete(listener);
     },
-    () => location.pathname,
+    () => toAppPath(location.pathname),
   );
 }
 
@@ -41,5 +42,5 @@ export function Link({
     event.preventDefault();
     navigate(to);
   };
-  return <a href={to} onClick={handleClick} {...props} />;
+  return <a href={toUrlPath(to)} onClick={handleClick} {...props} />;
 }

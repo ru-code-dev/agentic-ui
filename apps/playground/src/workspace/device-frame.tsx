@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { toUrlPath } from "../app/base-path.ts";
 import { cn } from "../lib/utils.ts";
 import type { DevicePreset } from "./devices.ts";
 
@@ -34,7 +35,7 @@ export function DeviceFrame({ device, landscape, fit }: DeviceFrameProps) {
     <iframe
       title="Device preview"
       data-testid="device-frame"
-      src="/preview"
+      src={toUrlPath("/preview")}
       className="block size-full bg-[#1a202c]"
     />
   );

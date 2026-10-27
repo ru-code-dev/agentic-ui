@@ -1,4 +1,5 @@
 import { Braces, ExternalLink, Maximize, RefreshCw, RotateCw, TriangleAlert } from "lucide-react";
+import { toUrlPath } from "../app/base-path.ts";
 import { IconButton } from "../components/icon-button.tsx";
 import { PaneHeader } from "../components/pane-header.tsx";
 import { Badge } from "../components/ui/badge.tsx";
@@ -39,7 +40,7 @@ export function PreviewPane({ analysis, onForceRender }: PreviewPaneProps) {
       : analysis.parse.ok
         ? analysis.parse.messages
         : [];
-    window.open(`/preview#${await encodeMessagesHash(messages)}`, "_blank");
+    window.open(`${toUrlPath("/preview")}#${await encodeMessagesHash(messages)}`, "_blank");
   };
   return (
     <div className="flex h-full min-w-0 flex-col bg-background">

@@ -8,7 +8,14 @@ const nodeBuiltinsStub = fileURLToPath(
   new URL("./src/validation/node-builtins.browser.ts", import.meta.url),
 );
 
+/** Deployment base path, e.g. `PLAYGROUND_BASE=/agentic-ui/ pnpm build` for a subfolder. */
+const base = `/${(process.env.PLAYGROUND_BASE ?? "/").replace(/^\/+|\/+$/g, "")}/`.replace(
+  /^\/\/$/,
+  "/",
+);
+
 export default defineConfig({
+  base,
   plugins: [react(), tailwindcss()],
   resolve: {
     tsconfigPaths: true,

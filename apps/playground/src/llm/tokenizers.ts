@@ -1,5 +1,6 @@
 import { Tokenizer } from "@huggingface/tokenizers";
 import { Tiktoken, type TiktokenBPE } from "js-tiktoken/lite";
+import { publicUrl } from "../app/base-path.ts";
 
 export type TokenizerId = "qwen" | "o200k" | "approx";
 
@@ -78,10 +79,10 @@ export function loadCounter(id: TokenizerId): Promise<TokenCounter> {
             createO200kCounter(module.default),
           )
         : Promise.all([
-            fetch("/tokenizers/qwen2.5/tokenizer.json").then(
+            fetch(publicUrl("tokenizers/qwen2.5/tokenizer.json")).then(
               (response) => response.json() as Promise<object>,
             ),
-            fetch("/tokenizers/qwen2.5/tokenizer_config.json").then(
+            fetch(publicUrl("tokenizers/qwen2.5/tokenizer_config.json")).then(
               (response) => response.json() as Promise<object>,
             ),
           ]).then(([json, config]) => createQwenCounter(json, config));
