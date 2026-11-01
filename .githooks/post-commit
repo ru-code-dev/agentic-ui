@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# DEC-047, companion of .githooks/pre-commit. `git commit <pathspecs>` commits a temporary index
+# and writes the real index from the paths as they were before the pre-commit hook ran, so a file
+# the hook formatted would show as "staged: unformatted". For each file the hook formatted whose
+# working tree equals HEAD while its index entry does not, stage it again (index = HEAD = tree).
+set -euo pipefail
+
+list=$(git rev-parse --git-path pre-commit-formatted)
+[ -s "$list" ] || exit 0
+cd "$(git rev-parse --show-toplevel)"
+while IFS= read -r -d '' file; do
+  if git diff --quiet HEAD -- "$file" && ! git diff --cached --quiet HEAD -- "$file"; then
+    git add -- "$file"
+  fi
+done < "$list"
+rm -f "$list"

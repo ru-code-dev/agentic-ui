@@ -1,3 +1,4 @@
+import type { ComponentRole } from "../prop-kinds.ts";
 import { AvatarApi } from "./avatar.ts";
 import { BoxApi } from "./box.ts";
 import { ButtonApi } from "./button.ts";
@@ -62,3 +63,26 @@ export const COMPONENT_APIS = [
   AvatarApi,
   IconApi,
 ];
+
+/** What each component is for (SV-C22); the catalog rules name components through their role. */
+export const COMPONENT_ROLES: Readonly<Record<string, ComponentRole>> = {
+  Box: "layout",
+  Center: "layout",
+  Container: "page",
+  Flex: "layout",
+  Grid: "layout",
+  Heading: "text",
+  Text: "text",
+  Button: "action",
+  Input: "input",
+  Checkbox: "input",
+  RadioGroup: "input",
+  Switch: "input",
+  List: "data",
+  Table: "data",
+  Tag: "status",
+  Modal: "overlay",
+  Tabs: "overlay",
+  Avatar: "media",
+  Icon: "media",
+};

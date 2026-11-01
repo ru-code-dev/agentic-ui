@@ -1,0 +1,48 @@
+# DEC-047: ruff lint + format for the agent server (dev tool in WORKFLOW, runtime stays stdlib, SV-C1).
+# Gate: `ruff check` 0 errors, 0 warnings (root `pnpm check`); formatting runs in .githooks/pre-commit.
+target-version = "py313"
+line-length = 120
+src = ["src", "tests"]
+
+[format]
+quote-style = "double"
+
+[lint]
+# E/W pycodestyle, F pyflakes (F403/F405: no `from x import *`, the DEC-050 analog), I isort, B bugbear,
+# UP pyupgrade, SIM simplify, RUF ruff, C4 comprehensions, PIE, BLE blind except + S110 try/except/pass
+# (SV-C16: no swallowed exceptions), ASYNC, PERF, N naming, ISC implicit concat, PGH (no blanket noqa /
+# type: ignore), TID tidy imports, RET returns, PLE pylint errors.
+select = [
+  "E",
+  "W",
+  "F",
+  "I",
+  "B",
+  "UP",
+  "SIM",
+  "RUF",
+  "C4",
+  "PIE",
+  "BLE",
+  "S110",
+  "ASYNC",
+  "PERF",
+  "N",
+  "ISC",
+  "PGH",
+  "TID",
+  "RET",
+  "PLE",
+]
+ignore = [
+  "TID252", # package-internal `from ..x import y` keeps the package relocatable (zipapp, SV-C2); no star imports (F403)
+  "N818", # exception names (QueueFull, TurnTimeout, SessionBusy, ...) are the public P2 API
+  "ASYNC109", # `timeout` parameters are the RPC deadline API, applied with asyncio.wait/timeout inside
+  "RUF001",
+  "RUF002",
+  "RUF003", # Cyrillic is not ambiguous here: the UI, fallback and prompts are Russian (SV-C9)
+]
+
+[lint.flake8-bugbear]
+# `_section(cls)` returns `dataclasses.field(default_factory=cls, ...)` (RUF009 cannot see that)
+extend-immutable-calls = ["agentic_ui_server.settings._section"]

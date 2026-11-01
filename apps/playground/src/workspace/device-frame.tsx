@@ -36,7 +36,7 @@ export function DeviceFrame({ device, landscape, fit }: DeviceFrameProps) {
       title="Device preview"
       data-testid="device-frame"
       src={toUrlPath("/preview")}
-      className="block size-full bg-[#1a202c]"
+      className="block size-full bg-(--kit-page-bg)"
     />
   );
 
@@ -102,7 +102,7 @@ export function DeviceFrame({ device, landscape, fit }: DeviceFrameProps) {
               <div className="pointer-events-none absolute left-1/2 top-[18px] z-10 h-[22px] w-[90px] -translate-x-1/2 rounded-full bg-black" />
             ) : null}
             <div
-              className="size-full overflow-hidden bg-[#1a202c]"
+              className="size-full overflow-hidden bg-(--kit-page-bg)"
               style={{ borderRadius: Math.max(0, chrome.radius - chrome.pad) }}
             >
               {iframe}

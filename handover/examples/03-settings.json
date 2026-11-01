@@ -1,0 +1,142 @@
+{
+  "name": "Настройки",
+  "description": "Уведомления, безопасность и способ подтверждения операций.",
+  "messages": [
+    {
+      "version": "v0.9",
+      "createSurface": {
+        "surfaceId": "settings",
+        "catalogId": "urn:agentic-ui:catalog:ui-kit-one:v1",
+        "sendDataModel": true
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateDataModel": {
+        "surfaceId": "settings",
+        "path": "/settings",
+        "value": {
+          "push": true,
+          "email": false,
+          "sms": true,
+          "twoFactor": true,
+          "confirm": "push"
+        }
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateComponents": {
+        "surfaceId": "settings",
+        "components": [
+          {
+            "id": "root",
+            "component": "Container",
+            "maxW": "container.md",
+            "py": "8",
+            "children": ["stack"]
+          },
+          {
+            "id": "stack",
+            "component": "Flex",
+            "direction": "column",
+            "gap": "6",
+            "children": ["title", "notifications", "confirm", "save"]
+          },
+          {
+            "id": "title",
+            "component": "Heading",
+            "text": "Настройки",
+            "as": "h1",
+            "size": "lg"
+          },
+          {
+            "id": "notifications",
+            "component": "Flex",
+            "direction": "column",
+            "gap": "4",
+            "bg": "gray.700",
+            "p": "5",
+            "borderRadius": "xl",
+            "borderWidth": "1px",
+            "borderColor": "whiteAlpha.100",
+            "children": ["n-title", "push", "email", "sms", "twofa"]
+          },
+          {
+            "id": "n-title",
+            "component": "Heading",
+            "text": "Уведомления и защита",
+            "as": "h2",
+            "size": "sm"
+          },
+          {
+            "id": "push",
+            "component": "Switch",
+            "label": "Push-уведомления об операциях",
+            "value": {
+              "path": "/settings/push"
+            }
+          },
+          {
+            "id": "email",
+            "component": "Switch",
+            "label": "Выписка на почту раз в месяц",
+            "value": {
+              "path": "/settings/email"
+            }
+          },
+          {
+            "id": "sms",
+            "component": "Switch",
+            "label": "SMS о входе в приложение",
+            "value": {
+              "path": "/settings/sms"
+            }
+          },
+          {
+            "id": "twofa",
+            "component": "Switch",
+            "label": "Двухфакторная аутентификация",
+            "value": {
+              "path": "/settings/twoFactor"
+            },
+            "colorScheme": "green"
+          },
+          {
+            "id": "confirm",
+            "component": "RadioGroup",
+            "label": "Подтверждение операций",
+            "value": {
+              "path": "/settings/confirm"
+            },
+            "options": [
+              {
+                "label": "Push-уведомлением",
+                "value": "push"
+              },
+              {
+                "label": "Кодом из SMS",
+                "value": "sms"
+              },
+              {
+                "label": "Кодом из приложения",
+                "value": "totp"
+              }
+            ]
+          },
+          {
+            "id": "save",
+            "component": "Button",
+            "label": "Сохранить изменения",
+            "colorScheme": "blue",
+            "action": {
+              "event": {
+                "name": "settings.save"
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+# DEC-047: formatting is not a gate; every commit formats what it commits. Staged files go through
+# `vp fmt -c .oxfmtrc.json` (oxfmt skips files it does not handle and the config's ignorePatterns),
+# staged `.py` files through `ruff format`, and all are re-staged; a commit that stages tests or ID inputs also
+# commits the regenerated traceability matrix (see the end of this file). Works for `git commit` and `git commit <pathspecs>` (git points GIT_INDEX_FILE
+# at the index being committed; .githooks/post-commit then re-syncs the real index). Files with
+# unstaged changes are left alone, so formatting never stages hunks the author did not stage.
+# Enabled by `git config core.hooksPath .githooks` (root `prepare`, scripts/setup-workflow.sh).
+set -euo pipefail
+
+root=$(git rev-parse --show-toplevel)
+vp="$root/node_modules/.bin/vp"
+if [ ! -x "$vp" ]; then
+  echo "pre-commit: $vp not found (run pnpm install); commit left unformatted" >&2
+  exit 0
+fi
+cd "$root"
+
+# The files formatted by this commit attempt, for .githooks/post-commit (overwritten every time).
+list=$(git rev-parse --git-path pre-commit-formatted)
+: > "$list"
+# Staged (added/copied/modified/renamed) files without unstaged changes, NUL-separated.
+git diff --cached --name-only --diff-filter=ACMR -z | while IFS= read -r -d '' file; do
+  if git diff --quiet -- "$file"; then
+    printf '%s\0' "$file"
+  else
+    echo "pre-commit: $file has unstaged changes; not formatted" >&2
+  fi
+done > "$list"
+
+# Quiet on success; a file oxfmt cannot parse is committed as is (formatting is not a gate).
+if [ -s "$list" ] && ! out=$(xargs -0 "$vp" fmt -c .oxfmtrc.json --no-error-on-unmatched-pattern < "$list" 2>&1); then
+  printf 'pre-commit: formatting failed, committing as is:\n%s\n' "$out" >&2
+fi
+# Python (oxfmt skips it): `ruff format` with the nearest ruff.toml (apps/agent-server/ruff.toml).
+# ruff lives in WORKFLOW/tools/<os>-<arch>/bin (scripts/setup-workflow.sh); AGENTIC_UI_RUFF overrides.
+python_list=$(git rev-parse --git-path pre-commit-python)
+while IFS= read -r -d '' file; do
+  case "$file" in *.py) printf '%s\0' "$file" ;; esac
+done < "$list" > "$python_list"
+if [ -s "$python_list" ]; then
+  platform="$(uname -s | tr '[:upper:]' '[:lower:]')-$(uname -m)"
+  ruff="${AGENTIC_UI_RUFF:-$root/WORKFLOW/tools/$platform/bin/ruff}"
+  if [ ! -x "$ruff" ]; then
+    echo "pre-commit: $ruff not found (bash scripts/setup-workflow.sh); Python files left unformatted" >&2
+  elif ! out=$(xargs -0 "$ruff" format --quiet < "$python_list" 2>&1); then
+    printf 'pre-commit: ruff format failed, committing as is:\n%s\n' "$out" >&2
+  fi
+fi
+[ -s "$list" ] && xargs -0 git add -- < "$list"
+
+# TOOL-I2/I6 (DEC-032): test tags drive docs/TRACEABILITY.md. When the commit stages a test, a Python test, the
+# Python test mapping or the ID list, regenerate the matrix (`node scripts/traceability.mjs --write`, from the
+# working tree) and commit it too, so tags never leave it stale. Other traceability problems are reported, not
+# blocking: `pnpm check` (check:trace) is the gate. The matrix joins the list .githooks/post-commit re-syncs.
+# TOOL-I2/I6 (DEC-032): test tags drive the traceability matrix. Amendment A3 moved the ID list and the matrix into
+# the gitignored WORKFLOW/project/, so the hook only REGENERATES the local matrix (traceability.mjs --write writes it
+# there, or skips when the records are absent) — there is nothing to stage. `pnpm check` (check:trace) is the gate.
+trace_inputs='\.(test|spec)\.(ts|tsx|mts|js|mjs)$|^apps/agent-server/tests/(.+/)?test_[^/]*\.py$'
+trace_inputs="$trace_inputs|^apps/agent-server/tests/traceability\.json$"
+if [ -f scripts/traceability.mjs ] && git diff --cached --name-only | grep -qE "$trace_inputs"; then
+  if ! out=$(node scripts/traceability.mjs --write 2>&1); then
+    printf 'pre-commit: traceability problems (not blocking, pnpm check fails on them):\n%s\n' "$out" >&2
+  fi
+fi

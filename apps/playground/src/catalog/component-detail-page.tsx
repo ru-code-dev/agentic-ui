@@ -59,7 +59,7 @@ export function ComponentDetailPage({ name }: { name: string }) {
             <h2 className="font-medium text-[12px] leading-5 text-muted-foreground uppercase tracking-wider">
               Live preview
             </h2>
-            <div className="min-h-64 overflow-hidden rounded-xl border bg-[#1a202c] p-6">
+            <div className="min-h-64 overflow-hidden rounded-xl border bg-(--kit-page-bg) p-6">
               <div className="w-[480px] max-w-full">
                 <SnippetPreview messages={example.messages} testId={`scoped-${name}`} />
               </div>

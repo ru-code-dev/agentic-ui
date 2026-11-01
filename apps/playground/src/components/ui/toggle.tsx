@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { type ElementRef, type ReactElement, forwardRef } from "react";
 
 import { Toggle as TogglePrimitive } from "@base-ui/react/toggle";
 import { cva, type VariantProps } from "class-variance-authority";
@@ -28,10 +28,10 @@ export const toggleVariants = cva(
   },
 );
 
-export const Toggle = React.forwardRef<
-  React.ElementRef<typeof TogglePrimitive>,
+export const Toggle = forwardRef<
+  ElementRef<typeof TogglePrimitive>,
   TogglePrimitive.Props & VariantProps<typeof toggleVariants>
->(function Toggle({ className, variant, size, ...props }, ref): React.ReactElement {
+>(function Toggle({ className, variant, size, ...props }, ref): ReactElement {
   return (
     <TogglePrimitive
       ref={ref}

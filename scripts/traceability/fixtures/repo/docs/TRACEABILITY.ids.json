@@ -1,0 +1,33 @@
+{
+  "phases": { "S05": "done", "P3": "open" },
+  "ids": [
+    { "id": "SV-C1", "source": "INTENT", "title": "stdlib only", "scope": "in", "phase": "S05" },
+    { "id": "SV-C2", "source": "INTENT", "title": "one pyz file", "scope": "in", "phase": "P3" },
+    { "id": "PG-01", "source": "SPEC", "title": "sidebar", "scope": "in", "phase": "S05" },
+    {
+      "id": "PG-02",
+      "source": "SPEC",
+      "title": "screenshots",
+      "scope": "out",
+      "reason": "skipped by the owner",
+      "evidence": "DEC-040"
+    },
+    {
+      "id": "PG-03",
+      "source": "SPEC",
+      "title": "size limit",
+      "scope": "in",
+      "phase": "S05",
+      "checks": ["check:size"]
+    },
+    {
+      "id": "INT-01",
+      "source": "SPEC",
+      "title": "playground",
+      "scope": "in",
+      "phase": "S05",
+      "covers": ["PG-01..03"]
+    },
+    { "id": "P3-extract", "source": "PLAN §4", "title": "extraction", "scope": "in", "phase": "P3" }
+  ]
+}

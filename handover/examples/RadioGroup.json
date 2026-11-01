@@ -1,0 +1,52 @@
+{
+  "name": "RadioGroup",
+  "description": "Выбор одного варианта.",
+  "messages": [
+    {
+      "version": "v0.9",
+      "createSurface": {
+        "surfaceId": "radio-group",
+        "catalogId": "urn:agentic-ui:catalog:ui-kit-one:v1",
+        "sendDataModel": true
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateDataModel": {
+        "surfaceId": "radio-group",
+        "path": "/delivery",
+        "value": "courier"
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateComponents": {
+        "surfaceId": "radio-group",
+        "components": [
+          {
+            "id": "root",
+            "component": "RadioGroup",
+            "label": "Способ получения карты",
+            "value": {
+              "path": "/delivery"
+            },
+            "options": [
+              {
+                "label": "Курьером",
+                "value": "courier"
+              },
+              {
+                "label": "В отделении",
+                "value": "branch"
+              },
+              {
+                "label": "Почтой России",
+                "value": "post"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

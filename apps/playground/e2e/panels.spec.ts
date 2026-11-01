@@ -12,7 +12,7 @@ import {
   textSurface,
 } from "./support/workspace.ts";
 
-test("PG-09: the Errors tab lists JSON, schema and preview console errors", async ({ page }) => {
+test("[PG-09] the Errors tab lists JSON, schema and preview console errors", async ({ page }) => {
   await openWorkspace(page);
   await openPanel(page, /Errors/);
   await expect(page.getByText("No errors")).toBeVisible();
@@ -46,7 +46,7 @@ test("PG-09: the Errors tab lists JSON, schema and preview console errors", asyn
   saveScreenshot("playground-errors", await page.screenshot());
 });
 
-test("PG-11: the Events tab logs actions with context and data model, and clears", async ({
+test("[PG-11] the Events tab logs actions with context and data model, and clears", async ({
   page,
 }) => {
   await openWorkspace(page);
@@ -64,7 +64,7 @@ test("PG-11: the Events tab logs actions with context and data model, and clears
   await expect(page.getByText("No events yet")).toBeVisible();
 });
 
-test("PG-12: mock rules answer events with simulated agent replies; rules can be added, edited and deleted", async ({
+test("[PG-12] mock rules answer events with simulated agent replies; rules can be added, edited and deleted", async ({
   page,
 }) => {
   await openWorkspace(page);
@@ -101,7 +101,7 @@ test("PG-12: mock rules answer events with simulated agent replies; rules can be
   saveScreenshot("playground-mock-rules", await page.screenshot());
 });
 
-test("PG-13: the Catalog tab shows catalog.json with copy and download", async ({ page }) => {
+test("[PG-13] the Catalog tab shows catalog.json with copy and download", async ({ page }) => {
   await openWorkspace(page);
   await openPanel(page, "Catalog");
   await expect(page.getByTestId("highlighted-code").first()).toContainText(
@@ -117,17 +117,17 @@ test("PG-13: the Catalog tab shows catalog.json with copy and download", async (
   expect(await page.evaluate(() => navigator.clipboard.readText())).toContain('"anyComponent"');
 });
 
-test("PG-14: the Prompt tab shows the system prompt with an examples control and token estimate", async ({
+test("[PG-14] the Prompt tab shows the system prompt with an examples control and token estimate", async ({
   page,
 }) => {
   await openWorkspace(page);
   await openPanel(page, "Prompt");
-  await expect(page.getByTestId("prompt-examples")).toHaveText("5");
+  await expect(page.getByTestId("prompt-examples")).toHaveText("9");
   const before = Number(
     (await page.getByTestId("prompt-tokens").textContent())?.replace(/\D/g, ""),
   );
   await page.getByRole("button", { name: "Fewer examples" }).click();
-  await expect(page.getByTestId("prompt-examples")).toHaveText("4");
+  await expect(page.getByTestId("prompt-examples")).toHaveText("8");
   await expect
     .poll(async () =>
       Number((await page.getByTestId("prompt-tokens").textContent())?.replace(/\D/g, "")),
@@ -141,7 +141,7 @@ test("PG-14: the Prompt tab shows the system prompt with an examples control and
   expect(readFileSync(await download.path(), "utf8")).toContain("<a2ui-json>");
 });
 
-test("PG-15: editor, selection, device and mock rules persist; Reset all restores defaults", async ({
+test("[PG-15] editor, selection, device and mock rules persist; Reset all restores defaults", async ({
   page,
 }) => {
   await openWorkspace(page);

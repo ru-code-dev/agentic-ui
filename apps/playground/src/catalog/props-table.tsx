@@ -1,11 +1,14 @@
-import { COMPONENT_APIS, STYLE_PROP_NAMES, TWO_WAY_BINDINGS } from "@agentic-ui/ui-kit-one-catalog";
+import { COMPONENT_APIS, STYLE_PROP_NAMES } from "@agentic-ui/ui-kit-one-catalog";
 import { propDoc } from "@agentic-ui/ui-kit-one-catalog/docs";
 import { COMPONENT_MAPPINGS } from "@agentic-ui/ui-kit-one-react";
 import type { z } from "zod";
 import { RichText } from "../components/rich-text.tsx";
 import { Badge } from "../components/ui/badge.tsx";
 
-/** Contract props of a component with type, values, kit mapping and binding (from the Zod API). */
+/** Badge colour per prop kind: interactive kinds stand out. */
+const KIND_VARIANT = { "two-way": "info", trigger: "info", action: "warning" } as const;
+
+/** Contract props of a component with kind, type, values and kit mapping (from the Zod API). */
 export function PropsTable({ name }: { name: string }) {
   const api = COMPONENT_APIS.find((candidate) => candidate.name === name);
   const mapping = COMPONENT_MAPPINGS.find((candidate) => candidate.component === name);
@@ -16,7 +19,6 @@ export function PropsTable({ name }: { name: string }) {
     ([prop]) =>
       !(styleCount === STYLE_PROP_NAMES.length && STYLE_PROP_NAMES.includes(prop as never)),
   );
-  const twoWay = TWO_WAY_BINDINGS[name] ?? [];
   return (
     <div className="overflow-hidden rounded-lg border">
       <table className="w-full text-left text-[12.5px]" data-testid="props-table">
@@ -39,11 +41,15 @@ export function PropsTable({ name }: { name: string }) {
                   {doc.required ? (
                     <span className="ml-1 text-destructive-foreground">*</span>
                   ) : null}
-                  {twoWay.includes(prop) ? (
-                    <Badge variant="info" className="ml-1.5">
-                      two-way
+                  {doc.kind === undefined ? null : (
+                    <Badge
+                      variant={KIND_VARIANT[doc.kind as keyof typeof KIND_VARIANT] ?? "outline"}
+                      className="ml-1.5"
+                      data-testid="prop-kind"
+                    >
+                      {doc.kind}
                     </Badge>
-                  ) : null}
+                  )}
                 </td>
                 <td className="px-3 py-2 font-mono text-[11.5px] text-muted-foreground">
                   {doc.type}

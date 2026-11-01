@@ -6,7 +6,7 @@ import type { z } from "zod";
 export interface PropMapping {
   /** Kit prop (or part) that receives the value, e.g. `variant`, `children`, `FormLabel`. */
   readonly kit: string;
-  /** Contract value → kit value, when values are renamed. */
+  /** Contract value → kit value, when values are renamed (passthrough: applied by option `values`). */
   readonly values?: Readonly<Record<string, string | number | boolean>>;
   /** Behavior beyond a straight pass-through (bindings, derived values). */
   readonly note?: string;
@@ -14,13 +14,15 @@ export interface PropMapping {
   readonly identity?: true;
 }
 
-/** Contract → kit mapping of one component; MAPPING.md is generated from these (`pnpm docs`). */
+/** Contract → kit mapping of one component; MAPPING.md is generated from these (`pnpm build`, D2-10). */
 export interface ComponentMapping {
   readonly component: string;
   /** Kit facades the implementation renders. */
   readonly kit: readonly string[];
   /** Every contract prop, in contract order. */
   readonly props: Readonly<Record<string, PropMapping>>;
+  /** Kit props the contract hides, always rendered with these values (DEC-046). */
+  readonly fixed?: Readonly<Record<string, string | number | boolean>>;
 }
 
 /** The resolved-prop keys of a contract component. */

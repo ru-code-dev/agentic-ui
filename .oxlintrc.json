@@ -1,7 +1,15 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "ignorePatterns": ["dist", "node_modules", "*.tsbuildinfo", "test-results", "playwright-report"],
-  "plugins": ["eslint", "oxc", "react", "unicorn", "typescript"],
+  "ignorePatterns": [
+    "dist",
+    "node_modules",
+    "*.tsbuildinfo",
+    "test-results",
+    "playwright-report",
+    "scripts/lint-rules/fixtures"
+  ],
+  "plugins": ["eslint", "oxc", "react", "unicorn", "typescript", "import"],
+  "jsPlugins": ["./scripts/oxlint-plugin/index.mjs"],
   "categories": {
     "correctness": "warn",
     "suspicious": "warn",
@@ -11,7 +19,17 @@
     "react-in-jsx-scope": "off",
     "eslint/no-shadow": "off",
     "eslint/no-await-in-loop": "off",
-    "eslint/no-underscore-dangle": "off"
+    "eslint/no-underscore-dangle": "off",
+    "import/no-namespace": "error",
+    "agentic-ui/no-export-star": "error",
+    "agentic-ui/effect-block-body": "error",
+    "agentic-ui/no-random-uuid": "error",
+    "import/no-unassigned-import": [
+      "warn",
+      {
+        "allow": ["**/*.css"]
+      }
+    ]
   },
   "overrides": [
     {
@@ -27,13 +45,15 @@
               }
             ]
           }
-        ]
+        ],
+        "agentic-ui/kit-boundary": ["error", { "allow": ["react", "@a2ui", "@agentic-ui", "zod"] }]
       }
     },
     {
       "files": ["packages/ui-kit-one-react/src/kit/**/*.ts"],
       "rules": {
-        "eslint/no-restricted-imports": "off"
+        "eslint/no-restricted-imports": "off",
+        "agentic-ui/kit-boundary": "off"
       }
     }
   ]

@@ -1,14 +1,15 @@
 "use client";
 
-import * as React from "react";
+import { type ComponentProps, type ElementRef, type ReactElement, forwardRef } from "react";
 
 import { Checkbox as CheckboxPrimitive } from "@base-ui/react/checkbox";
+import { Check, Minus } from "lucide-react";
 import { cn } from "~/lib/utils";
 
-export const Checkbox = React.forwardRef<
-  React.ElementRef<typeof CheckboxPrimitive.Root>,
+export const Checkbox = forwardRef<
+  ElementRef<typeof CheckboxPrimitive.Root>,
   CheckboxPrimitive.Root.Props
->(function Checkbox({ className, ...props }, ref): React.ReactElement {
+>(function Checkbox({ className, ...props }, ref): ReactElement {
   return (
     <CheckboxPrimitive.Root
       ref={ref}
@@ -22,40 +23,12 @@ export const Checkbox = React.forwardRef<
       <CheckboxPrimitive.Indicator
         className="absolute -inset-px flex items-center justify-center rounded-[.25rem] text-primary-foreground data-unchecked:hidden data-checked:bg-primary data-indeterminate:text-foreground"
         data-slot="checkbox-indicator"
-        render={(props: React.ComponentProps<"span">, state: CheckboxPrimitive.Indicator.State) => (
+        render={(props: ComponentProps<"span">, state: CheckboxPrimitive.Indicator.State) => (
           <span {...props}>
             {state.indeterminate ? (
-              <svg
-                aria-hidden="true"
-                className="size-3.5 sm:size-3"
-                fill="none"
-                height="24"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="3"
-                viewBox="0 0 24 24"
-                width="24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M5.252 12h13.496" />
-              </svg>
+              <Minus aria-hidden="true" className="size-3.5 sm:size-3" strokeWidth={3} />
             ) : (
-              <svg
-                aria-hidden="true"
-                className="size-3.5 sm:size-3"
-                fill="none"
-                height="24"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="3"
-                viewBox="0 0 24 24"
-                width="24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M5.252 12.7 10.2 18.63 18.748 5.37" />
-              </svg>
+              <Check aria-hidden="true" className="size-3.5 sm:size-3" strokeWidth={3} />
             )}
           </span>
         )}

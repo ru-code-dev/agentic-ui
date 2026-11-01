@@ -1,31 +1,13 @@
 import { expect, test, type Page } from "@playwright/test";
+import { SNIPPET_COMPONENTS } from "./support/contract.ts";
 import { watchConsole } from "./support/console.ts";
 import { decode, differingPixels, saveScreenshot } from "./support/pixels.ts";
 
 /** Chakra `radii.md`: the dialog's rounded corners show whatever page lies under the overlay. */
 const DIALOG_CORNER_INSET = 6;
 
-const COMPONENTS = [
-  "Avatar",
-  "Box",
-  "Button",
-  "Center",
-  "Checkbox",
-  "Container",
-  "Flex",
-  "Grid",
-  "Heading",
-  "Icon",
-  "Input",
-  "List",
-  "Modal",
-  "RadioGroup",
-  "Switch",
-  "Table",
-  "Tabs",
-  "Tag",
-  "Text",
-];
+/** Every contract component: a new one is compared too, with no edit here (DEC-036). */
+const COMPONENTS = SNIPPET_COMPONENTS;
 
 async function openModal(page: Page) {
   await page.getByRole("button", { name: "Показать детали" }).click();
@@ -36,7 +18,7 @@ async function openModal(page: Page) {
   return dialog;
 }
 
-test.describe("DEC-001: scoped in-document kit vs a Chakra-only page", () => {
+test.describe("[PG-06] scoped in-document kit vs a Chakra-only page (DEC-001)", () => {
   for (const name of COMPONENTS) {
     test(`${name} snippet is pixel-identical`, async ({ page }) => {
       const console = watchConsole(page);

@@ -1,0 +1,6 @@
+{
+  // @agentic-ui/a2ui-react d.ts build (a2ui-react/tsdown.config.ts): tsgo emits below this folder, so the bundled
+  // workspace sources (ui-kit-one-catalog, ui-kit-one-react) are part of the program and their types inlined.
+  "extends": "./a2ui-react/tsconfig.json",
+  "include": ["a2ui-react/src", "ui-kit-one-catalog/src", "ui-kit-one-react/src"]
+}

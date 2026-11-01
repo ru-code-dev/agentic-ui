@@ -8,7 +8,7 @@ const ROUTES = [
   ["/llm-context", "LLM context"],
 ] as const;
 
-test.describe("PG-18, PG-25: every route of the production build loads by deep link with no console output", () => {
+test.describe("[PG-18, PG-25] every route of the production build loads by deep link with no console output", () => {
   for (const [path, nav] of ROUTES) {
     test(path, async ({ page }) => {
       const console = watchConsole(page);
@@ -21,7 +21,7 @@ test.describe("PG-18, PG-25: every route of the production build loads by deep l
     });
   }
 
-  test("/preview loads standalone and renders from its hash", async ({ page }) => {
+  test("/preview loads standalone and renders from its hash [PG-23]", async ({ page }) => {
     const console = watchConsole(page);
     await page.goto("/preview");
     await expect(page.getByTestId("preview-root")).toBeAttached();
@@ -29,7 +29,7 @@ test.describe("PG-18, PG-25: every route of the production build loads by deep l
     console.expectClean();
   });
 
-  test("client-side navigation keeps the shell", async ({ page }) => {
+  test("client-side navigation keeps the shell [PG-25]", async ({ page }) => {
     await page.goto("/");
     await page.getByRole("link", { name: "LLM context" }).click();
     await expect(page).toHaveURL(/\/llm-context$/);

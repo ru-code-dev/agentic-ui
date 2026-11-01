@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vite-plus/test";
-import { openPreviewChannel, type PreviewChannelMessage } from "./channel.ts";
+import { BUILD_ID, openPreviewChannel, type PreviewChannelMessage } from "./channel.ts";
+import { newId } from "../lib/new-id.ts";
 
 const next = (channel: ReturnType<typeof openPreviewChannel>) =>
   new Promise<PreviewChannelMessage>((resolve) => {
@@ -9,9 +10,9 @@ const next = (channel: ReturnType<typeof openPreviewChannel>) =>
     });
   });
 
-describe("preview channel (PG-24)", () => {
+describe("preview channel [PG-24]", () => {
   it("carries app → preview and preview → app messages between documents", async () => {
-    const name = `test-${crypto.randomUUID()}`;
+    const name = `test-${newId()}`;
     const app = openPreviewChannel(name);
     const preview = openPreviewChannel(name);
 
@@ -50,5 +51,37 @@ describe("preview channel (PG-24)", () => {
 
     app.close();
     preview.close();
+  });
+});
+
+describe("stale preview guard [PG-28]", () => {
+  it("drops messages of another build and of builds without an id, and reports them", async () => {
+    const name = `test-${newId()}`;
+    const current = openPreviewChannel(name, "build-new");
+    const old = openPreviewChannel(name, "build-old");
+    const raw = new BroadcastChannel(name);
+    const received: PreviewChannelMessage[] = [];
+    const others: string[] = [];
+    current.subscribe(
+      (message) => received.push(message),
+      (build) => others.push(build),
+    );
+
+    old.post({ type: "error", previewId: "old", source: "runtime", message: "expected string" });
+    // oxlint-disable-next-line unicorn/require-post-message-target-origin -- BroadcastChannel.postMessage has no targetOrigin parameter
+    raw.postMessage({ type: "hello", previewId: "pre-PG-28" });
+    const same = openPreviewChannel(name, "build-new");
+    const arrived = next(current);
+    same.post({ type: "hello", previewId: "same" });
+    expect(await arrived).toEqual({ type: "hello", previewId: "same" });
+
+    expect(received).toEqual([{ type: "hello", previewId: "same" }]);
+    expect(others).toEqual(["build-old", "unknown"]);
+    for (const channel of [current, old, same]) channel.close();
+    raw.close();
+  });
+
+  it("stamps this build's id (vite define) on every message", () => {
+    expect(BUILD_ID).toMatch(/^[a-z0-9]+-[a-z0-9]+$/);
   });
 });

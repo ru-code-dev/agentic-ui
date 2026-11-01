@@ -1,7 +1,7 @@
 import { createComponentImplementation } from "@a2ui/react/v0_9";
 import { ModalApi } from "@agentic-ui/ui-kit-one-catalog";
 import { useCallback, useState } from "react";
-import { ActionScopeContext } from "../action-scope.ts";
+import { ActionScopeContext, TriggerScopeContext } from "../action-scope.ts";
 import { useKitEnvironment } from "../kit-environment.ts";
 import {
   Box,
@@ -26,7 +26,10 @@ export const mapping = componentMapping(
     "ModalBody",
   ],
   {
-    trigger: { kit: "trigger rendered in place", note: "a click inside it opens the modal" },
+    trigger: {
+      kit: "trigger rendered in place",
+      note: "a click inside it opens the modal; event actions inside it are not sent",
+    },
     content: { kit: "ModalBody" },
     title: { kit: "ModalHeader", note: "header omitted when there is no title" },
     open: { kit: "Modal isOpen / onClose", note: "two-way when bound; otherwise local state" },
@@ -37,10 +40,14 @@ export const mapping = componentMapping(
   },
 );
 
-export const Modal = createComponentImplementation(ModalApi, ({ props, buildChild }) => {
+/** A data binding (`{ path }`), even to a path the data model does not hold yet. */
+const isBinding = (raw: unknown) => typeof raw === "object" && raw !== null && "path" in raw;
+
+export const Modal = createComponentImplementation(ModalApi, ({ props, buildChild, context }) => {
   const { scoped, portalContainer } = useKitEnvironment();
   const [localOpen, setLocalOpen] = useState(false);
-  const isBound = props.open !== undefined;
+  // A binding to a missing path resolves to undefined: still bound, so opening writes `true` there.
+  const isBound = props.open !== undefined || isBinding(context.componentModel.properties["open"]);
   const isOpen = isBound ? props.open === true : localOpen;
   const setBoundOpen = props.setOpen;
   const setOpen = useCallback(
@@ -55,7 +62,9 @@ export const Modal = createComponentImplementation(ModalApi, ({ props, buildChil
   return (
     <>
       <Box display="contents" onClick={() => setOpen(true)}>
-        {buildChild(props.trigger)}
+        <TriggerScopeContext.Provider value={true}>
+          {buildChild(props.trigger)}
+        </TriggerScopeContext.Provider>
       </Box>
       <KitModal
         isOpen={isOpen}

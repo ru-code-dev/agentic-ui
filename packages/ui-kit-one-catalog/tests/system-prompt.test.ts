@@ -22,7 +22,7 @@ const agentProcessor = () => {
   });
 };
 
-describe("assembleSystemPrompt", () => {
+describe("assembleSystemPrompt [INT-03, PR-01]", () => {
   it("is exactly @a2ui/agent's Direct JSON prompt snippet when used without options", () => {
     expect(assembleSystemPrompt(catalogJson).text).toBe(agentProcessor().promptSnippet);
   });

@@ -1,0 +1,167 @@
+{
+  "name": "Статусы заказов",
+  "description": "Несколько строк заказов, записанных явно: у каждой строки свой Tag со своим литеральным colorScheme (статусные цвета без привязки к данным).",
+  "messages": [
+    {
+      "version": "v0.9",
+      "createSurface": {
+        "surfaceId": "orders",
+        "catalogId": "urn:agentic-ui:catalog:ui-kit-one:v1"
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateDataModel": {
+        "surfaceId": "orders",
+        "path": "/",
+        "value": {
+          "orders": [
+            {
+              "id": "1023",
+              "title": "Заказ №1023 · Наушники",
+              "status": "Доставлен"
+            },
+            {
+              "id": "1024",
+              "title": "Заказ №1024 · Чехол для телефона",
+              "status": "В пути"
+            },
+            {
+              "id": "1025",
+              "title": "Заказ №1025 · Зарядное устройство",
+              "status": "Отменён"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateComponents": {
+        "surfaceId": "orders",
+        "components": [
+          {
+            "id": "root",
+            "component": "Container",
+            "maxW": "container.sm",
+            "py": "8",
+            "children": ["stack"]
+          },
+          {
+            "id": "stack",
+            "component": "Flex",
+            "direction": "column",
+            "gap": "3",
+            "children": ["title", "row-0", "row-1", "row-2", "refresh"]
+          },
+          {
+            "id": "title",
+            "component": "Heading",
+            "text": "Мои заказы",
+            "as": "h1",
+            "size": "lg"
+          },
+          {
+            "id": "row-0",
+            "component": "Flex",
+            "justify": "space-between",
+            "align": "center",
+            "gap": "3",
+            "bg": "gray.700",
+            "p": "4",
+            "borderRadius": "xl",
+            "borderWidth": "1px",
+            "borderColor": "whiteAlpha.100",
+            "children": ["row-0-title", "row-0-status"]
+          },
+          {
+            "id": "row-0-title",
+            "component": "Text",
+            "text": {
+              "path": "/orders/0/title"
+            }
+          },
+          {
+            "id": "row-0-status",
+            "component": "Tag",
+            "label": {
+              "path": "/orders/0/status"
+            },
+            "colorScheme": "green",
+            "variant": "subtle"
+          },
+          {
+            "id": "row-1",
+            "component": "Flex",
+            "justify": "space-between",
+            "align": "center",
+            "gap": "3",
+            "bg": "gray.700",
+            "p": "4",
+            "borderRadius": "xl",
+            "borderWidth": "1px",
+            "borderColor": "whiteAlpha.100",
+            "children": ["row-1-title", "row-1-status"]
+          },
+          {
+            "id": "row-1-title",
+            "component": "Text",
+            "text": {
+              "path": "/orders/1/title"
+            }
+          },
+          {
+            "id": "row-1-status",
+            "component": "Tag",
+            "label": {
+              "path": "/orders/1/status"
+            },
+            "colorScheme": "orange",
+            "variant": "subtle"
+          },
+          {
+            "id": "row-2",
+            "component": "Flex",
+            "justify": "space-between",
+            "align": "center",
+            "gap": "3",
+            "bg": "gray.700",
+            "p": "4",
+            "borderRadius": "xl",
+            "borderWidth": "1px",
+            "borderColor": "whiteAlpha.100",
+            "children": ["row-2-title", "row-2-status"]
+          },
+          {
+            "id": "row-2-title",
+            "component": "Text",
+            "text": {
+              "path": "/orders/2/title"
+            }
+          },
+          {
+            "id": "row-2-status",
+            "component": "Tag",
+            "label": {
+              "path": "/orders/2/status"
+            },
+            "colorScheme": "red",
+            "variant": "subtle"
+          },
+          {
+            "id": "refresh",
+            "component": "Button",
+            "label": "Обновить статусы",
+            "variant": "outline",
+            "leftIcon": "repeat",
+            "action": {
+              "event": {
+                "name": "orders.refresh"
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

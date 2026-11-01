@@ -6,7 +6,7 @@ import { UI_KIT_ROOT_ATTRIBUTE } from "../src/index.ts";
 import { failOnConsoleNoise } from "./support/console-guard.ts";
 import { renderMessages } from "./support/render-messages.tsx";
 
-describe("UiKitProvider scoped mode", () => {
+describe("UiKitProvider scoped mode [PG-06]", () => {
   failOnConsoleNoise();
 
   it("portals the open Modal inside the kit root and leaves html/body untouched", async () => {

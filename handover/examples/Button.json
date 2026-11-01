@@ -1,0 +1,47 @@
+{
+  "name": "Button",
+  "description": "Основная кнопка с событием и подписью из модели данных.",
+  "messages": [
+    {
+      "version": "v0.9",
+      "createSurface": {
+        "surfaceId": "button",
+        "catalogId": "urn:agentic-ui:catalog:ui-kit-one:v1",
+        "sendDataModel": true
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateDataModel": {
+        "surfaceId": "button",
+        "path": "/cta",
+        "value": "Перевести деньги"
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateComponents": {
+        "surfaceId": "button",
+        "components": [
+          {
+            "id": "root",
+            "component": "Button",
+            "label": {
+              "path": "/cta"
+            },
+            "colorScheme": "blue",
+            "rightIcon": "arrowForward",
+            "action": {
+              "event": {
+                "name": "transfer.start",
+                "context": {
+                  "source": "button-snippet"
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

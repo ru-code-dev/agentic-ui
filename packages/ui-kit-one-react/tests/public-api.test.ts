@@ -1,0 +1,180 @@
+/**
+ * DEC-050 public API proof: the renderer entry and the kit boundary barrel (`src/kit/index.ts`,
+ * explicit named re-exports instead of `export *`) export the same names as before. The type
+ * imports below fail to compile if a type export disappears.
+ */
+import { describe, expect, it } from "vite-plus/test";
+import type {
+  ColorMode,
+  ComponentMapping,
+  PropMapping,
+  RegistryEntry,
+  SentAction,
+  Transport,
+  UiKitProviderProps,
+  UiKitRuntime,
+  UiKitRuntimeOptions,
+  UiKitSurfaceProps,
+} from "../src/index.ts";
+import type {
+  KitIcon,
+  KitStyleKeys,
+  KitStyleProps,
+  ScopedResetOptions,
+  WithChildren,
+} from "../src/kit/index.ts";
+
+/** The module object, via dynamic import (no `import * as`, DEC-050). */
+const entry = await import("../src/index.ts");
+const kit = await import("../src/kit/index.ts");
+
+export type PublicTypes = [
+  ColorMode,
+  ComponentMapping,
+  PropMapping,
+  RegistryEntry,
+  SentAction,
+  Transport,
+  UiKitProviderProps,
+  UiKitRuntime,
+  UiKitRuntimeOptions,
+  UiKitSurfaceProps,
+  KitIcon,
+  KitStyleKeys,
+  KitStyleProps,
+  ScopedResetOptions,
+  WithChildren,
+];
+
+/** Runtime names of `src/index.ts` before DEC-050 (+ PAGE_BACKGROUND, PG-29). */
+const BEFORE_ENTRY = [
+  "COMPONENT_IMPLEMENTATIONS",
+  "COMPONENT_MAPPINGS",
+  "COMPONENT_REGISTRY",
+  "DEFAULT_COLOR_MODE",
+  "ICON_KIT_NAMES",
+  "INCREMENTAL_VALIDATION",
+  "LocalTransport",
+  "PAGE_BACKGROUND",
+  "PASSTHROUGH",
+  "UI_KIT_ROOT_ATTRIBUTE",
+  "UiKitProvider",
+  "UiKitSurface",
+  "createUiKitRuntime",
+  "onComponentError", // A4-26: per-component render failures
+  "registeredFor",
+  "uiKitOneCatalog",
+  "useSurfaces",
+];
+
+/** Runtime names of `src/kit/index.ts` before DEC-050. */
+const BEFORE_KIT = [
+  "AddIcon",
+  "ArrowBackIcon",
+  "ArrowDownIcon",
+  "ArrowForwardIcon",
+  "ArrowUpIcon",
+  "AtSignIcon",
+  "AttachmentIcon",
+  "Avatar",
+  "BellIcon",
+  "Box",
+  "Button",
+  "CSSReset",
+  "CalendarIcon",
+  "Center",
+  "ChatIcon",
+  "CheckCircleIcon",
+  "CheckIcon",
+  "Checkbox",
+  "ChevronDownIcon",
+  "ChevronLeftIcon",
+  "ChevronRightIcon",
+  "ChevronUpIcon",
+  "CloseIcon",
+  "Container",
+  "CopyIcon",
+  "DarkMode",
+  "DeleteIcon",
+  "DownloadIcon",
+  "EditIcon",
+  "EmailIcon",
+  "EmotionThemeProvider",
+  "ExternalLinkIcon",
+  "Flex",
+  "FormControl",
+  "FormErrorMessage",
+  "FormHelperText",
+  "FormLabel",
+  "Global",
+  "GlobalStyle",
+  "HamburgerIcon",
+  "Heading",
+  "IdProvider",
+  "InfoIcon",
+  "InfoOutlineIcon",
+  "Input",
+  "LightMode",
+  "LinkIcon",
+  "List",
+  "ListItem",
+  "LockIcon",
+  "MinusIcon",
+  "Modal",
+  "ModalBody",
+  "ModalCloseButton",
+  "ModalContent",
+  "ModalHeader",
+  "ModalOverlay",
+  "MoonIcon",
+  "NotAllowedIcon",
+  "OrderedList",
+  "PhoneIcon",
+  "QuestionIcon",
+  "Radio",
+  "RadioGroup",
+  "RepeatIcon",
+  "SearchIcon",
+  "SettingsIcon",
+  "SimpleGrid",
+  "Stack",
+  "StarIcon",
+  "SunIcon",
+  "Switch",
+  "Tab",
+  "TabList",
+  "TabPanel",
+  "TabPanels",
+  "Table",
+  "TableCaption",
+  "Tabs",
+  "Tag",
+  "Tbody",
+  "Td",
+  "Text",
+  "Th",
+  "Thead",
+  "ThemeProvider",
+  "TimeIcon",
+  "Tr",
+  "UnlockIcon",
+  "UnorderedList",
+  "ViewIcon",
+  "ViewOffIcon",
+  "WarningIcon",
+  "WarningTwoIcon",
+  "css",
+  "extendTheme",
+  "scopedResetCss",
+  "toCSSVar",
+];
+
+describe("public API [DEC-050] (named exports only)", () => {
+  it("the package entry exports the same names", () => {
+    expect(Object.keys(entry).toSorted()).toEqual(BEFORE_ENTRY);
+  });
+
+  it("the kit barrel exports the same names", () => {
+    expect(Object.keys(kit).toSorted()).toEqual(BEFORE_KIT.toSorted()); // A4b-R5: a name added anywhere reads as a clear diff
+  });
+});

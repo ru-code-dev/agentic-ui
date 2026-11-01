@@ -26,7 +26,7 @@ const REFERENCES = [
   { text: "function add(a, b) {\n  return a + b;\n}\n", qwen: 14, o200k: 14 },
 ];
 
-describe("tokenizers (PG-26)", () => {
+describe("tokenizers [PG-26]", () => {
   const qwen = createQwenCounter(readJson("tokenizer.json"), readJson("tokenizer_config.json"));
   const openai = createO200kCounter(o200k);
 

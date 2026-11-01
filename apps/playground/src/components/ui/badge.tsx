@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { type ReactElement, forwardRef } from "react";
 
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
@@ -40,10 +40,10 @@ export interface BadgeProps extends useRender.ComponentProps<"span"> {
   size?: VariantProps<typeof badgeVariants>["size"];
 }
 
-export const Badge = React.forwardRef<HTMLElement, BadgeProps>(function Badge(
+export const Badge = forwardRef<HTMLElement, BadgeProps>(function Badge(
   { className, variant, size, render, ...props },
   ref,
-): React.ReactElement {
+): ReactElement {
   const defaultProps = {
     className: cn(badgeVariants({ className, size, variant })),
     "data-slot": "badge",

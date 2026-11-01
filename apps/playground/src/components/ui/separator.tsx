@@ -1,11 +1,11 @@
-import * as React from "react";
+import { type ElementRef, type ReactElement, forwardRef } from "react";
 import { Separator as SeparatorPrimitive } from "@base-ui/react/separator";
 import { cn } from "~/lib/utils";
 
-export const Separator = React.forwardRef<
-  React.ElementRef<typeof SeparatorPrimitive>,
+export const Separator = forwardRef<
+  ElementRef<typeof SeparatorPrimitive>,
   SeparatorPrimitive.Props
->(function Separator({ className, orientation = "horizontal", ...props }, ref): React.ReactElement {
+>(function Separator({ className, orientation = "horizontal", ...props }, ref): ReactElement {
   return (
     <SeparatorPrimitive
       ref={ref}

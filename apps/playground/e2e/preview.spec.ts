@@ -10,7 +10,7 @@ import {
   setEditorText,
 } from "./support/workspace.ts";
 
-test("PG-06: the device iframe renders /preview, with a Chakra Modal inside its own document", async ({
+test("[PG-06] the device iframe renders /preview, with a Chakra Modal inside its own document", async ({
   page,
 }) => {
   const console = watchConsole(page);
@@ -26,7 +26,7 @@ test("PG-06: the device iframe renders /preview, with a Chakra Modal inside its 
   console.expectClean();
 });
 
-test("PG-07: device presets, rotation, zoom to fit and fill", async ({ page }) => {
+test("[PG-07] device presets, rotation, zoom to fit and fill", async ({ page }) => {
   await openWorkspace(page);
   const viewport = page.getByTestId("device-viewport");
   await expect(viewport).toHaveAttribute("data-width", "393");
@@ -47,7 +47,7 @@ test("PG-07: device presets, rotation, zoom to fit and fill", async ({ page }) =
   ).toBeVisible();
 });
 
-test("PG-08: an unknown component type shows a visible error in the preview and the Errors tab", async ({
+test("[PG-08] an unknown component type shows a visible error in the preview and the Errors tab", async ({
   page,
 }) => {
   await openWorkspace(page);
@@ -75,7 +75,7 @@ test("PG-08: an unknown component type shows a visible error in the preview and 
   await expect(page.getByTestId("errors-panel")).toContainText("Runtime");
 });
 
-test("PG-10, PG-24: data model flows from the preview to the app and edits apply back", async ({
+test("[PG-10, PG-24] data model flows from the preview to the app and edits apply back", async ({
   page,
 }) => {
   await openWorkspace(page);
@@ -94,7 +94,7 @@ test("PG-10, PG-24: data model flows from the preview to the app and edits apply
   await expect(frame.getByRole("checkbox", { name: /Запомнить меня/ })).not.toBeChecked();
 });
 
-test("PG-23, PG-24: open in new tab restores from the hash and stays synced over the channel", async ({
+test("[PG-23, PG-24] open in new tab restores from the hash and stays synced over the channel", async ({
   page,
   context,
   browser,

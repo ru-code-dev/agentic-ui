@@ -3,7 +3,7 @@
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
 import { cva, type VariantProps } from "class-variance-authority";
-import * as React from "react";
+import { type ButtonHTMLAttributes, type ReactElement, forwardRef } from "react";
 import { cn } from "~/lib/utils";
 import { Spinner } from "~/components/ui/spinner";
 
@@ -55,14 +55,12 @@ export interface ButtonProps extends useRender.ComponentProps<"button"> {
 }
 
 // React 18: the registry's React 19 version reads `ref` as a prop; forwardRef passes it to useRender.
-export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function Button(
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
   { className, variant, size, render, children, loading = false, disabled: disabledProp, ...props },
   ref,
-): React.ReactElement {
+): ReactElement {
   const isDisabled: boolean = Boolean(loading || disabledProp);
-  const typeValue: React.ButtonHTMLAttributes<HTMLButtonElement>["type"] = render
-    ? undefined
-    : "button";
+  const typeValue: ButtonHTMLAttributes<HTMLButtonElement>["type"] = render ? undefined : "button";
 
   const defaultProps = {
     children: (

@@ -1,0 +1,9 @@
+# Dev/test settings for stock qwen-code 0.21.1 against a local OpenAI-compatible LLM endpoint (SV-C15: provider
+# flags live only here and in test/dev runners, never in code defaults). This file names no endpoint URL and no
+# model: the base URL, model and key come from the gitignored WORKFLOW/llm.env (AGENTIC_UI_LLM_*), composed into
+# --model / --openai-base-url by the runner (e.g. AGENTIC_UI_AGENT_EXTRA_ARGS or --set), see apps/agent-server/README.md
+# "Dev environment" and scripts/workflow-env.sh. The API key never enters this file: qwen reads it from the env block
+# of the WORKFLOW/qwen-home settings (written by scripts/setup-workflow.sh from WORKFLOW/llm.env).
+
+[agent]
+extra_args = ["--auth-type", "openai"]

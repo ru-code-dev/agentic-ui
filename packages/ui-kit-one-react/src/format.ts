@@ -5,8 +5,24 @@ export interface CellFormatOptions {
   readonly currency: string;
 }
 
-/** Formats one Table cell for display (Intl, so Russian month names are declined). */
-export function formatCell(
+/** The contract's default locale: the fallback for a locale tag Intl refuses. */
+const DEFAULT_LOCALE = "ru-RU";
+
+/**
+ * Formats one Table cell for display (Intl, so Russian month names are declined). A locale Intl
+ * refuses (RangeError, e.g. "ru_RU") falls back to the default locale instead of throwing while
+ * rendering (A3-13): one bad prop never blanks the surface.
+ */
+export function formatCell(value: unknown, format: CellFormat, options: CellFormatOptions): string {
+  try {
+    return formatWith(value, format, options);
+  } catch (error) {
+    if (!(error instanceof RangeError) || options.locale === DEFAULT_LOCALE) throw error;
+    return formatWith(value, format, { ...options, locale: DEFAULT_LOCALE });
+  }
+}
+
+function formatWith(
   value: unknown,
   format: CellFormat,
   { locale, currency }: CellFormatOptions,

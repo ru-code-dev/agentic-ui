@@ -42,7 +42,7 @@ function Surfaces({ runtime }: { runtime: UiKitRuntime }) {
   );
 }
 
-describe("runtime and transport seam", () => {
+describe("runtime and transport seam [INT-05, PG-16]", () => {
   it("renders and reports actions over a network-style transport with no renderer changes", async () => {
     const transport = new FakeSocketTransport();
     const runtime = createUiKitRuntime({ transport });

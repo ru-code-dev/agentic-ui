@@ -1,0 +1,10 @@
+{
+  "name": "trace-fixture",
+  "private": true,
+  "scripts": {
+    "check": "vp run -w check:size && vp run -w check:trace",
+    "check:size": "node size.mjs",
+    "check:trace": "node trace.mjs",
+    "other": "node other.mjs"
+  }
+}

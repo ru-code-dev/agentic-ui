@@ -5,7 +5,7 @@ import { Button } from "../components/ui/button.tsx";
 import { Checkbox } from "../components/ui/checkbox.tsx";
 import { Textarea } from "../components/ui/textarea.tsx";
 import { ToggleGroup, ToggleGroupItem } from "../components/ui/toggle-group.tsx";
-import { compositions } from "../examples.ts";
+import { promptExamples } from "../examples.ts";
 import { cn } from "../lib/utils.ts";
 import { formatDelta, formatTokens } from "./section-colors.ts";
 import { DEFAULT_CONTROLS, type LlmControls } from "./use-llm-context.ts";
@@ -96,7 +96,9 @@ export function ControlsPanel({
           </span>
           <IconButton
             label="More examples"
-            onClick={() => set({ examples: Math.min(compositions.length, controls.examples + 1) })}
+            onClick={() =>
+              set({ examples: Math.min(promptExamples.length, controls.examples + 1) })
+            }
           >
             <Plus />
           </IconButton>

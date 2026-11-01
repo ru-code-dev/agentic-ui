@@ -1,18 +1,12 @@
 import { writeFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { STYLE_PROP_NAMES } from "@agentic-ui/ui-kit-one-catalog";
-import { JSDOM } from "jsdom";
+import { importBuiltRenderer } from "./built-renderer.ts";
 import { renderMappingMarkdown } from "./mapping-markdown.ts";
 
-// Node cannot load the TSX sources, so the mappings are read from the build (run `tsdown` first).
-// @a2ui/react defines custom elements at import time, which needs DOM globals.
-const { window } = new JSDOM();
-Object.assign(globalThis, {
-  HTMLElement: window.HTMLElement,
-  customElements: window.customElements,
-});
-const dist = (await import(
-  new URL("../dist/index.mjs", import.meta.url).href
-)) as typeof import("../src/index.ts");
+// Writes MAPPING.md from the build (`tsdown` first: the package `build` and `docs` scripts run both).
+const pkgDir = fileURLToPath(new URL("..", import.meta.url));
+const dist = await importBuiltRenderer(pkgDir, new URL("../dist/index.mjs", import.meta.url).href);
 
 writeFileSync(
   new URL("../MAPPING.md", import.meta.url),

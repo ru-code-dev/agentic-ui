@@ -1,14 +1,14 @@
 "use client";
 
-import * as React from "react";
+import { type ElementRef, type ReactElement, forwardRef } from "react";
 
 import { Switch as SwitchPrimitive } from "@base-ui/react/switch";
 import { cn } from "~/lib/utils";
 
-export const Switch = React.forwardRef<
-  React.ElementRef<typeof SwitchPrimitive.Root>,
+export const Switch = forwardRef<
+  ElementRef<typeof SwitchPrimitive.Root>,
   SwitchPrimitive.Root.Props
->(function Switch({ className, ...props }, ref): React.ReactElement {
+>(function Switch({ className, ...props }, ref): ReactElement {
   return (
     <SwitchPrimitive.Root
       ref={ref}

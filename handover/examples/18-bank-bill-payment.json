@@ -1,0 +1,383 @@
+{
+  "name": "Оплата услуг",
+  "description": "Оплата ЖКХ, связи и интернета во вкладках.",
+  "messages": [
+    {
+      "version": "v0.9",
+      "createSurface": {
+        "surfaceId": "bills",
+        "catalogId": "urn:agentic-ui:catalog:ui-kit-one:v1",
+        "sendDataModel": true
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateDataModel": {
+        "surfaceId": "bills",
+        "path": "/bills",
+        "value": {
+          "tab": 0,
+          "housing": {
+            "account": "",
+            "amount": ""
+          },
+          "mobile": {
+            "phone": "",
+            "amount": ""
+          },
+          "internet": {
+            "contract": "",
+            "amount": ""
+          }
+        }
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateComponents": {
+        "surfaceId": "bills",
+        "components": [
+          {
+            "id": "root",
+            "component": "Container",
+            "maxW": "container.sm",
+            "py": "8",
+            "children": ["card"]
+          },
+          {
+            "id": "card",
+            "component": "Flex",
+            "direction": "column",
+            "gap": "5",
+            "bg": "gray.700",
+            "p": "8",
+            "borderRadius": "xl",
+            "borderWidth": "1px",
+            "borderColor": "whiteAlpha.100",
+            "children": ["title", "tabs"]
+          },
+          {
+            "id": "title",
+            "component": "Heading",
+            "text": "Оплата услуг",
+            "as": "h1",
+            "size": "md"
+          },
+          {
+            "id": "tabs",
+            "component": "Tabs",
+            "variant": "soft-rounded",
+            "selectedIndex": {
+              "path": "/bills/tab"
+            },
+            "tabs": [
+              {
+                "title": "ЖКХ",
+                "child": "housing"
+              },
+              {
+                "title": "Мобильная связь",
+                "child": "mobile"
+              },
+              {
+                "title": "Интернет",
+                "child": "internet"
+              }
+            ]
+          },
+          {
+            "id": "housing",
+            "component": "Flex",
+            "direction": "column",
+            "gap": "4",
+            "children": ["housing-id", "housing-amount", "housing-pay"]
+          },
+          {
+            "id": "housing-id",
+            "component": "Input",
+            "label": "Лицевой счёт",
+            "value": {
+              "path": "/bills/housing/account"
+            },
+            "type": "text",
+            "placeholder": "Номер из квитанции",
+            "isRequired": true,
+            "checks": [
+              {
+                "condition": {
+                  "call": "required",
+                  "args": {
+                    "value": {
+                      "path": "/bills/housing/account"
+                    }
+                  }
+                },
+                "message": "Обязательное поле"
+              }
+            ]
+          },
+          {
+            "id": "housing-amount",
+            "component": "Input",
+            "label": "Сумма, ₽",
+            "value": {
+              "path": "/bills/housing/amount"
+            },
+            "type": "number",
+            "isRequired": true,
+            "checks": [
+              {
+                "condition": {
+                  "call": "numeric",
+                  "args": {
+                    "value": {
+                      "path": "/bills/housing/amount"
+                    },
+                    "min": 1
+                  }
+                },
+                "message": "Укажите сумму"
+              }
+            ]
+          },
+          {
+            "id": "housing-pay",
+            "component": "Button",
+            "label": "Оплатить",
+            "colorScheme": "blue",
+            "action": {
+              "event": {
+                "name": "bill.pay",
+                "context": {
+                  "service": "housing",
+                  "amount": {
+                    "path": "/bills/housing/amount"
+                  }
+                }
+              }
+            },
+            "checks": [
+              {
+                "condition": {
+                  "call": "required",
+                  "args": {
+                    "value": {
+                      "path": "/bills/housing/account"
+                    }
+                  }
+                },
+                "message": "Реквизиты"
+              },
+              {
+                "condition": {
+                  "call": "numeric",
+                  "args": {
+                    "value": {
+                      "path": "/bills/housing/amount"
+                    },
+                    "min": 1
+                  }
+                },
+                "message": "Сумма"
+              }
+            ]
+          },
+          {
+            "id": "mobile",
+            "component": "Flex",
+            "direction": "column",
+            "gap": "4",
+            "children": ["mobile-id", "mobile-amount", "mobile-pay"]
+          },
+          {
+            "id": "mobile-id",
+            "component": "Input",
+            "label": "Номер телефона",
+            "value": {
+              "path": "/bills/mobile/phone"
+            },
+            "type": "tel",
+            "placeholder": "+79991234567",
+            "isRequired": true,
+            "checks": [
+              {
+                "condition": {
+                  "call": "required",
+                  "args": {
+                    "value": {
+                      "path": "/bills/mobile/phone"
+                    }
+                  }
+                },
+                "message": "Обязательное поле"
+              }
+            ]
+          },
+          {
+            "id": "mobile-amount",
+            "component": "Input",
+            "label": "Сумма, ₽",
+            "value": {
+              "path": "/bills/mobile/amount"
+            },
+            "type": "number",
+            "isRequired": true,
+            "checks": [
+              {
+                "condition": {
+                  "call": "numeric",
+                  "args": {
+                    "value": {
+                      "path": "/bills/mobile/amount"
+                    },
+                    "min": 1
+                  }
+                },
+                "message": "Укажите сумму"
+              }
+            ]
+          },
+          {
+            "id": "mobile-pay",
+            "component": "Button",
+            "label": "Оплатить",
+            "colorScheme": "blue",
+            "action": {
+              "event": {
+                "name": "bill.pay",
+                "context": {
+                  "service": "mobile",
+                  "amount": {
+                    "path": "/bills/mobile/amount"
+                  }
+                }
+              }
+            },
+            "checks": [
+              {
+                "condition": {
+                  "call": "required",
+                  "args": {
+                    "value": {
+                      "path": "/bills/mobile/phone"
+                    }
+                  }
+                },
+                "message": "Реквизиты"
+              },
+              {
+                "condition": {
+                  "call": "numeric",
+                  "args": {
+                    "value": {
+                      "path": "/bills/mobile/amount"
+                    },
+                    "min": 1
+                  }
+                },
+                "message": "Сумма"
+              }
+            ]
+          },
+          {
+            "id": "internet",
+            "component": "Flex",
+            "direction": "column",
+            "gap": "4",
+            "children": ["internet-id", "internet-amount", "internet-pay"]
+          },
+          {
+            "id": "internet-id",
+            "component": "Input",
+            "label": "Номер договора",
+            "value": {
+              "path": "/bills/internet/contract"
+            },
+            "type": "text",
+            "placeholder": "Например, 7700123456",
+            "isRequired": true,
+            "checks": [
+              {
+                "condition": {
+                  "call": "required",
+                  "args": {
+                    "value": {
+                      "path": "/bills/internet/contract"
+                    }
+                  }
+                },
+                "message": "Обязательное поле"
+              }
+            ]
+          },
+          {
+            "id": "internet-amount",
+            "component": "Input",
+            "label": "Сумма, ₽",
+            "value": {
+              "path": "/bills/internet/amount"
+            },
+            "type": "number",
+            "isRequired": true,
+            "checks": [
+              {
+                "condition": {
+                  "call": "numeric",
+                  "args": {
+                    "value": {
+                      "path": "/bills/internet/amount"
+                    },
+                    "min": 1
+                  }
+                },
+                "message": "Укажите сумму"
+              }
+            ]
+          },
+          {
+            "id": "internet-pay",
+            "component": "Button",
+            "label": "Оплатить",
+            "colorScheme": "blue",
+            "action": {
+              "event": {
+                "name": "bill.pay",
+                "context": {
+                  "service": "internet",
+                  "amount": {
+                    "path": "/bills/internet/amount"
+                  }
+                }
+              }
+            },
+            "checks": [
+              {
+                "condition": {
+                  "call": "required",
+                  "args": {
+                    "value": {
+                      "path": "/bills/internet/contract"
+                    }
+                  }
+                },
+                "message": "Реквизиты"
+              },
+              {
+                "condition": {
+                  "call": "numeric",
+                  "args": {
+                    "value": {
+                      "path": "/bills/internet/amount"
+                    },
+                    "min": 1
+                  }
+                },
+                "message": "Сумма"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -14,7 +14,7 @@ const update = {
   },
 };
 
-describe("parseMessages (PG-04)", () => {
+describe("parseMessages [PG-04]", () => {
   it.each([
     ["an array", JSON.stringify([create, update]), "array", 2],
     ["JSONL", `${JSON.stringify(create)}\n${JSON.stringify(update)}\n`, "jsonl", 2],
@@ -48,7 +48,7 @@ describe("parseMessages (PG-04)", () => {
   });
 });
 
-describe("validateSource (PG-09, S01-I3)", () => {
+describe("validateSource [PG-09] (S01-I3)", () => {
   it("maps a prop error to its JSON path and editor line", () => {
     const messages = [
       create,

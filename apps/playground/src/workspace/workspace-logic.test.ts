@@ -11,7 +11,7 @@ const rule = (patch: Partial<MockRule>): MockRule => ({
   ...patch,
 });
 
-describe("mock replies (PG-12)", () => {
+describe("mock replies [PG-12]", () => {
   it("returns the replies of enabled rules for the fired event", () => {
     const rules = [
       rule({ id: "a", messages: '[{"version":"v0.9"}]' }),
@@ -30,7 +30,7 @@ describe("mock replies (PG-12)", () => {
   });
 });
 
-describe("formatSource (PG-03, PG-17)", () => {
+describe("formatSource [PG-03, PG-17]", () => {
   it("pretty-prints JSON and keeps JSONL one message per line", () => {
     expect(formatSource('[{"version":"v0.9"}]')).toBe('[\n  {\n    "version": "v0.9"\n  }\n]');
     const jsonl = '{"version":"v0.9","createSurface":{}}\n  {"version":"v0.9","deleteSurface":{}}';

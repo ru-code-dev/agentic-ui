@@ -12,7 +12,7 @@ import { responseText } from "../src/prompt/index.ts";
 const catalogJson = buildCatalogJson();
 const login = readExamples("compositions").find((example) => example.file.includes("01-login"));
 
-describe("responseText", () => {
+describe("responseText [INT-03]", () => {
   it("writes a compact <a2ui-json> block that the agent SDK parses back", () => {
     const text = responseText(catalogJson, login?.messages ?? [], "direct-json");
     expect(text.startsWith("<a2ui-json>[")).toBe(true);

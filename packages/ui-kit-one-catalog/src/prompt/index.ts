@@ -10,3 +10,4 @@ export {
   type SystemPrompt,
 } from "./system-prompt.ts";
 export { responseText } from "./response.ts";
+export { PROMPT_EXAMPLE_IDS, orderForPrompt } from "./prompt-examples.ts";

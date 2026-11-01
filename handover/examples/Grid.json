@@ -1,0 +1,85 @@
+{
+  "name": "Grid",
+  "description": "Сетка из трёх колонок.",
+  "messages": [
+    {
+      "version": "v0.9",
+      "createSurface": {
+        "surfaceId": "grid",
+        "catalogId": "urn:agentic-ui:catalog:ui-kit-one:v1"
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateDataModel": {
+        "surfaceId": "grid",
+        "path": "/stats",
+        "value": {
+          "income": 120000,
+          "expenses": 87450,
+          "savings": 32550
+        }
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateComponents": {
+        "surfaceId": "grid",
+        "components": [
+          {
+            "id": "root",
+            "component": "Grid",
+            "columns": 3,
+            "gap": "4",
+            "children": ["income", "expenses", "savings"]
+          },
+          {
+            "id": "income",
+            "component": "Text",
+            "text": {
+              "call": "formatCurrency",
+              "args": {
+                "value": {
+                  "path": "/stats/income"
+                },
+                "currency": "RUB"
+              }
+            },
+            "color": "green.300",
+            "fontWeight": "semibold"
+          },
+          {
+            "id": "expenses",
+            "component": "Text",
+            "text": {
+              "call": "formatCurrency",
+              "args": {
+                "value": {
+                  "path": "/stats/expenses"
+                },
+                "currency": "RUB"
+              }
+            },
+            "color": "red.300",
+            "fontWeight": "semibold"
+          },
+          {
+            "id": "savings",
+            "component": "Text",
+            "text": {
+              "call": "formatCurrency",
+              "args": {
+                "value": {
+                  "path": "/stats/savings"
+                },
+                "currency": "RUB"
+              }
+            },
+            "color": "blue.300",
+            "fontWeight": "semibold"
+          }
+        ]
+      }
+    }
+  ]
+}

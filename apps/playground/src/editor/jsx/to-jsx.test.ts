@@ -4,7 +4,7 @@ import { messagesToJsx } from "./to-jsx.ts";
 
 const byId = (id: string) => compositions.find((example) => example.id === id)?.messages ?? [];
 
-describe("messagesToJsx (PG-21)", () => {
+describe("messagesToJsx [PG-21]", () => {
   it("renders a form with kit components, bindings and actions", () => {
     const jsx = messagesToJsx(byId("01-login"));
     expect(jsx).toContain('// Surface "login"');
@@ -14,8 +14,26 @@ describe("messagesToJsx (PG-21)", () => {
     expect(jsx).toContain('onClick={() => send("login.submit", { email: data.form.email })}');
   });
 
+  // A4b-R2: an own fixture, so a contract change (REMAP recipe 3) never breaks this test through an example.
   it("renders templates as map calls over the bound array with item-relative bindings", () => {
-    const jsx = messagesToJsx(byId("04-user-list"));
+    const surfaceId = "users";
+    const jsx = messagesToJsx([
+      {
+        version: "v0.9",
+        createSurface: { surfaceId, catalogId: "urn:agentic-ui:catalog:ui-kit-one:v1" },
+      },
+      {
+        version: "v0.9",
+        updateComponents: {
+          surfaceId,
+          components: [
+            { id: "root", component: "List", children: { componentId: "row", path: "/users" } },
+            { id: "row", component: "Flex", children: ["avatar"] },
+            { id: "avatar", component: "Avatar", name: { path: "name" }, size: "md" },
+          ],
+        },
+      },
+    ]);
     expect(jsx).toContain("{data.users.map((item) => (");
     expect(jsx).toContain('<Avatar name={item.name} size="md" />');
   });

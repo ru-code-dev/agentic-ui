@@ -1,10 +1,11 @@
 import { screen } from "@testing-library/react";
 import { describe, expect, it } from "vite-plus/test";
+import { formatCell } from "../src/format.ts";
 import { failOnConsoleNoise } from "./support/console-guard.ts";
 import { components, data, surface } from "./support/messages.ts";
 import { renderMessages } from "./support/render-messages.tsx";
 
-describe("data display", () => {
+describe("data display [PR-01]", () => {
   failOnConsoleNoise();
 
   it("Table formats currency, numbers and declined dates in ru-RU and follows data updates", () => {
@@ -38,6 +39,22 @@ describe("data display", () => {
     expect(screen.getByText("Операции")).toBeTruthy();
     push([data("t", "/rows/1", { date: "2026-10-25", payee: "Зарплата", amount: 95000, qty: 0 })]);
     expect(screen.getAllByRole("row")).toHaveLength(3);
+  });
+
+  it("Table cells with a locale Intl refuses (ru_RU) fall back to ru-RU instead of throwing [A3-13]", () => {
+    // The contract refuses "ru_RU" (BCP 47 pattern); the fallback guards any tag Intl still rejects.
+    expect(() => new Intl.NumberFormat("ru_RU")).toThrow(RangeError);
+    const options = { locale: "ru_RU", currency: "RUB" };
+    const cells = [
+      formatCell("2026-10-24", "date", options),
+      formatCell(1250, "currency", options),
+      formatCell(12500, "number", options),
+    ];
+    expect(cells.map((cell) => cell.replaceAll("\u00a0", " "))).toEqual([
+      "24 октября 2026 г.",
+      "1 250,00 ₽",
+      "12 500",
+    ]);
   });
 
   it("List repeats its template over a data-model array and grows when an item is added", () => {

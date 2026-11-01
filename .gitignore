@@ -5,3 +5,10 @@ dist
 test-results
 playwright-report
 blob-report
+
+# Local tooling, builds, caches, temp data and secrets (never committed)
+WORKFLOW/
+dist-subpath
+
+# DEC-057: your local agent server config for `pnpm dev:agent-mode` (created from a template on the first run)
+/agent-server.local.toml

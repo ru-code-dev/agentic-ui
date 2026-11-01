@@ -3,16 +3,16 @@ import { useState } from "react";
 import { Button } from "../../components/ui/button.tsx";
 import { Textarea } from "../../components/ui/textarea.tsx";
 import { cn } from "../../lib/utils.ts";
-import { useSession } from "../../state/session-store.ts";
 import { EmptyHint } from "./empty-hint.tsx";
 
 /** Live data model per surface; edit the JSON and Apply to send `updateDataModel` (PG-10). */
 export function DataModelPanel({
+  dataModels,
   onApply,
 }: {
+  dataModels: Readonly<Record<string, unknown>>;
   onApply: (surfaceId: string, value: unknown) => void;
 }) {
-  const dataModels = useSession((state) => state.dataModels);
   const surfaces = Object.keys(dataModels);
   const [selected, setSelected] = useState<string>();
   const [draft, setDraft] = useState<string>();

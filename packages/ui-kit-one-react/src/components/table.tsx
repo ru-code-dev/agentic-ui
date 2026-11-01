@@ -1,5 +1,5 @@
 import { createComponentImplementation } from "@a2ui/react/v0_9";
-import { TableApi, tokens } from "@agentic-ui/ui-kit-one-catalog";
+import { TableApi, formatting } from "@agentic-ui/ui-kit-one-catalog";
 import { formatCell } from "../format.ts";
 import {
   Box as KitBox,
@@ -25,11 +25,11 @@ export const mapping = componentMapping(
     caption: { kit: "TableCaption" },
     currency: {
       kit: "Intl.NumberFormat currency",
-      note: `"currency" columns; ${tokens.formatting.currency} when omitted`,
+      note: `"currency" columns; ${formatting.currency} when omitted`,
     },
     locale: {
       kit: "Intl locale",
-      note: `"number", "currency", "date" columns; ${tokens.formatting.locale} when omitted`,
+      note: `"number", "currency", "date" columns; ${formatting.locale} when omitted`,
     },
   },
 );
@@ -41,8 +41,8 @@ const isRow = (value: unknown): value is Row =>
 export const Table = createComponentImplementation(TableApi, ({ props }) => {
   const rows = Array.isArray(props.rows) ? props.rows.filter(isRow) : [];
   const options = {
-    locale: props.locale ?? tokens.formatting.locale,
-    currency: props.currency ?? tokens.formatting.currency,
+    locale: props.locale ?? formatting.locale,
+    currency: props.currency ?? formatting.currency,
   };
   return (
     <KitBox overflowX="auto" w="full">
@@ -59,8 +59,7 @@ export const Table = createComponentImplementation(TableApi, ({ props }) => {
         </KitThead>
         <KitTbody>
           {rows.map((row, rowIndex) => (
-            // Rows are plain data without identity; their position is the stable key.
-            // oxlint-disable-next-line react/no-array-index-key
+            // oxlint-disable-next-line react/no-array-index-key -- rows are plain data without identity; position is the key
             <KitTr key={rowIndex}>
               {props.columns.map((column) => (
                 <KitTd key={column.key} textAlign={column.align ?? "left"}>

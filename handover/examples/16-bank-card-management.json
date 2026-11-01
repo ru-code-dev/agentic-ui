@@ -1,0 +1,192 @@
+{
+  "name": "Управление картой",
+  "description": "Карта, её статус и переключатели блокировки и оплат.",
+  "messages": [
+    {
+      "version": "v0.9",
+      "createSurface": {
+        "surfaceId": "card",
+        "catalogId": "urn:agentic-ui:catalog:ui-kit-one:v1",
+        "sendDataModel": true
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateDataModel": {
+        "surfaceId": "card",
+        "path": "/card",
+        "value": {
+          "number": "•• 4821",
+          "holder": "ANNA SMIRNOVA",
+          "expires": "08/29",
+          "status": "Активна",
+          "frozen": false,
+          "online": true,
+          "contactless": true,
+          "limit": 150000
+        }
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateComponents": {
+        "surfaceId": "card",
+        "components": [
+          {
+            "id": "root",
+            "component": "Container",
+            "maxW": "container.sm",
+            "py": "8",
+            "children": ["stack"]
+          },
+          {
+            "id": "stack",
+            "component": "Flex",
+            "direction": "column",
+            "gap": "5",
+            "children": ["visual", "controls"]
+          },
+          {
+            "id": "visual",
+            "component": "Flex",
+            "direction": "column",
+            "justify": "space-between",
+            "gap": "8",
+            "bg": "blue.700",
+            "p": "6",
+            "borderRadius": "2xl",
+            "shadow": "dark-lg",
+            "children": ["v-top", "v-number", "v-bottom"]
+          },
+          {
+            "id": "v-top",
+            "component": "Flex",
+            "justify": "space-between",
+            "align": "center",
+            "children": ["v-bank", "v-status"]
+          },
+          {
+            "id": "v-bank",
+            "component": "Text",
+            "text": "Банк · Мир Premium",
+            "fontWeight": "semibold",
+            "color": "whiteAlpha.900"
+          },
+          {
+            "id": "v-status",
+            "component": "Tag",
+            "label": {
+              "path": "/card/status"
+            },
+            "colorScheme": "green",
+            "variant": "solid"
+          },
+          {
+            "id": "v-number",
+            "component": "Text",
+            "text": {
+              "path": "/card/number"
+            },
+            "fontSize": "3xl",
+            "fontWeight": "bold",
+            "color": "white"
+          },
+          {
+            "id": "v-bottom",
+            "component": "Flex",
+            "justify": "space-between",
+            "children": ["v-holder", "v-exp"]
+          },
+          {
+            "id": "v-holder",
+            "component": "Text",
+            "text": {
+              "path": "/card/holder"
+            },
+            "color": "whiteAlpha.800"
+          },
+          {
+            "id": "v-exp",
+            "component": "Text",
+            "text": {
+              "path": "/card/expires"
+            },
+            "color": "whiteAlpha.800"
+          },
+          {
+            "id": "controls",
+            "component": "Flex",
+            "direction": "column",
+            "gap": "4",
+            "bg": "gray.700",
+            "p": "5",
+            "borderRadius": "xl",
+            "borderWidth": "1px",
+            "borderColor": "whiteAlpha.100",
+            "children": ["c-title", "frozen", "online", "contactless", "limit", "apply"]
+          },
+          {
+            "id": "c-title",
+            "component": "Heading",
+            "text": "Настройки карты",
+            "as": "h2",
+            "size": "sm"
+          },
+          {
+            "id": "frozen",
+            "component": "Switch",
+            "label": "Временно заблокировать",
+            "value": {
+              "path": "/card/frozen"
+            },
+            "colorScheme": "red"
+          },
+          {
+            "id": "online",
+            "component": "Switch",
+            "label": "Оплата в интернете",
+            "value": {
+              "path": "/card/online"
+            }
+          },
+          {
+            "id": "contactless",
+            "component": "Switch",
+            "label": "Бесконтактная оплата",
+            "value": {
+              "path": "/card/contactless"
+            }
+          },
+          {
+            "id": "limit",
+            "component": "Text",
+            "text": {
+              "call": "formatString",
+              "args": {
+                "value": "Лимит в месяц: ${formatCurrency(value: ${/card/limit}, currency: 'RUB', decimals: 0)}"
+              }
+            },
+            "color": "gray.400",
+            "fontSize": "sm"
+          },
+          {
+            "id": "apply",
+            "component": "Button",
+            "label": "Сохранить",
+            "colorScheme": "blue",
+            "action": {
+              "event": {
+                "name": "card.update",
+                "context": {
+                  "card": {
+                    "path": "/card/number"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

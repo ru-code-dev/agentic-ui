@@ -1,0 +1,137 @@
+{
+  "name": "Чек-лист заявки",
+  "description": "Список с состоянием у каждого элемента: шаблон ChildList, у каждого элемента свой Checkbox, двусторонне привязанный к относительному пути done; данные уходят агенту по кнопке.",
+  "messages": [
+    {
+      "version": "v0.9",
+      "createSurface": {
+        "surfaceId": "checklist",
+        "catalogId": "urn:agentic-ui:catalog:ui-kit-one:v1",
+        "sendDataModel": true
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateDataModel": {
+        "surfaceId": "checklist",
+        "path": "/",
+        "value": {
+          "tasks": [
+            {
+              "id": "t1",
+              "title": "Подтвердить e-mail",
+              "done": true,
+              "note": "Сделано"
+            },
+            {
+              "id": "t2",
+              "title": "Загрузить паспорт",
+              "done": false,
+              "note": "Нужно сделать"
+            },
+            {
+              "id": "t3",
+              "title": "Указать доход",
+              "done": false,
+              "note": "Нужно сделать"
+            },
+            {
+              "id": "t4",
+              "title": "Подписать согласие",
+              "done": false,
+              "note": "Нужно сделать"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateComponents": {
+        "surfaceId": "checklist",
+        "components": [
+          {
+            "id": "root",
+            "component": "Container",
+            "maxW": "container.sm",
+            "py": "8",
+            "children": ["stack"]
+          },
+          {
+            "id": "stack",
+            "component": "Flex",
+            "direction": "column",
+            "gap": "4",
+            "children": ["title", "hint", "tasks", "save"]
+          },
+          {
+            "id": "title",
+            "component": "Heading",
+            "text": "Заявка на кредит",
+            "as": "h1",
+            "size": "lg"
+          },
+          {
+            "id": "hint",
+            "component": "Text",
+            "text": "Отметьте выполненные шаги",
+            "color": "gray.400"
+          },
+          {
+            "id": "tasks",
+            "component": "List",
+            "variant": "plain",
+            "spacing": "2",
+            "children": {
+              "componentId": "task",
+              "path": "/tasks"
+            }
+          },
+          {
+            "id": "task",
+            "component": "Flex",
+            "justify": "space-between",
+            "align": "center",
+            "gap": "3",
+            "bg": "gray.700",
+            "p": "4",
+            "borderRadius": "xl",
+            "borderWidth": "1px",
+            "borderColor": "whiteAlpha.100",
+            "children": ["task-done", "task-note"]
+          },
+          {
+            "id": "task-done",
+            "component": "Checkbox",
+            "label": {
+              "path": "title"
+            },
+            "value": {
+              "path": "done"
+            },
+            "colorScheme": "green"
+          },
+          {
+            "id": "task-note",
+            "component": "Tag",
+            "label": {
+              "path": "note"
+            },
+            "size": "sm"
+          },
+          {
+            "id": "save",
+            "component": "Button",
+            "label": "Сохранить прогресс",
+            "colorScheme": "blue",
+            "action": {
+              "event": {
+                "name": "checklist.save"
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

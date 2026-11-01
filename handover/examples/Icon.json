@@ -1,0 +1,28 @@
+{
+  "name": "Icon",
+  "description": "Иконка из набора контракта.",
+  "messages": [
+    {
+      "version": "v0.9",
+      "createSurface": {
+        "surfaceId": "icon",
+        "catalogId": "urn:agentic-ui:catalog:ui-kit-one:v1"
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateComponents": {
+        "surfaceId": "icon",
+        "components": [
+          {
+            "id": "root",
+            "component": "Icon",
+            "name": "bell",
+            "color": "blue.300",
+            "boxSize": "8"
+          }
+        ]
+      }
+    }
+  ]
+}

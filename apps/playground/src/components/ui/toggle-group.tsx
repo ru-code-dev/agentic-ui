@@ -3,19 +3,27 @@
 import type { Toggle as TogglePrimitive } from "@base-ui/react/toggle";
 import { ToggleGroup as ToggleGroupPrimitive } from "@base-ui/react/toggle-group";
 import type { VariantProps } from "class-variance-authority";
-import * as React from "react";
+import {
+  type Context,
+  type ElementRef,
+  type ReactElement,
+  createContext,
+  forwardRef,
+  useContext,
+  useMemo,
+} from "react";
 import { cn } from "~/lib/utils";
-import { Separator } from "~/components/ui/separator";
 import { Toggle as ToggleComponent, type toggleVariants } from "~/components/ui/toggle";
 
-export const ToggleGroupContext: React.Context<VariantProps<typeof toggleVariants>> =
-  React.createContext<VariantProps<typeof toggleVariants>>({
-    size: "default",
-    variant: "default",
-  });
+export const ToggleGroupContext: Context<VariantProps<typeof toggleVariants>> = createContext<
+  VariantProps<typeof toggleVariants>
+>({
+  size: "default",
+  variant: "default",
+});
 
-export const ToggleGroup = React.forwardRef<
-  React.ElementRef<typeof ToggleGroupPrimitive>,
+export const ToggleGroup = forwardRef<
+  ElementRef<typeof ToggleGroupPrimitive>,
   ToggleGroupPrimitive.Props & VariantProps<typeof toggleVariants>
 >(function ToggleGroup(
   {
@@ -27,8 +35,8 @@ export const ToggleGroup = React.forwardRef<
     ...props
   },
   ref,
-): React.ReactElement {
-  const context = React.useMemo(() => ({ size, variant }), [size, variant]);
+): ReactElement {
+  const context = useMemo(() => ({ size, variant }), [size, variant]);
 
   return (
     <ToggleGroupPrimitive
@@ -56,14 +64,11 @@ export const ToggleGroup = React.forwardRef<
   );
 });
 
-export const ToggleGroupItem = React.forwardRef<
-  React.ElementRef<typeof ToggleComponent>,
+export const ToggleGroupItem = forwardRef<
+  ElementRef<typeof ToggleComponent>,
   TogglePrimitive.Props & VariantProps<typeof toggleVariants>
->(function ToggleGroupItem(
-  { className, children, variant, size, ...props },
-  ref,
-): React.ReactElement {
-  const context = React.useContext(ToggleGroupContext);
+>(function ToggleGroupItem({ className, children, variant, size, ...props }, ref): ReactElement {
+  const context = useContext(ToggleGroupContext);
 
   const resolvedVariant = context.variant || variant;
   const resolvedSize = context.size || size;
@@ -80,28 +85,6 @@ export const ToggleGroupItem = React.forwardRef<
     >
       {children}
     </ToggleComponent>
-  );
-});
-
-export const ToggleGroupSeparator = React.forwardRef<
-  React.ElementRef<typeof Separator>,
-  {
-    className?: string;
-  } & React.ComponentProps<typeof Separator>
->(function ToggleGroupSeparator(
-  { className, orientation = "vertical", ...props },
-  ref,
-): React.ReactElement {
-  return (
-    <Separator
-      ref={ref}
-      className={cn(
-        "pointer-events-none relative bg-input before:absolute before:inset-0 dark:before:bg-input/32",
-        className,
-      )}
-      orientation={orientation}
-      {...props}
-    />
   );
 });
 

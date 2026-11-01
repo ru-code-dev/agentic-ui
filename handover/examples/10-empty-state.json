@@ -1,0 +1,88 @@
+{
+  "name": "Пустое состояние",
+  "description": "Нет шаблонов платежей: иконка, пояснение и действие.",
+  "messages": [
+    {
+      "version": "v0.9",
+      "createSurface": {
+        "surfaceId": "empty",
+        "catalogId": "urn:agentic-ui:catalog:ui-kit-one:v1"
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateDataModel": {
+        "surfaceId": "empty",
+        "path": "/emptyState",
+        "value": {
+          "title": "Пока нет шаблонов",
+          "hint": "Сохраните частый платёж как шаблон — в следующий раз хватит одного нажатия.",
+          "cta": "Создать шаблон"
+        }
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateComponents": {
+        "surfaceId": "empty",
+        "components": [
+          {
+            "id": "root",
+            "component": "Center",
+            "minH": "md",
+            "p": "8",
+            "children": ["content"]
+          },
+          {
+            "id": "content",
+            "component": "Flex",
+            "direction": "column",
+            "align": "center",
+            "gap": "4",
+            "maxW": "sm",
+            "textAlign": "center",
+            "children": ["icon", "title", "text", "cta"]
+          },
+          {
+            "id": "icon",
+            "component": "Icon",
+            "name": "star",
+            "color": "gray.500",
+            "boxSize": "12"
+          },
+          {
+            "id": "title",
+            "component": "Heading",
+            "text": {
+              "path": "/emptyState/title"
+            },
+            "as": "h1",
+            "size": "md"
+          },
+          {
+            "id": "text",
+            "component": "Text",
+            "text": {
+              "path": "/emptyState/hint"
+            },
+            "color": "gray.400"
+          },
+          {
+            "id": "cta",
+            "component": "Button",
+            "label": {
+              "path": "/emptyState/cta"
+            },
+            "colorScheme": "blue",
+            "leftIcon": "add",
+            "action": {
+              "event": {
+                "name": "empty.create"
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

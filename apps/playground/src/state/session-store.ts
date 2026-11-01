@@ -23,6 +23,8 @@ interface SessionState {
   readonly dataModels: Readonly<Record<string, unknown>>;
   readonly revision: number;
   readonly renderedRevision: number;
+  /** PG-28: build id of a preview document from another build that posted to the channel. */
+  readonly otherBuild: string | undefined;
   logEvent(event: Omit<LoggedEvent, "id">): void;
   clearEvents(): void;
   reportError(source: ErrorSource, message: string): void;
@@ -30,6 +32,7 @@ interface SessionState {
   setDataModel(surfaceId: string, value: unknown): void;
   bumpRevision(): number;
   markRendered(revision: number): void;
+  noteOtherBuild(build: string): void;
 }
 
 let sequence = 0;
@@ -41,6 +44,7 @@ export const useSession = create<SessionState>()((set, get) => ({
   dataModels: {},
   revision: 0,
   renderedRevision: -1,
+  otherBuild: undefined,
   logEvent: (event) =>
     set((state) => ({ events: [...state.events, { ...event, id: ++sequence }] })),
   clearEvents: () => set({ events: [] }),
@@ -59,4 +63,5 @@ export const useSession = create<SessionState>()((set, get) => ({
     return revision;
   },
   markRendered: (renderedRevision) => set({ renderedRevision }),
+  noteOtherBuild: (otherBuild) => set({ otherBuild }),
 }));

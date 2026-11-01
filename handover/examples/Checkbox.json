@@ -1,0 +1,40 @@
+{
+  "name": "Checkbox",
+  "description": "Флажок, связанный с моделью данных.",
+  "messages": [
+    {
+      "version": "v0.9",
+      "createSurface": {
+        "surfaceId": "checkbox",
+        "catalogId": "urn:agentic-ui:catalog:ui-kit-one:v1",
+        "sendDataModel": true
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateDataModel": {
+        "surfaceId": "checkbox",
+        "path": "/form",
+        "value": {
+          "remember": true
+        }
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateComponents": {
+        "surfaceId": "checkbox",
+        "components": [
+          {
+            "id": "root",
+            "component": "Checkbox",
+            "label": "Запомнить меня на этом устройстве",
+            "value": {
+              "path": "/form/remember"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -43,10 +43,41 @@ const theme = extendTheme({
 });
 const cssVarTheme = toCSSVar(theme);
 
+/**
+ * The theme the provider renders with, narrowed to what tests read (not re-exported by src/index.ts). The explicit
+ * type keeps the d.ts build away from Chakra's inferred theme type (TS2883, "cannot be named").
+ */
+const { colors: themeColors, styles: themeStyles } = theme;
+export const KIT_THEME: {
+  readonly colors: Readonly<Record<string, unknown>>;
+  readonly styles: { readonly global?: unknown };
+} = { colors: themeColors, styles: themeStyles };
+
 type GlobalStyles = (props: {
   colorMode: ColorMode;
   theme: typeof cssVarTheme;
-}) => Record<string, object>;
+}) => Record<string, Record<string, unknown>>;
+
+const globalStyles = (colorMode: ColorMode) =>
+  (cssVarTheme.styles.global as GlobalStyles)({ colorMode, theme: cssVarTheme });
+
+/** A theme color token (`gray.800`) as its CSS value (`#1A202C`); other values unchanged. */
+function resolveColor(value: string): string {
+  let current: unknown = theme.colors;
+  for (const key of value.split(".")) {
+    if (typeof current !== "object" || current === null) return value;
+    current = (current as Record<string, unknown>)[key];
+  }
+  return typeof current === "string" ? current : value;
+}
+
+/**
+ * The page background the kit paints in the default color mode (the theme's own global
+ * `body.bg`): hosts use it behind previews so a preview and its frame never differ (PG-29).
+ */
+export const PAGE_BACKGROUND: string = resolveColor(
+  String(globalStyles(DEFAULT_COLOR_MODE)["body"]?.["bg"]),
+);
 
 /** Maps a theme global-style selector into the scoped root (`body`/`html` become the root itself). */
 function scopeSelector(selector: string): string {
@@ -61,7 +92,7 @@ function scopeSelector(selector: string): string {
 }
 
 function scopedStyles(colorMode: ColorMode, positionRelative: boolean) {
-  const globals = (cssVarTheme.styles.global as GlobalStyles)({ colorMode, theme: cssVarTheme });
+  const globals = globalStyles(colorMode);
   const scopedGlobals = Object.fromEntries(
     Object.entries(globals).map(([selector, rules]) => [scopeSelector(selector), rules]),
   );

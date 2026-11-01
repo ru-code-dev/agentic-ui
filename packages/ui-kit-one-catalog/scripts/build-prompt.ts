@@ -1,14 +1,19 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { parseArgs } from "node:util";
 import { buildCatalogJson } from "../src/index.ts";
-import { approxTokens, assembleSystemPrompt, type PromptFormat } from "../src/prompt/index.ts";
-import { readExamples } from "./examples.ts";
+import {
+  PROMPT_EXAMPLE_IDS,
+  approxTokens,
+  assembleSystemPrompt,
+  type PromptFormat,
+} from "../src/prompt/index.ts";
+import { systemPromptText } from "./artifacts.ts";
 
 const FORMATS: readonly PromptFormat[] = ["direct-json", "express"];
 
 const { values } = parseArgs({
   options: {
-    examples: { type: "string", default: "5" },
+    examples: { type: "string", default: String(PROMPT_EXAMPLE_IDS.length) },
     format: { type: "string", default: "direct-json" },
   },
 });
@@ -19,14 +24,13 @@ if (!Number.isInteger(count) || count < 0) {
 const format = FORMATS.find((candidate) => candidate === values.format);
 if (format === undefined) throw new Error(`--format must be one of ${FORMATS.join(", ")}`);
 
-const examples = [...readExamples("compositions"), ...readExamples("components")].slice(0, count);
-const prompt = assembleSystemPrompt(buildCatalogJson(), { format, examples });
+const { examples, text } = systemPromptText(count, format);
 
 const outDir = new URL("../dist/", import.meta.url);
 mkdirSync(outDir, { recursive: true });
-writeFileSync(new URL("system-prompt.md", outDir), `${prompt.text}\n`);
+writeFileSync(new URL("system-prompt.md", outDir), text);
 console.log(
-  `wrote dist/system-prompt.md (${format}, ${examples.length} examples, ~${approxTokens(prompt.text)} tokens)`,
+  `wrote dist/system-prompt.md (${format}, ${examples.length} examples, ~${approxTokens(text)} tokens)`,
 );
-for (const section of prompt.sections)
+for (const section of assembleSystemPrompt(buildCatalogJson(), { format, examples }).sections)
   console.log(`  ${section.title}: ~${approxTokens(section.text)} tokens`);

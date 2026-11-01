@@ -32,7 +32,7 @@ function runtimeAccepts(component: Record<string, unknown>): boolean {
   }
 }
 
-describe("catalog.json", () => {
+describe("catalog.json [INT-02, PR-01]", () => {
   it("uses the contract id as $id and catalogId and carries the catalog rules", () => {
     expect(catalog.$id).toBe(CATALOG_ID);
     expect(catalog.catalogId).toBe(CATALOG_ID);
@@ -45,11 +45,11 @@ describe("catalog.json", () => {
     expect(ajv.validateSchema(catalog), JSON.stringify(ajv.errors)).toBe(true);
   });
 
-  it("declares all 19 components, the 14 basic functions and the shared $defs", () => {
+  it("declares every contract component (COMPONENT_APIS, in order), the 14 basic functions and the shared $defs [INT-01, DEC-036]", () => {
     expect(Object.keys(catalog.components as object)).toEqual(
       COMPONENT_APIS.map((api) => api.name),
     );
-    expect(COMPONENT_APIS).toHaveLength(19);
+    expect(COMPONENT_APIS.length).toBeGreaterThan(0);
     expect(Object.keys(catalog.functions as object)).toHaveLength(14);
     expect(Object.keys(catalog.$defs as object)).toEqual(
       expect.arrayContaining(["StyleProps", "ColorProp", "anyComponent", "anyFunction", "theme"]),

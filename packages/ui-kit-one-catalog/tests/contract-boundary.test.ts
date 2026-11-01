@@ -52,7 +52,7 @@ function productionClosure(rootDir: string): Set<string> {
   return seen;
 }
 
-describe("contract boundary", () => {
+describe("contract boundary [INT-01]", () => {
   it("has no React, Chakra, Emotion or framer-motion in its production dependency closure", () => {
     const closure = productionClosure(packageRoot);
     expect(closure.has("@a2ui/web_core")).toBe(true);

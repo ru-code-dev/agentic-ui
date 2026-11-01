@@ -1,5 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 import { watchConsole } from "./support/console.ts";
+import { COMPOSITION_COUNT, CONTRACT_COMPONENTS } from "./support/contract.ts";
 import { saveScreenshot } from "./support/pixels.ts";
 
 const total = async (page: Page) =>
@@ -10,7 +11,7 @@ const total = async (page: Page) =>
     ),
   );
 
-test("PG-26: sections, costs, payloads and the context gauge measured with the Qwen tokenizer by default", async ({
+test("[PG-26] sections, costs, payloads and the context gauge measured with the Qwen tokenizer by default", async ({
   page,
 }) => {
   const console = watchConsole(page);
@@ -29,15 +30,15 @@ test("PG-26: sections, costs, payloads and the context gauge measured with the Q
   ]) {
     await expect(page.getByTestId(`section-${id}`)).toBeVisible();
   }
-  await expect(page.getByTestId("component-cost")).toHaveCount(19);
-  await expect(page.getByTestId("output-costs").locator("tr")).toHaveCount(20);
+  await expect(page.getByTestId("component-cost")).toHaveCount(CONTRACT_COMPONENTS.length);
+  await expect(page.getByTestId("output-costs").locator("tr")).toHaveCount(COMPOSITION_COUNT);
   await expect(page.getByTestId("turn-payloads")).toContainText("login.submit");
   await expect(page.getByTestId("context-gauge")).toContainText("/ 128k");
   saveScreenshot("playground-llm-context", await page.screenshot({ fullPage: true }));
   console.expectClean();
 });
 
-test("PG-26: live controls recompute with a delta vs the default prompt", async ({ page }) => {
+test("[PG-26] live controls recompute with a delta vs the default prompt", async ({ page }) => {
   await page.goto("/llm-context");
   await expect(page.getByTestId("prompt-total")).toBeVisible({ timeout: 30_000 });
   const initial = await total(page);
@@ -47,7 +48,7 @@ test("PG-26: live controls recompute with a delta vs the default prompt", async 
   expect(await total(page)).toBeLessThan(initial);
   await page.getByRole("button", { name: "All", exact: true }).click();
   await page.getByRole("button", { name: "Fewer examples" }).click();
-  await expect(page.getByTestId("llm-examples")).toHaveText("4");
+  await expect(page.getByTestId("llm-examples")).toHaveText("8");
   await page.getByTestId("llm-instructions").fill("Ты — ассистент интернет-банка.");
   await expect(page.getByTestId("section-instructions")).toBeVisible();
   await page
@@ -61,7 +62,7 @@ test("PG-26: live controls recompute with a delta vs the default prompt", async 
   await expect(page.getByTestId("component-cost").first()).toContainText("Avatar");
 });
 
-test("PG-26: tokenizers are selectable and labelled exact or approximate; the window is selectable", async ({
+test("[PG-26] tokenizers are selectable and labelled exact or approximate; the window is selectable", async ({
   page,
 }) => {
   await page.goto("/llm-context");

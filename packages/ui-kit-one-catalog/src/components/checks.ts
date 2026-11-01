@@ -1,5 +1,6 @@
 import { CheckRuleSchema } from "@a2ui/web_core/v0_9";
 import { z } from "zod";
+import { prop } from "../prop-kinds.ts";
 import { commonRef } from "../schema-refs.ts";
 
 /**
@@ -7,13 +8,15 @@ import { commonRef } from "../schema-refs.ts";
  * mixin, so the runtime validator accepts what the catalog JSON allows.
  */
 export const checksProp = (effect: string) =>
-  z
-    .array(
-      commonRef(
-        CheckRuleSchema,
-        "CheckRule",
-        "A rule: a `condition` (a boolean function call such as required, email, regex, length or numeric) and the `message` shown when it fails.",
-      ),
-    )
-    .describe(`Validation rules evaluated against the data model. ${effect}`)
-    .optional();
+  prop.checks(
+    z
+      .array(
+        commonRef(
+          CheckRuleSchema,
+          "CheckRule",
+          "A rule: a `condition` (a boolean function call such as required, email, regex, length or numeric) and the `message` shown when it fails.",
+        ),
+      )
+      .describe(`Validation rules evaluated against the data model. ${effect}`)
+      .optional(),
+  );

@@ -1,0 +1,147 @@
+{
+  "name": "Список пользователей",
+  "description": "Список доверенных лиц из модели данных: аватар, имя, роль.",
+  "messages": [
+    {
+      "version": "v0.9",
+      "createSurface": {
+        "surfaceId": "users",
+        "catalogId": "urn:agentic-ui:catalog:ui-kit-one:v1"
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateDataModel": {
+        "surfaceId": "users",
+        "path": "/users",
+        "value": [
+          {
+            "id": "u1",
+            "name": "Анна Смирнова",
+            "email": "anna@example.ru",
+            "role": "Владелец"
+          },
+          {
+            "id": "u2",
+            "name": "Игорь Петров",
+            "email": "igor@example.ru",
+            "role": "Бухгалтер"
+          },
+          {
+            "id": "u3",
+            "name": "Мария Кузнецова",
+            "email": "maria@example.ru",
+            "role": "Наблюдатель"
+          }
+        ]
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateComponents": {
+        "surfaceId": "users",
+        "components": [
+          {
+            "id": "root",
+            "component": "Container",
+            "maxW": "container.md",
+            "py": "8",
+            "children": ["stack"]
+          },
+          {
+            "id": "stack",
+            "component": "Flex",
+            "direction": "column",
+            "gap": "4",
+            "children": ["title", "list"]
+          },
+          {
+            "id": "title",
+            "component": "Heading",
+            "text": "Доступ к счёту",
+            "as": "h1",
+            "size": "lg"
+          },
+          {
+            "id": "list",
+            "component": "List",
+            "spacing": "3",
+            "children": {
+              "componentId": "row",
+              "path": "/users"
+            }
+          },
+          {
+            "id": "row",
+            "component": "Flex",
+            "align": "center",
+            "gap": "4",
+            "bg": "gray.700",
+            "p": "4",
+            "borderRadius": "xl",
+            "borderWidth": "1px",
+            "borderColor": "whiteAlpha.100",
+            "children": ["avatar", "who", "role", "open"]
+          },
+          {
+            "id": "avatar",
+            "component": "Avatar",
+            "name": {
+              "path": "name"
+            },
+            "size": "md"
+          },
+          {
+            "id": "who",
+            "component": "Flex",
+            "direction": "column",
+            "w": "full",
+            "children": ["name", "email"]
+          },
+          {
+            "id": "name",
+            "component": "Text",
+            "text": {
+              "path": "name"
+            },
+            "fontWeight": "semibold"
+          },
+          {
+            "id": "email",
+            "component": "Text",
+            "text": {
+              "path": "email"
+            },
+            "fontSize": "sm",
+            "color": "gray.400"
+          },
+          {
+            "id": "role",
+            "component": "Tag",
+            "label": {
+              "path": "role"
+            },
+            "colorScheme": "purple"
+          },
+          {
+            "id": "open",
+            "component": "Button",
+            "label": "Открыть",
+            "variant": "ghost",
+            "size": "sm",
+            "action": {
+              "event": {
+                "name": "user.open",
+                "context": {
+                  "userId": {
+                    "path": "id"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

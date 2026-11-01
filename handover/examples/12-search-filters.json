@@ -1,0 +1,191 @@
+{
+  "name": "Поиск с фильтрами",
+  "description": "Поиск операций: строка, флажки категорий, период и результаты.",
+  "messages": [
+    {
+      "version": "v0.9",
+      "createSurface": {
+        "surfaceId": "search",
+        "catalogId": "urn:agentic-ui:catalog:ui-kit-one:v1",
+        "sendDataModel": true
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateDataModel": {
+        "surfaceId": "search",
+        "path": "/filters",
+        "value": {
+          "query": "",
+          "food": true,
+          "transport": true,
+          "shopping": false,
+          "period": "month"
+        }
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateDataModel": {
+        "surfaceId": "search",
+        "path": "/results",
+        "value": [
+          {
+            "date": "2026-10-24",
+            "merchant": "Вкусвилл",
+            "category": "Продукты",
+            "amount": -1240
+          },
+          {
+            "date": "2026-10-23",
+            "merchant": "Метро",
+            "category": "Транспорт",
+            "amount": -62
+          },
+          {
+            "date": "2026-10-20",
+            "merchant": "Азбука вкуса",
+            "category": "Продукты",
+            "amount": -3410.9
+          }
+        ]
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateComponents": {
+        "surfaceId": "search",
+        "components": [
+          {
+            "id": "root",
+            "component": "Container",
+            "maxW": "container.lg",
+            "py": "8",
+            "children": ["layout"]
+          },
+          {
+            "id": "layout",
+            "component": "Grid",
+            "minChildWidth": "xs",
+            "gap": "6",
+            "children": ["filters", "results"]
+          },
+          {
+            "id": "filters",
+            "component": "Flex",
+            "direction": "column",
+            "gap": "4",
+            "bg": "gray.700",
+            "p": "5",
+            "borderRadius": "xl",
+            "borderWidth": "1px",
+            "borderColor": "whiteAlpha.100",
+            "children": ["query", "cats", "food", "transport", "shopping", "period", "apply"]
+          },
+          {
+            "id": "query",
+            "component": "Input",
+            "label": "Поиск",
+            "value": {
+              "path": "/filters/query"
+            },
+            "placeholder": "Магазин или сумма"
+          },
+          {
+            "id": "cats",
+            "component": "Text",
+            "text": "Категории",
+            "fontWeight": "semibold"
+          },
+          {
+            "id": "food",
+            "component": "Checkbox",
+            "label": "Продукты",
+            "value": {
+              "path": "/filters/food"
+            }
+          },
+          {
+            "id": "transport",
+            "component": "Checkbox",
+            "label": "Транспорт",
+            "value": {
+              "path": "/filters/transport"
+            }
+          },
+          {
+            "id": "shopping",
+            "component": "Checkbox",
+            "label": "Покупки",
+            "value": {
+              "path": "/filters/shopping"
+            }
+          },
+          {
+            "id": "period",
+            "component": "RadioGroup",
+            "label": "Период",
+            "value": {
+              "path": "/filters/period"
+            },
+            "options": [
+              {
+                "label": "Неделя",
+                "value": "week"
+              },
+              {
+                "label": "Месяц",
+                "value": "month"
+              },
+              {
+                "label": "Год",
+                "value": "year"
+              }
+            ]
+          },
+          {
+            "id": "apply",
+            "component": "Button",
+            "label": "Применить",
+            "colorScheme": "blue",
+            "leftIcon": "search",
+            "action": {
+              "event": {
+                "name": "search.apply"
+              }
+            }
+          },
+          {
+            "id": "results",
+            "component": "Table",
+            "rows": {
+              "path": "/results"
+            },
+            "size": "sm",
+            "columns": [
+              {
+                "header": "Дата",
+                "key": "date",
+                "format": "date"
+              },
+              {
+                "header": "Где",
+                "key": "merchant"
+              },
+              {
+                "header": "Категория",
+                "key": "category"
+              },
+              {
+                "header": "Сумма",
+                "key": "amount",
+                "format": "currency",
+                "align": "right"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

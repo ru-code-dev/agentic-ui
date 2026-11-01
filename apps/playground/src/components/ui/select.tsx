@@ -1,11 +1,9 @@
 "use client";
 
-import { mergeProps } from "@base-ui/react/merge-props";
 import { Select as SelectPrimitive } from "@base-ui/react/select";
-import { useRender } from "@base-ui/react/use-render";
 import { cva, type VariantProps } from "class-variance-authority";
 import { ChevronDownIcon, ChevronsUpDownIcon, ChevronUpIcon } from "lucide-react";
-import * as React from "react";
+import { type ElementRef, type ReactElement, forwardRef } from "react";
 import { cn } from "~/lib/utils";
 
 export const Select: typeof SelectPrimitive.Root = SelectPrimitive.Root;
@@ -28,47 +26,10 @@ export const selectTriggerVariants = cva(
 
 export const selectTriggerIconClassName = "-me-1 size-4.5 opacity-80 sm:size-4";
 
-export interface SelectButtonProps extends useRender.ComponentProps<"button"> {
-  size?: VariantProps<typeof selectTriggerVariants>["size"];
-}
-
-export const SelectButton = React.forwardRef<HTMLElement, SelectButtonProps>(function SelectButton(
-  { className, size, render, children, ...props },
-  ref,
-): React.ReactElement {
-  const typeValue: React.ButtonHTMLAttributes<HTMLButtonElement>["type"] = render
-    ? undefined
-    : "button";
-
-  const defaultProps = {
-    children: (
-      <>
-        <span className="flex-1 truncate in-data-placeholder:text-muted-foreground/72">
-          {children}
-        </span>
-        <ChevronsUpDownIcon className={selectTriggerIconClassName} />
-      </>
-    ),
-    className: cn(selectTriggerVariants({ size }), "min-w-0", className),
-    "data-slot": "select-button",
-    type: typeValue,
-  };
-
-  return useRender({
-    ref,
-    defaultTagName: "button",
-    props: mergeProps<"button">(defaultProps, props),
-    render,
-  });
-});
-
-export const SelectTrigger = React.forwardRef<
-  React.ElementRef<typeof SelectPrimitive.Trigger>,
+export const SelectTrigger = forwardRef<
+  ElementRef<typeof SelectPrimitive.Trigger>,
   SelectPrimitive.Trigger.Props & VariantProps<typeof selectTriggerVariants>
->(function SelectTrigger(
-  { className, size = "default", children, ...props },
-  ref,
-): React.ReactElement {
+>(function SelectTrigger({ className, size = "default", children, ...props }, ref): ReactElement {
   return (
     <SelectPrimitive.Trigger
       ref={ref}
@@ -84,10 +45,10 @@ export const SelectTrigger = React.forwardRef<
   );
 });
 
-export const SelectValue = React.forwardRef<
-  React.ElementRef<typeof SelectPrimitive.Value>,
+export const SelectValue = forwardRef<
+  ElementRef<typeof SelectPrimitive.Value>,
   SelectPrimitive.Value.Props
->(function SelectValue({ className, ...props }, ref): React.ReactElement {
+>(function SelectValue({ className, ...props }, ref): ReactElement {
   return (
     <SelectPrimitive.Value
       ref={ref}
@@ -98,8 +59,8 @@ export const SelectValue = React.forwardRef<
   );
 });
 
-export const SelectPopup = React.forwardRef<
-  React.ElementRef<typeof SelectPrimitive.Popup>,
+export const SelectPopup = forwardRef<
+  ElementRef<typeof SelectPrimitive.Popup>,
   SelectPrimitive.Popup.Props & {
     portalProps?: SelectPrimitive.Portal.Props;
     side?: SelectPrimitive.Positioner.Props["side"];
@@ -123,7 +84,7 @@ export const SelectPopup = React.forwardRef<
     ...props
   },
   ref,
-): React.ReactElement {
+): ReactElement {
   return (
     <SelectPrimitive.Portal {...portalProps}>
       <SelectPrimitive.Positioner
@@ -168,10 +129,10 @@ export const SelectPopup = React.forwardRef<
   );
 });
 
-export const SelectItem = React.forwardRef<
-  React.ElementRef<typeof SelectPrimitive.Item>,
+export const SelectItem = forwardRef<
+  ElementRef<typeof SelectPrimitive.Item>,
   SelectPrimitive.Item.Props
->(function SelectItem({ className, children, ...props }, ref): React.ReactElement {
+>(function SelectItem({ className, children, ...props }, ref): ReactElement {
   return (
     <SelectPrimitive.Item
       ref={ref}

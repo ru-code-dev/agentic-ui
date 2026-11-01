@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { watchConsole } from "./support/console.ts";
+import { COMPOSITION_COUNT, SNIPPET_COMPONENTS } from "./support/contract.ts";
 import {
   editorText,
   openPanel,
@@ -10,16 +11,16 @@ import {
   textSurface,
 } from "./support/workspace.ts";
 
-test("PG-01, PG-02: the sidebar lists 20 compositions and 19 snippets that load into editor and preview", async ({
+test("[PG-01, PG-02] the sidebar lists every composition and component snippet; they load into editor and preview", async ({
   page,
 }) => {
   const console = watchConsole(page);
   await openWorkspace(page);
   await expect(page.getByRole("region", { name: "Compositions" }).getByRole("button")).toHaveCount(
-    20,
+    COMPOSITION_COUNT,
   );
   await expect(page.getByRole("region", { name: "Components" }).getByRole("button")).toHaveCount(
-    19,
+    SNIPPET_COMPONENTS.length,
   );
   await selectExample(page, "15-bank-transfer");
   expect(await editorText(page)).toContain('"surfaceId": "transfer"');
@@ -31,7 +32,7 @@ test("PG-01, PG-02: the sidebar lists 20 compositions and 19 snippets that load 
   console.expectClean();
 });
 
-test("PG-03: lint with line/column, format, copy and reset", async ({ page }) => {
+test("[PG-03] lint with line/column, format, copy and reset", async ({ page }) => {
   await openWorkspace(page);
   await setEditorText(page, '[\n  {"version": "v0.9",\n  "createSurface": }\n]');
   await expect(page.getByTestId("editor-status")).toHaveText("Invalid JSON · line 3");
@@ -49,7 +50,7 @@ test("PG-03: lint with line/column, format, copy and reset", async ({ page }) =>
   );
 });
 
-test("PG-04: accepts a message array, JSONL, a single message and an example file", async ({
+test("[PG-04] accepts a message array, JSONL, a single message and an example file", async ({
   page,
 }) => {
   await openWorkspace(page);
@@ -73,7 +74,7 @@ test("PG-04: accepts a message array, JSONL, a single message and an example fil
   await expect(frame.getByText("Массив")).toHaveCount(0);
 });
 
-test("PG-05: the last valid render stays visible while the JSON is invalid", async ({ page }) => {
+test("[PG-05] the last valid render stays visible while the JSON is invalid", async ({ page }) => {
   await openWorkspace(page);
   await setEditorText(page, JSON.stringify(textSurface("Живой рендер")));
   await expect(previewFrame(page).getByText("Живой рендер")).toBeVisible();
@@ -82,7 +83,7 @@ test("PG-05: the last valid render stays visible while the JSON is invalid", asy
   await expect(previewFrame(page).getByText("Живой рендер")).toBeVisible();
 });
 
-test("PG-05: invalid JSON restored on reload explains why nothing renders", async ({ page }) => {
+test("[PG-05] invalid JSON restored on reload explains why nothing renders", async ({ page }) => {
   await openWorkspace(page);
   await setEditorText(page, "[{");
   await expect(page.getByTestId("editor-status")).toContainText("Invalid JSON");
@@ -96,7 +97,7 @@ test("PG-05: invalid JSON restored on reload explains why nothing renders", asyn
   await expect(page.getByText("The JSON does not parse")).toBeHidden();
 });
 
-test("PG-17: Ctrl/Cmd+S formats and Ctrl/Cmd+Enter re-renders", async ({ page }) => {
+test("[PG-17] Ctrl/Cmd+S formats and Ctrl/Cmd+Enter re-renders", async ({ page }) => {
   await openWorkspace(page);
   const frame = previewFrame(page);
   await frame.getByRole("textbox", { name: /Электронная почта/ }).fill("anna@bank.ru");
@@ -108,7 +109,7 @@ test("PG-17: Ctrl/Cmd+S formats and Ctrl/Cmd+Enter re-renders", async ({ page })
   expect(await editorText(page)).toContain('  {    "version": "v0.9"');
 });
 
-test("PG-21: the composition view shows generated JSX and the live data model", async ({
+test("[PG-21] the composition view shows generated JSX and the live data model", async ({
   page,
 }) => {
   await openWorkspace(page);

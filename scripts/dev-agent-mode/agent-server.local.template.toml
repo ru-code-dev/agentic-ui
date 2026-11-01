@@ -1,0 +1,18 @@
+# agent-server.local.toml: your local agent server settings for `pnpm dev:agent-mode` (DEC-057).
+# Created from scripts/dev-agent-mode/agent-server.local.template.toml on the first run; gitignored, never committed.
+# Edit agent.bin (your qwen) and agent.env, then restart `pnpm dev:agent-mode`.
+# Every other key and its default: apps/agent-server/agentic-ui-server.example.toml (unknown keys are errors).
+# The same file works for the manual way:
+#   . scripts/workflow-env.sh && PYTHONPATH=apps/agent-server/src python3.13 -m agentic_ui_server --config agent-server.local.toml
+
+[server]
+host = "127.0.0.1"
+port = 8787 # the playground's /api proxy target (AGENT_SERVER_URL); dev:agent-mode passes it on
+base_path = "/api" # the page calls /api; keep it
+
+[agent]
+bin = "qwen" # your qwen CLI: a command on PATH or a path (.js/.mjs/.cjs run with node)
+# Fixed extra env for the CLI, e.g. its provider settings; keep the two defaults.
+env = { QWEN_SANDBOX = "false", QWEN_CODE_SUPPRESS_YOLO_WARNING = "1" }
+extra_args = [] # CLI flags appended after the lean-spawn base args (e.g. your provider/model flags)
+model = "" # optional model name sent via ACP model selection ("" = the CLI's own default)

@@ -1,0 +1,94 @@
+# agentic-ui-server settings: every key with its default value (PLAN §2.1).
+# Precedence: defaults < this file (--config PATH or AGENTIC_UI_CONFIG) < env AGENTIC_UI_* < CLI flags (--set KEY=VALUE).
+# Unknown keys are errors. Paths may start with "~" (expanded with HOME). Env lists are comma-separated;
+# *_args env values use shell quoting. tests/unit/test_example_config.py keeps this file equal to the code defaults.
+# Model/provider: none by default (SV-C15). The production fork brings its own; dev/test flags live in config.dev.toml.
+
+[server]
+host = "127.0.0.1" # AGENTIC_UI_HOST: bind host (SV-C12)
+port = 8787 # AGENTIC_UI_PORT
+base_path = "/api" # AGENTIC_UI_BASE_PATH: route prefix ({base}/prompt, ...): a path or an absolute URL (its path)
+cors_origins = [] # AGENTIC_UI_CORS_ORIGINS: allowed origins (empty = same-origin only)
+max_body_bytes = 1048576 # AGENTIC_UI_MAX_BODY_BYTES: request size cap
+
+[agent]
+bin = "qwen" # AGENTIC_UI_AGENT_BIN: CLI path or command; .js/.mjs/.cjs run with `node`, .ts with strip-types
+node = "node" # AGENTIC_UI_AGENT_NODE: interpreter for JS entries
+acp_flag = "--acp" # AGENTIC_UI_AGENT_ACP_FLAG: "--experimental-acp" for old builds, "" for none
+# AGENTIC_UI_AGENT_BASE_ARGS: lean spawn (RESEARCH §D.2): qwen core tools off + every non-core tool denied by name
+base_args = [
+  "--core-tools",
+  "none",
+  "--exclude-tools",
+  "agent,ask_user_question,enter_plan_mode,exit_plan_mode,list_agents,skill,tool_search,enter_worktree,exit_worktree,artifact,record_artifact,send_message,task_create,task_update,task_list,task_stop,team_create,team_delete,team_plan_approval,workflow,structured_output,computer_use__bring_to_front,computer_use__check_for_update,computer_use__check_permissions,computer_use__click,computer_use__double_click,computer_use__drag,computer_use__end_session,computer_use__get_accessibility_tree,computer_use__get_agent_cursor_state,computer_use__get_config,computer_use__get_cursor_position,computer_use__get_recording_state,computer_use__get_screen_size,computer_use__get_window_state,computer_use__hotkey,computer_use__kill_app,computer_use__launch_app,computer_use__list_apps,computer_use__list_windows,computer_use__move_cursor,computer_use__page,computer_use__press_key,computer_use__replay_trajectory,computer_use__right_click,computer_use__scroll,computer_use__set_agent_cursor_enabled,computer_use__set_agent_cursor_motion,computer_use__set_agent_cursor_style,computer_use__set_config,computer_use__set_value,computer_use__start_recording,computer_use__start_session,computer_use__stop_recording,computer_use__type_text,computer_use__zoom",
+]
+extra_args = [
+] # AGENTIC_UI_AGENT_EXTRA_ARGS: appended after base_args (provider flags only in dev/test configs)
+home = "" # AGENTIC_UI_AGENT_HOME: CLI profile dir, written to every agent.env_names.home name ("" = inherit)
+env = { QWEN_SANDBOX = "false", QWEN_CODE_SUPPRESS_YOLO_WARNING = "1" } # AGENTIC_UI_AGENT_ENV (K=V,K=V): fixed extra env
+inherit_env = true # AGENTIC_UI_AGENT_INHERIT_ENV: inherit the server env (false = env_passthrough names only)
+env_passthrough = [
+  "PATH",
+  "HOME",
+  "LANG",
+  "LC_ALL",
+  "TZ",
+  "TMPDIR",
+  "NO_PROXY",
+  "no_proxy",
+  "HTTPS_PROXY",
+  "HTTP_PROXY",
+]
+tls_insecure = false # AGENTIC_UI_AGENT_TLS_INSECURE: NODE_TLS_REJECT_UNAUTHORIZED=0 for the agent
+auth_method = "" # AGENTIC_UI_AGENT_AUTH_METHOD: ACP authenticate methodId ("" = skip)
+mode = "" # AGENTIC_UI_AGENT_MODE: ACP session mode ("" = never set; no yolo, SV-C10)
+model = "" # AGENTIC_UI_AGENT_MODEL: model name sent via ACP model selection ("" = untouched, SV-C15)
+model_apply = "session" # AGENTIC_UI_AGENT_MODEL_APPLY: "session" (after session/new|load, on change) | "every_turn"
+work_root = "" # AGENTIC_UI_WORK_ROOT: per-chat empty cwd parent ("" = $XDG_STATE_HOME/agentic-ui-server/chats)
+# what the CLI keeps per chat cwd under its HOME, removed with a forgotten chat ({home} {cwd} {cwd_slug} {cwd_sha256})
+forget_paths = ["{home}/.qwen/projects/{cwd_slug}", "{home}/.qwen/tmp/{cwd_sha256}"]
+system_prompt_file = "" # AGENTIC_UI_SYSTEM_PROMPT_FILE: override the bundled system prompt ("" = bundled)
+# AGENTIC_UI_AGENT_SYSTEM_SETTINGS (JSON): highest-precedence qwen settings overlay ("" = none)
+system_settings = { tools = { computerUse = { enabled = false } }, ui = { enableFollowupSuggestions = false } }
+cache_dir = "" # AGENTIC_UI_CACHE_DIR: extracted prompt/overlay files ("" = $XDG_CACHE_HOME/agentic-ui-server)
+client_name = "agentic-ui-server" # ACP initialize clientInfo.name
+
+[agent.env_names] # env var names per role, as alias lists (forks may rename the prefix)
+home = ["QWEN_HOME"]
+no_relaunch = ["QWEN_CODE_NO_RELAUNCH"]
+system_prompt = ["QWEN_SYSTEM_MD"]
+system_settings = ["QWEN_CODE_SYSTEM_SETTINGS_PATH"]
+mcp_blocking = ["QWEN_CODE_LEGACY_MCP_BLOCKING"]
+secrets = [
+] # values always redacted (e.g. the fork's key variable); *_KEY, *_TOKEN, *_SECRET, *PASSWORD* are anyway
+
+[timeouts]
+start_s = 60.0 # AGENTIC_UI_START_TIMEOUT_S: spawn -> session ready
+rpc_s = 30.0 # AGENTIC_UI_RPC_TIMEOUT_S: small RPCs (set_mode, load, model)
+turn_s = 180.0 # AGENTIC_UI_TURN_TIMEOUT_S: one prompt turn
+request_s = 600.0 # AGENTIC_UI_REQUEST_TIMEOUT_S: whole HTTP request incl. repairs
+cancel_grace_s = 1.5 # AGENTIC_UI_CANCEL_GRACE_S: session/cancel -> kill backstop
+kill_grace_s = 2.0 # SIGTERM -> SIGKILL on close
+
+[limits]
+max_live_agents = 4 # AGENTIC_UI_MAX_LIVE_AGENTS: cap on live agent processes (one per chat, no pool, SV-C19)
+idle_ttl_s = 1800.0 # AGENTIC_UI_IDLE_TTL_S: idle process closed by the reaper
+reap_interval_s = 30.0 # reaper period
+forget_after_s = 86400.0 # chat (session id for session/load) forgotten after this idle time
+max_queue_per_chat = 4 # queued turns per chat before QueueFull (HTTP 429)
+max_waiting = 32 # requests waiting for a chat turn or an agent slot across all chats before HTTP 429
+max_line_bytes = 16777216 # ACP stdout line limit
+stderr_lines = 200 # agent stderr ring buffer (crash reports)
+
+[repair]
+max_attempts = 3 # AGENTIC_UI_MAX_REPAIR_ATTEMPTS: SV-C8 MAX_REPAIR_ATTEMPTS
+
+[reply] # SV-C27 reply modes (docs/architecture/orchestrator-flow.md)
+ui = "always" # AGENTIC_UI_REPLY_UI: always (every reply holds UI) | auto (text-only answers to /prompt allowed)
+fallback = "surface" # AGENTIC_UI_REPLY_FALLBACK: surface (fallback surface + text) | text (text only) after failed repairs
+surfaces = "many" # AGENTIC_UI_REPLY_SURFACES: many (new topic = new surface) | single (one surface per chat)
+
+[log]
+level = "INFO" # AGENTIC_UI_LOG_LEVEL
+format = "%(asctime)s %(levelname)s %(name)s: %(message)s" # AGENTIC_UI_LOG_FORMAT
+acp_wire = false # AGENTIC_UI_LOG_ACP_WIRE: debug-log every ACP frame (truncated, redacted)

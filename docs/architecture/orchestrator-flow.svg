@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="1110" viewBox="0 0 1100 1110" role="img" aria-labelledby="title desc">
+  <title id="title">Orchestrator flow: text always, UI when needed</title>
+  <desc id="desc">A user message goes to the production orchestrator, which answers with text only or runs A2UI generation, validation, repair and fallback; every reply is one response with text and possibly empty messages; the web package always shows the text and renders surfaces; actions on a surface go back to the same orchestrator.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#495057"/>
+    </marker>
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#c92a2a"/>
+    </marker>
+    <marker id="arrow-violet" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6741d9"/>
+    </marker>
+    <style>
+      text { font-family: system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #1f2328; font-size: 14px; }
+      .t { font-weight: 700; font-size: 15px; }
+      .m { font-family: ui-monospace, Menlo, Consolas, "Liberation Mono", monospace; font-size: 13px; }
+      .s { fill: #495057; font-size: 13px; }
+      .note { fill: #495057; font-size: 13px; font-style: italic; }
+      .lbl { font-size: 13px; font-weight: 600; fill: #343a40; }
+      .lbl-red { font-size: 13px; font-weight: 600; fill: #c92a2a; }
+      .lbl-violet { font-size: 13px; font-weight: 600; fill: #6741d9; }
+      .flow { fill: none; stroke: #495057; stroke-width: 1.8; }
+      .flow-red { fill: none; stroke: #c92a2a; stroke-width: 1.8; }
+      .flow-violet { fill: none; stroke: #6741d9; stroke-width: 1.8; stroke-dasharray: 7 5; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1100" height="1110" fill="#ffffff"/>
+
+  <!-- user message -->
+  <rect x="420" y="14" width="200" height="36" rx="18" fill="#f8f9fa" stroke="#495057" stroke-width="1.5"/>
+  <text x="520" y="37" text-anchor="middle">user message (<tspan class="m">chatId</tspan>)</text>
+  <path class="flow" d="M520,50 V86" marker-end="url(#arrow)"/>
+
+  <!-- router -->
+  <rect x="370" y="90" width="300" height="70" rx="12" fill="#e8f0fe" stroke="#3b5bdb" stroke-width="1.8"/>
+  <text x="520" y="119" text-anchor="middle" class="t">Production server</text>
+  <text x="520" y="142" text-anchor="middle">orchestrator / router</text>
+  <text x="690" y="152" class="note">decides per message: does this need UI?</text>
+
+  <!-- branches -->
+  <path class="flow" d="M370,125 H150 V226" marker-end="url(#arrow)"/>
+  <text x="262" y="116" text-anchor="middle" class="lbl">no UI</text>
+  <path class="flow" d="M520,160 V226" marker-end="url(#arrow)"/>
+  <text x="530" y="198" class="lbl">needs UI</text>
+
+  <!-- text answer -->
+  <rect x="50" y="230" width="200" height="90" rx="12" fill="#e6f4ea" stroke="#2f9e44" stroke-width="1.8"/>
+  <text x="150" y="262" text-anchor="middle" class="t">LLM</text>
+  <text x="150" y="286" text-anchor="middle">text answer</text>
+  <text x="150" y="306" text-anchor="middle" class="s">(<tspan class="m">messages: []</tspan>)</text>
+
+  <!-- A2UI generation -->
+  <rect x="370" y="230" width="300" height="90" rx="12" fill="#fff4e6" stroke="#e8590c" stroke-width="1.8"/>
+  <text x="520" y="256" text-anchor="middle" class="t">A2UI generation</text>
+  <text x="520" y="280" text-anchor="middle"><tspan class="m">system-prompt.md</tspan> + catalog</text>
+  <text x="520" y="304" text-anchor="middle">→ text + <tspan class="m">&lt;a2ui-json&gt;</tspan></text>
+  <path class="flow" d="M520,320 V366" marker-end="url(#arrow)"/>
+
+  <!-- validate -->
+  <rect x="370" y="370" width="300" height="80" rx="12" fill="#fff4e6" stroke="#e8590c" stroke-width="1.8"/>
+  <text x="520" y="398" text-anchor="middle" class="t">validate</text>
+  <text x="520" y="422" text-anchor="middle"><tspan class="m">catalog.json</tspan>, validator-cases agree</text>
+
+  <!-- invalid -> repair -->
+  <path class="flow-red" d="M670,410 H746" marker-end="url(#arrow-red)"/>
+  <text x="709" y="400" text-anchor="middle" class="lbl-red">invalid</text>
+  <rect x="750" y="370" width="290" height="80" rx="12" fill="#fdecec" stroke="#c92a2a" stroke-width="1.8"/>
+  <text x="895" y="398" text-anchor="middle" class="t">repair ≤ N</text>
+  <text x="895" y="422" text-anchor="middle">exact errors back to the agent</text>
+
+  <!-- repair loop -->
+  <path class="flow-red" d="M895,370 V275 H674" marker-end="url(#arrow-red)"/>
+  <text x="782" y="266" text-anchor="middle" class="lbl-red">repair loop: regenerate</text>
+
+  <!-- still invalid -> fallback -->
+  <path class="flow-red" d="M895,450 V516" marker-end="url(#arrow-red)"/>
+  <text x="905" y="489" class="lbl-red">still invalid</text>
+  <rect x="750" y="520" width="290" height="90" rx="12" fill="#fdecec" stroke="#c92a2a" stroke-width="1.8"/>
+  <text x="895" y="547" text-anchor="middle" class="t">fallback</text>
+  <text x="895" y="571" text-anchor="middle">drop the JSON, keep the text</text>
+  <text x="895" y="594" text-anchor="middle" class="s">(or the "sorry" surface, configurable)</text>
+
+  <!-- into the response -->
+  <path class="flow" d="M150,320 V676" marker-end="url(#arrow)"/>
+  <path class="flow" d="M520,450 V676" marker-end="url(#arrow)"/>
+  <text x="530" y="560" class="lbl">valid</text>
+  <path class="flow" d="M895,610 V676" marker-end="url(#arrow)"/>
+
+  <!-- response -->
+  <rect x="100" y="680" width="900" height="80" rx="12" fill="#f1f3f5" stroke="#495057" stroke-width="1.8"/>
+  <text x="550" y="708" text-anchor="middle" class="t">response</text>
+  <text x="550" y="736" text-anchor="middle" class="m">{ status, text, messages[] (may be empty), contractVersion, chatId }</text>
+  <path class="flow" d="M520,760 V806" marker-end="url(#arrow)"/>
+
+  <!-- web -->
+  <rect x="100" y="810" width="900" height="140" rx="12" fill="#e7f5ff" stroke="#1971c2" stroke-width="1.8"/>
+  <text x="550" y="838" text-anchor="middle" class="t">Web (PKG package): <tspan class="m">useA2UIChat</tspan> / <tspan class="m">useA2UISurfaces</tspan></text>
+  <text x="140" y="868">• always shows the text (markdown bubble)</text>
+  <text x="140" y="894">• <tspan class="m">messages[]</tspan> non-empty → validate → surface created or updated in place (by <tspan class="m">surfaceId</tspan>)</text>
+  <text x="140" y="920">• invalid / version mismatch → text + placeholder</text>
+
+  <!-- action -->
+  <path class="flow-violet" d="M520,950 V1006" marker-end="url(#arrow-violet)"/>
+  <text x="530" y="983" class="lbl-violet">button/action on a surface</text>
+  <rect x="270" y="1010" width="500" height="80" rx="12" fill="#f3f0ff" stroke="#6741d9" stroke-width="1.8"/>
+  <text x="520" y="1040" text-anchor="middle" class="m">POST /action {chatId, surfaceId, event, dataModel}</text>
+  <text x="520" y="1066" text-anchor="middle">→ same orchestrator (usually a small <tspan class="m">updateDataModel</tspan>)</text>
+
+  <!-- action round trip back to the orchestrator -->
+  <path class="flow-violet" d="M770,1050 H1075 V110 H674" marker-end="url(#arrow-violet)"/>
+  <text x="872" y="101" text-anchor="middle" class="lbl-violet">action round trip → orchestrator</text>
+</svg>

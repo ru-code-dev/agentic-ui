@@ -11,8 +11,18 @@
     "docs/SPEC.md",
     "docs/DECISIONS.md",
     "docs/reports",
+    "docs/server",
+    "docs/HANDOFF.md",
+    "docs/TRACEABILITY.md",
+    "scripts/traceability/fixtures/repo/docs/TRACEABILITY.md",
+    "experiments/llm-contract/results",
     "packages/ui-kit-one-catalog/CONTRACTS.md",
     "packages/ui-kit-one-react/MAPPING.md",
+    "apps/agent-server/src/agentic_ui_server/data",
+    "apps/agent-server/validator-cases",
+    "apps/agent-server/fallback.json",
+    "apps/agent-server/SERVER-CONTRACT.md",
+    "handover",
     "apps/playground/public/tokenizers"
   ],
   "sortPackageJson": {}

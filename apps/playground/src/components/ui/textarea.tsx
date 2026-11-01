@@ -2,18 +2,23 @@
 
 import { Field as FieldPrimitive } from "@base-ui/react/field";
 import { mergeProps } from "@base-ui/react/merge-props";
-import * as React from "react";
+import {
+  type ComponentProps,
+  type ComponentPropsWithoutRef,
+  type ReactElement,
+  forwardRef,
+} from "react";
 import { cn } from "~/lib/utils";
 
-export type TextareaProps = React.ComponentPropsWithoutRef<"textarea"> & {
+export type TextareaProps = ComponentPropsWithoutRef<"textarea"> & {
   size?: "sm" | "default" | "lg" | number;
   unstyled?: boolean;
 };
 
-export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(function Textarea(
+export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function Textarea(
   { className, size = "default", unstyled = false, ...props },
   ref,
-): React.ReactElement {
+): ReactElement {
   return (
     <span
       className={
@@ -33,7 +38,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(fun
         disabled={props.disabled}
         id={props.id}
         name={props.name}
-        render={(defaultProps: React.ComponentProps<"textarea">) => (
+        render={(defaultProps: ComponentProps<"textarea">) => (
           <textarea
             className={cn(
               "field-sizing-content min-h-17.5 w-full rounded-[inherit] px-[calc(--spacing(3)-1px)] py-[calc(--spacing(1.5)-1px)] text-foreground outline-none placeholder:text-muted-foreground/72 max-sm:min-h-20.5",

@@ -1,0 +1,41 @@
+{
+  "name": "Container",
+  "description": "Колонка страницы ограниченной ширины.",
+  "messages": [
+    {
+      "version": "v0.9",
+      "createSurface": {
+        "surfaceId": "container",
+        "catalogId": "urn:agentic-ui:catalog:ui-kit-one:v1"
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateComponents": {
+        "surfaceId": "container",
+        "components": [
+          {
+            "id": "root",
+            "component": "Container",
+            "maxW": "container.md",
+            "py": "6",
+            "children": ["title", "intro"]
+          },
+          {
+            "id": "title",
+            "component": "Heading",
+            "text": "Мои финансы",
+            "as": "h1",
+            "size": "lg"
+          },
+          {
+            "id": "intro",
+            "component": "Text",
+            "text": "Все счета и карты в одном месте.",
+            "color": "gray.400"
+          }
+        ]
+      }
+    }
+  ]
+}

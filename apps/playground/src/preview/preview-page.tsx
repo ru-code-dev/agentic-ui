@@ -8,13 +8,14 @@ import { RenderBoundary } from "./render-boundary.tsx";
 import { RuntimeSurfaces } from "./runtime-surfaces.tsx";
 import { useChannel } from "./use-channel.ts";
 import { usePreviewRuntime } from "./use-preview-runtime.ts";
+import { newId } from "../lib/new-id.ts";
 
 /**
  * `/preview`: a document of its own where the kit owns the page (document mode). Shown in the
  * device frame's iframe and in "open in new tab"; driven by the preview channel or the URL hash.
  */
 export function PreviewPage() {
-  const previewId = useMemo(() => crypto.randomUUID(), []);
+  const previewId = useMemo(() => newId(), []);
   const [state, setState] = useState<{
     messages: readonly unknown[] | undefined;
     revision: number;
@@ -50,19 +51,27 @@ export function PreviewPage() {
     onRendered: (revision) => post({ type: "rendered", previewId, revision }),
   });
 
-  useEffect(
-    () =>
-      captureConsoleErrors((message) =>
-        post({ type: "error", previewId, source: "console", message }),
-      ),
-    [post, previewId],
-  );
+  useEffect(() => {
+    // The returned function is the cleanup on purpose: it restores console.error.
+    return captureConsoleErrors((message) =>
+      post({ type: "error", previewId, source: "console", message }),
+    );
+  }, [post, previewId]);
 
   useEffect(() => {
-    void decodeMessagesHash(location.hash).then((fromHash) => {
-      if (fromHash !== undefined) setState({ messages: fromHash, revision: 0 });
-      post({ type: "hello", previewId });
-    });
+    // A4-17: a broken share link (not base64, not deflate, truncated, not JSON) is reported on the page
+    // and to the opener; "hello" is posted either way, so the opener can still drive the preview.
+    void decodeMessagesHash(location.hash)
+      .then((fromHash) => {
+        if (fromHash !== undefined) setState({ messages: fromHash, revision: 0 });
+      })
+      .catch((failure: unknown) => {
+        const reason = failure instanceof Error ? failure.message : String(failure);
+        const message = `Ссылка на превью повреждена: ${reason}`;
+        setErrors((previous) => (previous.includes(message) ? previous : [...previous, message]));
+        post({ type: "error", previewId, source: "runtime", message });
+      })
+      .finally(() => post({ type: "hello", previewId }));
   }, [post, previewId]);
 
   return (

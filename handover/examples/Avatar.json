@@ -1,0 +1,27 @@
+{
+  "name": "Avatar",
+  "description": "Аватар с инициалами.",
+  "messages": [
+    {
+      "version": "v0.9",
+      "createSurface": {
+        "surfaceId": "avatar",
+        "catalogId": "urn:agentic-ui:catalog:ui-kit-one:v1"
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateComponents": {
+        "surfaceId": "avatar",
+        "components": [
+          {
+            "id": "root",
+            "component": "Avatar",
+            "name": "Анна Смирнова",
+            "size": "lg"
+          }
+        ]
+      }
+    }
+  ]
+}

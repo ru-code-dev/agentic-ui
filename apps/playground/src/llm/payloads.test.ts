@@ -5,7 +5,7 @@ import { turnPayloads } from "./payloads.ts";
 const NOW = "2026-10-27T12:00:00.000Z";
 const login = compositions.find((example) => example.id === "01-login")?.messages ?? [];
 
-describe("turnPayloads (PG-26 d)", () => {
+describe("turnPayloads [PG-26] (d)", () => {
   it("derives the action event and data model from the messages when nothing fired yet", () => {
     const [action, dataModel] = turnPayloads(login, undefined, {}, NOW);
     expect(JSON.parse(action?.json ?? "{}")).toMatchObject({

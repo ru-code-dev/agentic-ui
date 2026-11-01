@@ -1,0 +1,222 @@
+{
+  "name": "История платежей",
+  "description": "Длинный список через один шаблон ChildList (объект {componentId, path}, не массив): пути внутри шаблона относительны элементу, статус — нейтральный Tag со связанным текстом.",
+  "messages": [
+    {
+      "version": "v0.9",
+      "createSurface": {
+        "surfaceId": "payments",
+        "catalogId": "urn:agentic-ui:catalog:ui-kit-one:v1"
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateDataModel": {
+        "surfaceId": "payments",
+        "path": "/",
+        "value": {
+          "payments": [
+            {
+              "id": "p1",
+              "date": "2026-10-01",
+              "title": "Пятёрочка",
+              "amount": 1840.5,
+              "status": "Выполнен"
+            },
+            {
+              "id": "p2",
+              "date": "2026-10-02",
+              "title": "МТС, мобильная связь",
+              "amount": 650,
+              "status": "Выполнен"
+            },
+            {
+              "id": "p3",
+              "date": "2026-10-03",
+              "title": "Яндекс Такси",
+              "amount": 430,
+              "status": "Выполнен"
+            },
+            {
+              "id": "p4",
+              "date": "2026-10-04",
+              "title": "Аптека «Ригла»",
+              "amount": 1215.9,
+              "status": "В обработке"
+            },
+            {
+              "id": "p5",
+              "date": "2026-10-05",
+              "title": "ЖКХ, октябрь",
+              "amount": 7340,
+              "status": "Выполнен"
+            },
+            {
+              "id": "p6",
+              "date": "2026-10-06",
+              "title": "Кофейня «Зерно»",
+              "amount": 320,
+              "status": "Выполнен"
+            },
+            {
+              "id": "p7",
+              "date": "2026-10-07",
+              "title": "Ozon",
+              "amount": 2990,
+              "status": "Возврат"
+            },
+            {
+              "id": "p8",
+              "date": "2026-10-08",
+              "title": "Ростелеком, интернет",
+              "amount": 900,
+              "status": "Выполнен"
+            }
+          ],
+          "total": 15686.4
+        }
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateComponents": {
+        "surfaceId": "payments",
+        "components": [
+          {
+            "id": "root",
+            "component": "Container",
+            "maxW": "container.md",
+            "py": "8",
+            "children": ["stack"]
+          },
+          {
+            "id": "stack",
+            "component": "Flex",
+            "direction": "column",
+            "gap": "4",
+            "children": ["header", "list"]
+          },
+          {
+            "id": "header",
+            "component": "Flex",
+            "justify": "space-between",
+            "align": "center",
+            "children": ["title", "total"]
+          },
+          {
+            "id": "title",
+            "component": "Heading",
+            "text": "Платежи за октябрь",
+            "as": "h1",
+            "size": "lg"
+          },
+          {
+            "id": "total",
+            "component": "Text",
+            "text": {
+              "call": "formatCurrency",
+              "args": {
+                "value": {
+                  "path": "/total"
+                },
+                "currency": "RUB"
+              }
+            },
+            "fontWeight": "semibold"
+          },
+          {
+            "id": "list",
+            "component": "List",
+            "variant": "plain",
+            "spacing": "2",
+            "children": {
+              "componentId": "payment",
+              "path": "/payments"
+            }
+          },
+          {
+            "id": "payment",
+            "component": "Flex",
+            "align": "center",
+            "gap": "4",
+            "bg": "gray.700",
+            "p": "4",
+            "borderRadius": "xl",
+            "borderWidth": "1px",
+            "borderColor": "whiteAlpha.100",
+            "children": ["payment-info", "payment-amount", "payment-status", "payment-repeat"]
+          },
+          {
+            "id": "payment-info",
+            "component": "Flex",
+            "direction": "column",
+            "w": "full",
+            "children": ["payment-title", "payment-date"]
+          },
+          {
+            "id": "payment-title",
+            "component": "Text",
+            "text": {
+              "path": "title"
+            },
+            "fontWeight": "medium"
+          },
+          {
+            "id": "payment-date",
+            "component": "Text",
+            "text": {
+              "call": "formatDate",
+              "args": {
+                "value": {
+                  "path": "date"
+                },
+                "format": "dd.MM.yyyy"
+              }
+            },
+            "fontSize": "sm",
+            "color": "gray.400"
+          },
+          {
+            "id": "payment-amount",
+            "component": "Text",
+            "text": {
+              "call": "formatCurrency",
+              "args": {
+                "value": {
+                  "path": "amount"
+                },
+                "currency": "RUB"
+              }
+            },
+            "fontWeight": "semibold"
+          },
+          {
+            "id": "payment-status",
+            "component": "Tag",
+            "label": {
+              "path": "status"
+            },
+            "variant": "outline"
+          },
+          {
+            "id": "payment-repeat",
+            "component": "Button",
+            "label": "Повторить",
+            "variant": "ghost",
+            "size": "sm",
+            "action": {
+              "event": {
+                "name": "payment.repeat",
+                "context": {
+                  "paymentId": {
+                    "path": "id"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

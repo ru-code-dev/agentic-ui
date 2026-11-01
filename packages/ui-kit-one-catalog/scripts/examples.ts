@@ -16,8 +16,10 @@ export function readExamples(kind: "components" | "compositions"): ExampleFile[]
   let files: string[];
   try {
     files = readdirSync(dir).filter((file) => file.endsWith(".json"));
-  } catch {
-    return [];
+  } catch (error) {
+    // A kit without this example group has no folder; any other read failure is a real error.
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") return [];
+    throw error;
   }
   return files.toSorted().map((file) => {
     const example = JSON.parse(readFileSync(fileURLToPath(new URL(file, dir)), "utf8")) as Omit<

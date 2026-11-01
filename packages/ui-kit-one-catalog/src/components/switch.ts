@@ -1,6 +1,7 @@
 import { spec } from "@a2ui/web_core/catalog";
 import { DynamicBooleanSchema, DynamicStringSchema, type ComponentApi } from "@a2ui/web_core/v0_9";
 import { z } from "zod";
+import { prop } from "../prop-kinds.ts";
 import { commonRef } from "../schema-refs.ts";
 import { colorSchemes } from "../tokens/index.ts";
 
@@ -9,18 +10,20 @@ export const SwitchApi = {
   schema: spec(
     z
       .object({
-        label: commonRef(DynamicStringSchema, "DynamicString", "Text describing the setting."),
-        value: commonRef(
-          DynamicBooleanSchema,
-          "DynamicBoolean",
-          "On/off state. Bind it to a data-model path: toggling writes true/false back (two-way).",
+        label: prop.content(
+          commonRef(DynamicStringSchema, "DynamicString", "Text describing the setting."),
         ),
-        colorScheme: z.enum(colorSchemes).describe("Track color when on.").optional(),
-        isDisabled: commonRef(
-          DynamicBooleanSchema,
-          "DynamicBoolean",
-          "Disables the switch.",
-        ).optional(),
+        value: prop.twoWay(
+          commonRef(
+            DynamicBooleanSchema,
+            "DynamicBoolean",
+            "On/off state. Bind it to a data-model path: toggling writes true/false back (two-way).",
+          ),
+        ),
+        colorScheme: prop.style("colorScheme", colorSchemes, "Track color when on."),
+        isDisabled: prop.content(
+          commonRef(DynamicBooleanSchema, "DynamicBoolean", "Disables the switch.").optional(),
+        ),
       })
       .describe("An on/off toggle with a label, for settings that take effect immediately.")
       .strict(),

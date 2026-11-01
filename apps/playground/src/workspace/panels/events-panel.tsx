@@ -1,7 +1,7 @@
 import { Activity, Trash2 } from "lucide-react";
 import { Badge } from "../../components/ui/badge.tsx";
 import { Button } from "../../components/ui/button.tsx";
-import { useSession } from "../../state/session-store.ts";
+import type { LoggedEvent } from "../../state/session-store.ts";
 import { EmptyHint } from "./empty-hint.tsx";
 
 const time = (iso: string) =>
@@ -12,10 +12,14 @@ const time = (iso: string) =>
   });
 const compact = (value: unknown) => (value === undefined ? "—" : JSON.stringify(value));
 
-/** Outgoing actions and simulated agent replies, newest first (PG-11). */
-export function EventsPanel() {
-  const events = useSession((state) => state.events);
-  const clear = useSession((state) => state.clearEvents);
+/** Outgoing actions and agent replies (simulated or real), newest first (PG-11). */
+export function EventsPanel({
+  events,
+  onClear: clear,
+}: {
+  events: readonly LoggedEvent[];
+  onClear: () => void;
+}) {
   if (events.length === 0) {
     return (
       <EmptyHint

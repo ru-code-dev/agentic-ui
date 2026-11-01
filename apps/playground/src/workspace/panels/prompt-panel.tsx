@@ -5,7 +5,7 @@ import { useMemo } from "react";
 import { CodeBlock } from "../../code/code-block.tsx";
 import { IconButton } from "../../components/icon-button.tsx";
 import { Link } from "../../app/router.tsx";
-import { compositions } from "../../examples.ts";
+import { promptExamples } from "../../examples.ts";
 import { useWorkspace } from "../../state/workspace-store.ts";
 
 const CATALOG_JSON = buildCatalogJson();
@@ -15,7 +15,7 @@ export function PromptPanel() {
   const count = useWorkspace((state) => state.promptExamples);
   const setCount = useWorkspace((state) => state.setPromptExamples);
   const prompt = useMemo(
-    () => assembleSystemPrompt(CATALOG_JSON, { examples: compositions.slice(0, count) }),
+    () => assembleSystemPrompt(CATALOG_JSON, { examples: promptExamples.slice(0, count) }),
     [count],
   );
   return (
@@ -31,7 +31,7 @@ export function PromptPanel() {
           </span>
           <IconButton
             label="More examples"
-            onClick={() => setCount(Math.min(compositions.length, count + 1))}
+            onClick={() => setCount(Math.min(promptExamples.length, count + 1))}
           >
             <Plus />
           </IconButton>

@@ -6,8 +6,8 @@ import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 
 const LIMIT = 250;
-const SOURCE = /\.(ts|tsx|js|mjs|cjs|css|html)$/;
-const GENERATED = [/(^|\/)dist\//, /(^|\/)CONTRACTS\.md$/, /(^|\/)MAPPING\.md$/, /^patches\//];
+const SOURCE = /\.(ts|tsx|js|mjs|cjs|css|html|py|sh)$|^\.githooks\//;
+const GENERATED = [/(^|\/)dist\//, /^patches\//];
 
 const files = execFileSync("git", ["ls-files", "--cached", "--others", "--exclude-standard"], {
   encoding: "utf8",

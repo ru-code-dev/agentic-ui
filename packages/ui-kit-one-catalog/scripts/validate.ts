@@ -10,6 +10,10 @@ const examples = [
   ...readMockRules(),
 ];
 const failures: string[] = [];
+if (readExamples("components").length === 0)
+  failures.push(
+    "examples/components/: no example (SV-C22 needs one validated example per component)",
+  );
 
 for (const example of examples) {
   example.messages.forEach((message, index) => {

@@ -1,14 +1,14 @@
 import { createBasicCatalogFunctions } from "@a2ui/web_core/v0_9/basic_catalog";
 import { describe, expect, it } from "vite-plus/test";
-import { tokens } from "../src/index.ts";
+import { formatting } from "../src/index.ts";
 
-const functions = createBasicCatalogFunctions({ locale: tokens.formatting.locale });
+const functions = createBasicCatalogFunctions({ locale: formatting.locale });
 const execute = (name: string, args: Record<string, unknown>) =>
   functions.find((fn) => fn.name === name)?.execute(args, undefined as never);
 
-describe("basic functions with the contract locale (ru-RU, RUB)", () => {
+describe("basic functions with the contract locale (ru-RU, RUB) [INT-01]", () => {
   it("formats currency in rubles", () => {
-    expect(execute("formatCurrency", { value: 1500.5, currency: tokens.formatting.currency })).toBe(
+    expect(execute("formatCurrency", { value: 1500.5, currency: formatting.currency })).toBe(
       "1 500,50 ₽",
     );
   });

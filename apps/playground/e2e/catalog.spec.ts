@@ -1,12 +1,15 @@
 import { expect, test } from "@playwright/test";
 import { watchConsole } from "./support/console.ts";
+import { CONTRACT_COMPONENTS } from "./support/contract.ts";
 import { saveScreenshot } from "./support/pixels.ts";
 
-test("PG-20: the catalog shows 19 live cards that open their detail page", async ({ page }) => {
+test("[PG-20, DEC-036] the catalog shows one live card per contract component that opens its detail page", async ({
+  page,
+}) => {
   const console = watchConsole(page);
   await page.goto("/components");
-  await expect(page.locator("article[data-testid^=card-]")).toHaveCount(19);
-  await expect(page.locator("article [data-ui-kit-root]")).toHaveCount(19);
+  await expect(page.locator("article[data-testid^=card-]")).toHaveCount(CONTRACT_COMPONENTS.length);
+  await expect(page.locator("article [data-ui-kit-root]")).toHaveCount(CONTRACT_COMPONENTS.length);
   await expect(
     page.getByTestId("card-Table").getByRole("gridcell", { name: "Пятёрочка" }),
   ).toBeVisible();
@@ -17,7 +20,7 @@ test("PG-20: the catalog shows 19 live cards that open their detail page", async
   console.expectClean();
 });
 
-test("PG-20, PG-22: the detail view has a live preview, props table and highlighted JSON / React / Contract / JSON Schema", async ({
+test("[PG-20, PG-22] the detail view has a live preview, props table and highlighted JSON / React / Contract / JSON Schema", async ({
   page,
 }) => {
   const console = watchConsole(page);
@@ -43,7 +46,7 @@ test("PG-20, PG-22: the detail view has a live preview, props table and highligh
   console.expectClean();
 });
 
-test("PG-20: passthrough components show their one-line registry entry and the generic factory", async ({
+test("[PG-20] passthrough components show their one-line registry entry and the generic factory", async ({
   page,
 }) => {
   await page.goto("/components/Text");

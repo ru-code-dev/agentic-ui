@@ -1,4 +1,4 @@
-import { validateMessages } from "../validation/validate-messages.ts";
+import { validateMessages } from "@agentic-ui/ui-kit-one-catalog";
 import { positionAt, type SourcePosition } from "./source-position.ts";
 
 export interface SchemaIssue extends SourcePosition {

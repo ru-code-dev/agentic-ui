@@ -9,6 +9,7 @@ import {
   type SentAction,
   type UiKitProviderProps,
   type UiKitRuntime,
+  type UiKitRuntimeOptions,
 } from "../../src/index.ts";
 
 function Surfaces({ runtime, mode }: { runtime: UiKitRuntime; mode: UiKitProviderProps["mode"] }) {
@@ -25,10 +26,13 @@ function Surfaces({ runtime, mode }: { runtime: UiKitRuntime; mode: UiKitProvide
 /** Renders A2UI messages through the real runtime, transport and provider. */
 export function renderMessages(
   messages: readonly unknown[],
-  options: { mode?: UiKitProviderProps["mode"] } = {},
+  options: { mode?: UiKitProviderProps["mode"]; catalog?: UiKitRuntimeOptions["catalog"] } = {},
 ) {
   const transport = new LocalTransport();
-  const runtime = createUiKitRuntime({ transport });
+  const runtime = createUiKitRuntime({
+    transport,
+    ...(options.catalog === undefined ? {} : { catalog: options.catalog }),
+  });
   const sent: SentAction[] = [];
   transport.onAction((action) => sent.push(action));
   const view = render(<Surfaces runtime={runtime} mode={options.mode} />);

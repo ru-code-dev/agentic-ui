@@ -1,0 +1,118 @@
+{
+  "name": "Таблица платежей",
+  "description": "Платежи за месяц из модели данных с суммами в рублях.",
+  "messages": [
+    {
+      "version": "v0.9",
+      "createSurface": {
+        "surfaceId": "payments",
+        "catalogId": "urn:agentic-ui:catalog:ui-kit-one:v1"
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateDataModel": {
+        "surfaceId": "payments",
+        "path": "/payments",
+        "value": [
+          {
+            "date": "2026-10-03",
+            "payee": "ООО «Ромашка»",
+            "purpose": "Аренда офиса",
+            "amount": 85000
+          },
+          {
+            "date": "2026-10-10",
+            "payee": "ИП Соколов",
+            "purpose": "Разработка сайта",
+            "amount": 42500
+          },
+          {
+            "date": "2026-10-15",
+            "payee": "ПАО «Ростелеком»",
+            "purpose": "Интернет и телефония",
+            "amount": 3900
+          },
+          {
+            "date": "2026-10-21",
+            "payee": "ООО «Канцмир»",
+            "purpose": "Канцтовары",
+            "amount": 7350.4
+          }
+        ]
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateComponents": {
+        "surfaceId": "payments",
+        "components": [
+          {
+            "id": "root",
+            "component": "Container",
+            "maxW": "container.lg",
+            "py": "8",
+            "children": ["stack"]
+          },
+          {
+            "id": "stack",
+            "component": "Flex",
+            "direction": "column",
+            "gap": "4",
+            "children": ["head", "table"]
+          },
+          {
+            "id": "head",
+            "component": "Flex",
+            "justify": "space-between",
+            "align": "center",
+            "children": ["title", "badge"]
+          },
+          {
+            "id": "title",
+            "component": "Heading",
+            "text": "Платежи за октябрь",
+            "as": "h1",
+            "size": "lg"
+          },
+          {
+            "id": "badge",
+            "component": "Tag",
+            "label": "Обновлено сегодня",
+            "colorScheme": "green"
+          },
+          {
+            "id": "table",
+            "component": "Table",
+            "variant": "striped",
+            "rows": {
+              "path": "/payments"
+            },
+            "caption": "Исходящие платежи по расчётному счёту",
+            "columns": [
+              {
+                "header": "Дата",
+                "key": "date",
+                "format": "date"
+              },
+              {
+                "header": "Получатель",
+                "key": "payee"
+              },
+              {
+                "header": "Назначение",
+                "key": "purpose"
+              },
+              {
+                "header": "Сумма",
+                "key": "amount",
+                "format": "currency",
+                "align": "right"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

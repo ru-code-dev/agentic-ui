@@ -1,4 +1,5 @@
 import type { IconName } from "@agentic-ui/ui-kit-one-catalog";
+// oxlint-disable-next-line import/no-namespace -- name-indexed lookup table (DEC-050)
 import * as kit from "./kit/index.ts";
 
 type KitIconName = Extract<keyof typeof kit, `${string}Icon`>;

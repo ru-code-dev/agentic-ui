@@ -1,0 +1,294 @@
+{
+  "name": "Перевод",
+  "description": "Перевод по номеру телефона: счёт списания, получатель, сумма и подтверждение в модальном окне.",
+  "messages": [
+    {
+      "version": "v0.9",
+      "createSurface": {
+        "surfaceId": "transfer",
+        "catalogId": "urn:agentic-ui:catalog:ui-kit-one:v1",
+        "sendDataModel": true
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateDataModel": {
+        "surfaceId": "transfer",
+        "path": "/transfer",
+        "value": {
+          "from": "current",
+          "phone": "",
+          "amount": "",
+          "message": "",
+          "saveTemplate": false
+        }
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateComponents": {
+        "surfaceId": "transfer",
+        "components": [
+          {
+            "id": "root",
+            "component": "Container",
+            "maxW": "container.sm",
+            "py": "8",
+            "children": ["card"]
+          },
+          {
+            "id": "card",
+            "component": "Flex",
+            "direction": "column",
+            "gap": "4",
+            "bg": "gray.700",
+            "p": "8",
+            "borderRadius": "xl",
+            "borderWidth": "1px",
+            "borderColor": "whiteAlpha.100",
+            "children": ["title", "from", "phone", "amount", "message", "save", "modal"]
+          },
+          {
+            "id": "title",
+            "component": "Heading",
+            "text": "Перевод по номеру телефона",
+            "as": "h1",
+            "size": "md"
+          },
+          {
+            "id": "from",
+            "component": "RadioGroup",
+            "label": "Списать со счёта",
+            "value": {
+              "path": "/transfer/from"
+            },
+            "options": [
+              {
+                "label": "Расчётный •• 4821 — 184 250,50 ₽",
+                "value": "current"
+              },
+              {
+                "label": "Накопительный •• 7730 — 640 000 ₽",
+                "value": "savings"
+              }
+            ]
+          },
+          {
+            "id": "phone",
+            "component": "Input",
+            "label": "Номер получателя",
+            "value": {
+              "path": "/transfer/phone"
+            },
+            "type": "tel",
+            "placeholder": "+79991234567",
+            "isRequired": true,
+            "checks": [
+              {
+                "condition": {
+                  "call": "regex",
+                  "args": {
+                    "value": {
+                      "path": "/transfer/phone"
+                    },
+                    "pattern": "^\\+7\\d{10}$"
+                  }
+                },
+                "message": "Формат: +7 и 10 цифр"
+              }
+            ]
+          },
+          {
+            "id": "amount",
+            "component": "Input",
+            "label": "Сумма, ₽",
+            "value": {
+              "path": "/transfer/amount"
+            },
+            "type": "number",
+            "isRequired": true,
+            "helperText": "Без комиссии до 100 000 ₽ в месяц",
+            "checks": [
+              {
+                "condition": {
+                  "call": "numeric",
+                  "args": {
+                    "value": {
+                      "path": "/transfer/amount"
+                    },
+                    "min": 1,
+                    "max": 600000
+                  }
+                },
+                "message": "Сумма от 1 до 600 000 ₽"
+              }
+            ]
+          },
+          {
+            "id": "message",
+            "component": "Input",
+            "label": "Сообщение получателю",
+            "value": {
+              "path": "/transfer/message"
+            },
+            "placeholder": "Необязательно"
+          },
+          {
+            "id": "save",
+            "component": "Switch",
+            "label": "Сохранить как шаблон",
+            "value": {
+              "path": "/transfer/saveTemplate"
+            }
+          },
+          {
+            "id": "modal",
+            "component": "Modal",
+            "trigger": "review",
+            "content": "summary",
+            "title": "Проверьте перевод"
+          },
+          {
+            "id": "review",
+            "component": "Button",
+            "label": "Продолжить",
+            "colorScheme": "blue",
+            "isFullWidth": true,
+            "action": {
+              "event": {
+                "name": "modal.open",
+                "context": {
+                  "modal": "transfer-summary"
+                }
+              }
+            },
+            "checks": [
+              {
+                "condition": {
+                  "call": "regex",
+                  "args": {
+                    "value": {
+                      "path": "/transfer/phone"
+                    },
+                    "pattern": "^\\+7\\d{10}$"
+                  }
+                },
+                "message": "Телефон"
+              },
+              {
+                "condition": {
+                  "call": "numeric",
+                  "args": {
+                    "value": {
+                      "path": "/transfer/amount"
+                    },
+                    "min": 1,
+                    "max": 600000
+                  }
+                },
+                "message": "Сумма от 1 до 600 000 ₽"
+              }
+            ]
+          },
+          {
+            "id": "summary",
+            "component": "Flex",
+            "direction": "column",
+            "gap": "3",
+            "children": ["s-grid", "s-actions"]
+          },
+          {
+            "id": "s-grid",
+            "component": "Grid",
+            "columns": 2,
+            "gap": "3",
+            "children": ["s-to-l", "s-to", "s-sum-l", "s-sum", "s-msg-l", "s-msg"]
+          },
+          {
+            "id": "s-to-l",
+            "component": "Text",
+            "text": "Получатель",
+            "color": "gray.400"
+          },
+          {
+            "id": "s-to",
+            "component": "Text",
+            "text": {
+              "path": "/transfer/phone"
+            }
+          },
+          {
+            "id": "s-sum-l",
+            "component": "Text",
+            "text": "Сумма",
+            "color": "gray.400"
+          },
+          {
+            "id": "s-sum",
+            "component": "Text",
+            "text": {
+              "call": "formatCurrency",
+              "args": {
+                "value": {
+                  "path": "/transfer/amount"
+                },
+                "currency": "RUB"
+              }
+            },
+            "fontWeight": "bold"
+          },
+          {
+            "id": "s-msg-l",
+            "component": "Text",
+            "text": "Сообщение",
+            "color": "gray.400"
+          },
+          {
+            "id": "s-msg",
+            "component": "Text",
+            "text": {
+              "path": "/transfer/message"
+            }
+          },
+          {
+            "id": "s-actions",
+            "component": "Flex",
+            "justify": "flex-end",
+            "gap": "3",
+            "children": ["cancel", "confirm"]
+          },
+          {
+            "id": "cancel",
+            "component": "Button",
+            "label": "Изменить",
+            "variant": "ghost",
+            "action": {
+              "event": {
+                "name": "transfer.cancel"
+              }
+            }
+          },
+          {
+            "id": "confirm",
+            "component": "Button",
+            "label": "Перевести",
+            "colorScheme": "blue",
+            "action": {
+              "event": {
+                "name": "transfer.confirm",
+                "context": {
+                  "phone": {
+                    "path": "/transfer/phone"
+                  },
+                  "amount": {
+                    "path": "/transfer/amount"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

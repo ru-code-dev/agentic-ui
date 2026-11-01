@@ -14,9 +14,12 @@ import {
 } from "../src/index.ts";
 
 const packageRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
+/** `RadioGroup` → `radio-group.tsx`: the file of a custom component in src/components/. */
+const fileOf = (name: string) =>
+  `${name.replace(/(?<=\p{Ll})(?=\p{Lu})/gu, "-").toLowerCase()}.tsx`;
 const shapeOf = (schema: z.ZodTypeAny) => Object.keys((schema as z.AnyZodObject).shape as object);
 
-describe("contract → kit mapping", () => {
+describe("contract → kit mapping [INT-04, DOC-04]", () => {
   it("implements every contract component, in contract order", () => {
     expect(COMPONENT_IMPLEMENTATIONS.map((impl) => impl.name)).toEqual(
       COMPONENT_APIS.map((api) => api.name),
@@ -33,18 +36,13 @@ describe("contract → kit mapping", () => {
     }
   });
 
-  it("passes the expected pure-data components through the generic factory (DEC-005)", () => {
-    expect(Object.keys(PASSTHROUGH)).toEqual([
-      "Box",
-      "Center",
-      "Container",
-      "Flex",
-      "Grid",
-      "Heading",
-      "Text",
-      "Tag",
-      "Avatar",
-    ]);
+  it("passes every component without a custom file through the generic factory (DEC-005) [DEC-036, A3-27]", () => {
+    // A custom component has its own file in src/components/; every other component is a passthrough line.
+    // Lookup is by name: the order of the passthrough lines is free (REMAP recipe 7 appends one).
+    const custom = new Set(readdirSync(join(packageRoot, "src/components")));
+    const pure = COMPONENT_APIS.map((api) => api.name).filter((name) => !custom.has(fileOf(name)));
+    expect(Object.keys(PASSTHROUGH).toSorted()).toEqual(pure.toSorted());
+    expect(pure.length).toBeGreaterThan(0);
   });
 
   it("declares by hand only the props that are translated; the rest are identity", () => {
@@ -67,7 +65,7 @@ describe("contract → kit mapping", () => {
     expect(Object.keys(ICON_KIT_NAMES).toSorted()).toEqual([...iconNames].toSorted());
   });
 
-  it("keeps MAPPING.md generated from the mappings (regenerate with `pnpm docs`)", () => {
+  it("keeps MAPPING.md generated from the mappings (regenerate with `pnpm build`) [D2-10]", () => {
     const committed = readFileSync(join(packageRoot, "MAPPING.md"), "utf8");
     expect(committed).toBe(
       renderMappingMarkdown(

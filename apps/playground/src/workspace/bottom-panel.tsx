@@ -33,8 +33,9 @@ export function BottomPanel({
   onApplyDataModel: (surfaceId: string, value: unknown) => void;
 }) {
   const previewErrors = useSession((state) => state.previewErrors);
-  const events = useSession((state) => state.events.length);
-  const surfaces = useSession((state) => Object.keys(state.dataModels).length);
+  const events = useSession((state) => state.events);
+  const clearEvents = useSession((state) => state.clearEvents);
+  const dataModels = useSession((state) => state.dataModels);
   const rules = useWorkspace((state) => state.mockRules.length);
   return (
     <Tabs defaultValue="errors" className="flex h-full min-h-0 flex-col gap-0 bg-panel">
@@ -46,11 +47,11 @@ export function BottomPanel({
           </TabsTab>
           <TabsTab value="data">
             Data model
-            <Count value={surfaces} />
+            <Count value={Object.keys(dataModels).length} />
           </TabsTab>
           <TabsTab value="events">
             Events
-            <Count value={events} />
+            <Count value={events.length} />
           </TabsTab>
           <TabsTab value="mocks">
             Mock rules
@@ -64,10 +65,10 @@ export function BottomPanel({
         <ErrorsPanel analysis={analysis} previewErrors={previewErrors} />
       </TabsPanel>
       <TabsPanel value="data" className="min-h-0 flex-1 overflow-hidden">
-        <DataModelPanel onApply={onApplyDataModel} />
+        <DataModelPanel dataModels={dataModels} onApply={onApplyDataModel} />
       </TabsPanel>
       <TabsPanel value="events" className="min-h-0 flex-1 overflow-auto">
-        <EventsPanel />
+        <EventsPanel events={events} onClear={clearEvents} />
       </TabsPanel>
       <TabsPanel value="mocks" className="min-h-0 flex-1 overflow-auto">
         <MockRulesPanel />

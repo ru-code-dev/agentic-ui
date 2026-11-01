@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "module": "Preserve",
+    "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "types": [],
+    // Chakra v1 declarations import this raw `.ts` source (same mapping as ui-kit-one-react).
+    "paths": {
+      "@chakra-ui/descendant/src/*": [
+        "../ui-kit-one-react/node_modules/@chakra-ui/descendant/dist/declarations/src/*"
+      ]
+    }
+  },
+  "include": ["src"]
+}

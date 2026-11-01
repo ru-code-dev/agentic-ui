@@ -31,6 +31,7 @@ export function PreviewPane({ analysis, onForceRender }: PreviewPaneProps) {
   const { deviceId, landscape, fitToPane, setDevice, toggleLandscape, toggleFit } = useWorkspace();
   const errorCount = useSession((state) => state.previewErrors.length);
   const hasRendered = useSession((state) => state.revision > 0);
+  const otherBuild = useSession((state) => state.otherBuild);
   const device = findDevice(deviceId);
   // The hash carries the editor content as it is now, not the debounced analysis.
   const openInNewTab = async () => {
@@ -88,6 +89,12 @@ export function PreviewPane({ analysis, onForceRender }: PreviewPaneProps) {
           <Badge variant="warning" data-testid="stale-preview">
             <TriangleAlert />
             {hasRendered ? "Showing last valid render" : "Nothing to render yet"}
+          </Badge>
+        )}
+        {otherBuild === undefined ? null : (
+          <Badge variant="warning" data-testid="stale-preview-tab" title={`build ${otherBuild}`}>
+            <TriangleAlert />
+            Stale preview tab — reload it
           </Badge>
         )}
         {errorCount > 0 ? (

@@ -21,7 +21,7 @@ const data = (surfaceId: string, path: string, value: unknown) => ({
   updateDataModel: { surfaceId, path, value },
 });
 
-describe("ui-kit-one renderer (Chakra UI v1)", () => {
+describe("ui-kit-one renderer (Chakra UI v1) [INT-04, PR-01]", () => {
   failOnConsoleNoise();
 
   it("renders the Text snippet", () => {
@@ -88,6 +88,13 @@ describe("ui-kit-one renderer (Chakra UI v1)", () => {
     await waitForElementToBeRemoved(dialog);
   });
 
+  it("keeps a Modal trigger press local: it opens the modal and sends no event", async () => {
+    const { sent } = renderMessages(modalExample.messages);
+    await userEvent.click(screen.getByRole("button", { name: "Показать детали" }));
+    expect(await screen.findByRole("dialog")).toBeTruthy();
+    expect(sent).toEqual([]);
+  });
+
   it("binds Modal open state two-way and closes it after an event action inside", async () => {
     const { push, dataModel, sent } = renderMessages([
       surface("confirm", true),
@@ -118,7 +125,7 @@ describe("ui-kit-one renderer (Chakra UI v1)", () => {
     expect(dataModel("confirm", "/dialog/open")).toBe(true);
     const dialog = await screen.findByRole("dialog");
     await userEvent.click(screen.getByRole("button", { name: "Да, удалить" }));
-    expect(sent.map((entry) => entry.action.name)).toEqual(["delete.ask", "item.delete"]);
+    expect(sent.map((entry) => entry.action.name)).toEqual(["item.delete"]);
     expect(dataModel("confirm", "/dialog/open")).toBe(false);
     await waitForElementToBeRemoved(dialog);
     push([data("confirm", "/dialog/open", true)]);

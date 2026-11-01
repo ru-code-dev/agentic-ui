@@ -1,0 +1,62 @@
+{
+  "name": "Flex",
+  "description": "Строка: подпись слева, сумма из модели данных справа.",
+  "messages": [
+    {
+      "version": "v0.9",
+      "createSurface": {
+        "surfaceId": "flex",
+        "catalogId": "urn:agentic-ui:catalog:ui-kit-one:v1"
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateDataModel": {
+        "surfaceId": "flex",
+        "path": "/balance",
+        "value": 184250.5
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateComponents": {
+        "surfaceId": "flex",
+        "components": [
+          {
+            "id": "root",
+            "component": "Flex",
+            "direction": "row",
+            "justify": "space-between",
+            "gap": "4",
+            "align": "center",
+            "p": "4",
+            "bg": "gray.700",
+            "borderRadius": "lg",
+            "children": ["label", "amount"]
+          },
+          {
+            "id": "label",
+            "component": "Text",
+            "text": "Баланс",
+            "color": "gray.400"
+          },
+          {
+            "id": "amount",
+            "component": "Text",
+            "text": {
+              "call": "formatCurrency",
+              "args": {
+                "value": {
+                  "path": "/balance"
+                },
+                "currency": "RUB"
+              }
+            },
+            "fontSize": "xl",
+            "fontWeight": "bold"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,168 @@
+{
+  "name": "Уведомления",
+  "description": "Лента уведомлений: отправитель, текст, время и статус.",
+  "messages": [
+    {
+      "version": "v0.9",
+      "createSurface": {
+        "surfaceId": "notifications",
+        "catalogId": "urn:agentic-ui:catalog:ui-kit-one:v1"
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateDataModel": {
+        "surfaceId": "notifications",
+        "path": "/items",
+        "value": [
+          {
+            "id": "n1",
+            "from": "Служба безопасности",
+            "text": "Вход в приложение с нового устройства",
+            "time": "09:41",
+            "status": "Важно"
+          },
+          {
+            "id": "n2",
+            "from": "Анна Смирнова",
+            "text": "Перевела вам 2 500 ₽ за обед",
+            "time": "Вчера",
+            "status": "Новое"
+          },
+          {
+            "id": "n3",
+            "from": "Интернет-банк",
+            "text": "Выписка за сентябрь готова",
+            "time": "01.10",
+            "status": "Прочитано"
+          }
+        ]
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateComponents": {
+        "surfaceId": "notifications",
+        "components": [
+          {
+            "id": "root",
+            "component": "Container",
+            "maxW": "container.md",
+            "py": "8",
+            "children": ["stack"]
+          },
+          {
+            "id": "stack",
+            "component": "Flex",
+            "direction": "column",
+            "gap": "4",
+            "children": ["title", "list"]
+          },
+          {
+            "id": "title",
+            "component": "Heading",
+            "text": "Уведомления",
+            "as": "h1",
+            "size": "lg"
+          },
+          {
+            "id": "list",
+            "component": "List",
+            "spacing": "3",
+            "children": {
+              "componentId": "item",
+              "path": "/items"
+            }
+          },
+          {
+            "id": "item",
+            "component": "Flex",
+            "gap": "4",
+            "align": "flex-start",
+            "bg": "gray.700",
+            "p": "4",
+            "borderRadius": "xl",
+            "borderWidth": "1px",
+            "borderColor": "whiteAlpha.100",
+            "children": ["avatar", "body", "side"]
+          },
+          {
+            "id": "avatar",
+            "component": "Avatar",
+            "name": {
+              "path": "from"
+            },
+            "size": "sm"
+          },
+          {
+            "id": "body",
+            "component": "Flex",
+            "direction": "column",
+            "gap": "1",
+            "w": "full",
+            "children": ["from", "text"]
+          },
+          {
+            "id": "from",
+            "component": "Text",
+            "text": {
+              "path": "from"
+            },
+            "fontWeight": "semibold"
+          },
+          {
+            "id": "text",
+            "component": "Text",
+            "text": {
+              "path": "text"
+            },
+            "color": "gray.300"
+          },
+          {
+            "id": "side",
+            "component": "Flex",
+            "direction": "column",
+            "align": "flex-end",
+            "gap": "2",
+            "children": ["time", "status", "read"]
+          },
+          {
+            "id": "time",
+            "component": "Text",
+            "text": {
+              "path": "time"
+            },
+            "fontSize": "xs",
+            "color": "gray.500"
+          },
+          {
+            "id": "status",
+            "component": "Tag",
+            "label": {
+              "path": "status"
+            },
+            "size": "sm",
+            "colorScheme": "orange"
+          },
+          {
+            "id": "read",
+            "component": "Button",
+            "label": "Прочитано",
+            "size": "sm",
+            "variant": "ghost",
+            "action": {
+              "event": {
+                "name": "notification.read",
+                "context": {
+                  "notificationId": {
+                    "path": "id"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

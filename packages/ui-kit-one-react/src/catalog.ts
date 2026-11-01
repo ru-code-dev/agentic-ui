@@ -6,55 +6,35 @@ import {
   CATALOG_OPTIONS,
   FUNCTION_APIS,
   PROTOCOL_VERSION,
-  tokens,
+  formatting,
 } from "@agentic-ui/ui-kit-one-catalog";
-import { Button } from "./components/button.tsx";
-import { Checkbox } from "./components/checkbox.tsx";
-import { Icon } from "./components/icon.tsx";
-import { Input } from "./components/input.tsx";
-import { List } from "./components/list.tsx";
-import { Modal } from "./components/modal.tsx";
-import { RadioGroup } from "./components/radio-group.tsx";
-import { Switch } from "./components/switch.tsx";
-import { Table } from "./components/table.tsx";
-import { PASSTHROUGH } from "./passthrough-components.ts";
-import { Tabs } from "./components/tabs.tsx";
+import { guarded } from "./component-boundary.tsx";
+import { REGISTERED } from "./registry.ts";
+import { totalFunctions } from "./total-functions.ts";
 
 const contractFunctionNames = new Set<string>(FUNCTION_APIS.map((api) => api.name));
 
-/** Implementations in contract order. */
-export const COMPONENT_IMPLEMENTATIONS: readonly ReactComponentImplementation[] = [
-  PASSTHROUGH.Box.implementation,
-  PASSTHROUGH.Center.implementation,
-  PASSTHROUGH.Container.implementation,
-  PASSTHROUGH.Flex.implementation,
-  PASSTHROUGH.Grid.implementation,
-  PASSTHROUGH.Heading.implementation,
-  PASSTHROUGH.Text.implementation,
-  Button,
-  Input,
-  Checkbox,
-  RadioGroup,
-  Switch,
-  List,
-  Table,
-  PASSTHROUGH.Tag.implementation,
-  Modal,
-  Tabs,
-  PASSTHROUGH.Avatar.implementation,
-  Icon,
-];
+/**
+ * Implementations in contract order (from the single registry, src/registry.ts), each behind a
+ * per-component error boundary (A4-26, component-boundary.tsx).
+ */
+export const COMPONENT_IMPLEMENTATIONS: readonly ReactComponentImplementation[] = REGISTERED.map(
+  (entry) => guarded(entry.implementation),
+);
 
 /**
  * ui-kit-one rendered with Chakra UI v1: one implementation per contract component, and the A2UI
- * basic functions formatting with the contract locale (ru-RU).
+ * basic functions formatting with the contract locale (ru-RU), made total for empty form values
+ * (A6-02, total-functions.ts).
  */
 export const uiKitOneCatalog = new Catalog<ReactComponentImplementation, FunctionImplementation>(
   CATALOG_ID,
   PROTOCOL_VERSION,
   [...COMPONENT_IMPLEMENTATIONS],
-  createBasicCatalogFunctions({ locale: tokens.formatting.locale }).filter((fn) =>
-    contractFunctionNames.has(fn.name),
+  totalFunctions(
+    createBasicCatalogFunctions({ locale: formatting.locale }).filter((fn) =>
+      contractFunctionNames.has(fn.name),
+    ),
   ),
   CATALOG_OPTIONS,
 );

@@ -33,8 +33,9 @@
     }
   },
   "scripts": {
+    "check:generated": "node scripts/check-generated.ts",
     "typecheck": "tsgo -p tsconfig.json && tsgo -p tsconfig.node.json",
-    "test": "vp test run",
+    "test": "vp test run --reporter=verbose",
     "build": "tsdown && node scripts/build-json.ts && node scripts/build-prompt.ts && node scripts/build-docs.ts",
     "catalog:json": "node scripts/build-json.ts",
     "catalog:prompt": "node scripts/build-prompt.ts",

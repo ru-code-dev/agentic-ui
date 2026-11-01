@@ -5,15 +5,18 @@ import { COMPONENT_APIS } from "../src/index.ts";
 
 const committed = readFileSync(new URL("../CONTRACTS.md", import.meta.url), "utf8");
 
-describe("CONTRACTS.md", () => {
-  it("is up to date with the contract (regenerate with `pnpm docs`)", () => {
+describe("CONTRACTS.md [DOC-05]", () => {
+  // D2-10 lineage (cited by info-CF-contract.md): "is up to date with the contract (regenerate with `pnpm docs`)"
+  it("is up to date with the contract (regenerate with `pnpm build`) [D2-10]", () => {
     expect(committed).toBe(renderContractsMarkdown());
   });
 
   it("documents every component with a props table, bindings, actions and an example", () => {
     for (const api of COMPONENT_APIS) {
       const section = committed.split(`\n### ${api.name}\n`)[1]?.split("\n### ")[0] ?? "";
-      expect(section, api.name).toContain("| Prop | Type | Required | Values | Description |");
+      expect(section, api.name).toContain(
+        "| Prop | Kind | Type | Required | Values | Description |",
+      );
       expect(section, api.name).toContain("- Two-way bindings:");
       expect(section, api.name).toContain("- Actions:");
       expect(section, api.name).toContain(`examples/components/${api.name}.json`);

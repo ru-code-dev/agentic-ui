@@ -9,3 +9,13 @@ export const ActionScopeContext = createContext<() => void>(() => {});
 export function useActionScope(): () => void {
   return useContext(ActionScopeContext);
 }
+
+/**
+ * True inside a trigger (Modal `trigger`): a press there only opens its component locally, so
+ * event actions are not dispatched to the agent (contract prop kind `trigger`, CF).
+ */
+export const TriggerScopeContext = createContext(false);
+
+export function useInTrigger(): boolean {
+  return useContext(TriggerScopeContext);
+}

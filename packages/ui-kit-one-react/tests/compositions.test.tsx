@@ -21,7 +21,7 @@ const mockRules = read<{ event: string; messages: unknown[] }>("mock-rules");
 const surfaceOf = (messages: readonly unknown[]) =>
   JSON.stringify(messages).match(/"surfaceId":"([^"]+)"/)?.[1];
 
-describe("every composition renders through the renderer", () => {
+describe("every composition renders through the renderer [INT-06, EX-01..24, PR-01]", () => {
   failOnConsoleNoise();
 
   for (const composition of compositions) {

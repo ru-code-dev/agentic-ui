@@ -1,3 +1,5 @@
+import { PROMPT_EXAMPLE_IDS, orderForPrompt } from "@agentic-ui/ui-kit-one-catalog/prompt";
+
 export interface Example {
   readonly id: string;
   readonly kind: "composition" | "component";
@@ -41,10 +43,19 @@ const toExample = (file: ExampleFile, id: string, kind: Example["kind"]): Exampl
   messages: file.messages,
 });
 
-/** The 20 compositions (EX-01..20), in file order. */
+/** The 24 compositions (EX-01..24), in file order. */
 export const compositions: readonly Example[] = sorted(compositionFiles).map(([path, file]) =>
   toExample(file, idOf(path, "compositions"), "composition"),
 );
+
+/** Compositions in system-prompt order: the default few-shot examples first (PROMPT_EXAMPLE_IDS). */
+export const promptExamples: readonly Example[] = orderForPrompt(
+  compositions,
+  (example) => example.id,
+);
+
+/** Few-shot examples of the default system prompt. */
+export const DEFAULT_PROMPT_EXAMPLES = PROMPT_EXAMPLE_IDS.length;
 
 /** The 19 component snippets, in alphabetical order. */
 export const componentExamples: readonly Example[] = sorted(componentFiles).map(([path, file]) =>

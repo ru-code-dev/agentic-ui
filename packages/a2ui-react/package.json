@@ -1,0 +1,78 @@
+{
+  "name": "@agentic-ui/a2ui-react",
+  "version": "0.1.0",
+  "private": true,
+  "description": "agentic-ui web integration (SV-C26): headless agent client + React chat, surfaces and kit provider; bundles the ui-kit-one catalog and renderer",
+  "license": "UNLICENSED",
+  "author": "Shterenberg Zakhar Gennadievich <shternberg.inbox@gmail.com>",
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./src/react/index.ts",
+      "development": "./src/react/index.ts",
+      "default": "./dist/index.js"
+    },
+    "./core": {
+      "types": "./src/core/index.ts",
+      "development": "./src/core/index.ts",
+      "default": "./dist/core.js"
+    }
+  },
+  "publishConfig": {
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "./core": {
+        "types": "./dist/core.d.ts",
+        "default": "./dist/core.js"
+      }
+    }
+  },
+  "scripts": {
+    "typecheck": "tsgo -p tsconfig.json && tsgo -p tsconfig.test.json",
+    "test": "vp test run --reporter=verbose",
+    "build": "tsdown",
+    "prepack": "tsdown"
+  },
+  "dependencies": {
+    "@a2ui/agent": "0.0.2",
+    "@a2ui/react": "0.14.0",
+    "@a2ui/web_core": "0.14.0",
+    "zod": "3.25.76"
+  },
+  "devDependencies": {
+    "@agentic-ui/ui-kit-one-catalog": "workspace:*",
+    "@agentic-ui/ui-kit-one-react": "workspace:*",
+    "@chakra-ui/icons": "1.1.7",
+    "@chakra-ui/react": "1.8.9",
+    "@emotion/react": "11.14.0",
+    "@emotion/styled": "11.14.1",
+    "@playwright/test": "1.60.0",
+    "@testing-library/dom": "10.4.2",
+    "@testing-library/react": "16.3.3",
+    "@types/node": "24.12.4",
+    "@types/react": "18.3.31",
+    "@types/react-dom": "18.3.7",
+    "framer-motion": "6.5.1",
+    "jsdom": "26.1.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "tsdown": "0.20.3",
+    "vite-plus": "0.2.2"
+  },
+  "peerDependencies": {
+    "@chakra-ui/icons": "^1.1.0",
+    "@chakra-ui/react": "^1.8.0",
+    "@emotion/react": "^11.0.0",
+    "@emotion/styled": "^11.0.0",
+    "framer-motion": "^6.5.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0"
+  }
+}

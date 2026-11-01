@@ -1,7 +1,14 @@
 "use client";
 
 import { Tabs as TabsPrimitive } from "@base-ui/react/tabs";
-import * as React from "react";
+import {
+  type Context,
+  type ElementRef,
+  type ReactElement,
+  createContext,
+  forwardRef,
+  useContext,
+} from "react";
 import { cn } from "~/lib/utils";
 import {
   type SegmentedControlSize,
@@ -13,24 +20,23 @@ import {
 type TabsVariant = "default" | "underline";
 type TabsSize = SegmentedControlSize;
 
-const TabsListContext: React.Context<TabsSize> = React.createContext<TabsSize>("default");
+const TabsListContext: Context<TabsSize> = createContext<TabsSize>("default");
 
-export const Tabs = React.forwardRef<
-  React.ElementRef<typeof TabsPrimitive.Root>,
-  TabsPrimitive.Root.Props
->(function Tabs({ className, ...props }, ref): React.ReactElement {
-  return (
-    <TabsPrimitive.Root
-      ref={ref}
-      className={cn("flex flex-col gap-2 data-[orientation=vertical]:flex-row", className)}
-      data-slot="tabs"
-      {...props}
-    />
-  );
-});
+export const Tabs = forwardRef<ElementRef<typeof TabsPrimitive.Root>, TabsPrimitive.Root.Props>(
+  function Tabs({ className, ...props }, ref): ReactElement {
+    return (
+      <TabsPrimitive.Root
+        ref={ref}
+        className={cn("flex flex-col gap-2 data-[orientation=vertical]:flex-row", className)}
+        data-slot="tabs"
+        {...props}
+      />
+    );
+  },
+);
 
-export const TabsList = React.forwardRef<
-  React.ElementRef<typeof TabsPrimitive.List>,
+export const TabsList = forwardRef<
+  ElementRef<typeof TabsPrimitive.List>,
   TabsPrimitive.List.Props & {
     size?: TabsSize;
     variant?: TabsVariant;
@@ -38,7 +44,7 @@ export const TabsList = React.forwardRef<
 >(function TabsList(
   { variant = "default", size = "default", className, children, ...props },
   ref,
-): React.ReactElement {
+): ReactElement {
   return (
     <TabsPrimitive.List
       ref={ref}
@@ -68,13 +74,13 @@ export const TabsList = React.forwardRef<
   );
 });
 
-export const TabsTab = React.forwardRef<
-  React.ElementRef<typeof TabsPrimitive.Tab>,
+export const TabsTab = forwardRef<
+  ElementRef<typeof TabsPrimitive.Tab>,
   TabsPrimitive.Tab.Props & {
     size?: TabsSize;
   }
->(function TabsTab({ className, size, ...props }, ref): React.ReactElement {
-  const contextSize: TabsSize = React.useContext(TabsListContext);
+>(function TabsTab({ className, size, ...props }, ref): ReactElement {
+  const contextSize: TabsSize = useContext(TabsListContext);
   const resolvedSize: TabsSize = size ?? contextSize;
 
   return (
@@ -93,10 +99,10 @@ export const TabsTab = React.forwardRef<
   );
 });
 
-export const TabsPanel = React.forwardRef<
-  React.ElementRef<typeof TabsPrimitive.Panel>,
+export const TabsPanel = forwardRef<
+  ElementRef<typeof TabsPrimitive.Panel>,
   TabsPrimitive.Panel.Props
->(function TabsPanel({ className, ...props }, ref): React.ReactElement {
+>(function TabsPanel({ className, ...props }, ref): ReactElement {
   return (
     <TabsPrimitive.Panel
       ref={ref}

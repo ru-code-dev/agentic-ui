@@ -1,0 +1,318 @@
+{
+  "name": "Аналитика расходов",
+  "description": "Расходы по категориям за месяц и крупнейшие получатели.",
+  "messages": [
+    {
+      "version": "v0.9",
+      "createSurface": {
+        "surfaceId": "spending",
+        "catalogId": "urn:agentic-ui:catalog:ui-kit-one:v1"
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateDataModel": {
+        "surfaceId": "spending",
+        "path": "/categories",
+        "value": {
+          "food": {
+            "name": "Продукты",
+            "amount": 32480,
+            "change": "+8%"
+          },
+          "transport": {
+            "name": "Транспорт",
+            "amount": 6210,
+            "change": "−12%"
+          },
+          "cafe": {
+            "name": "Кафе и рестораны",
+            "amount": 14950,
+            "change": "+21%"
+          },
+          "health": {
+            "name": "Здоровье",
+            "amount": 4300,
+            "change": "−5%"
+          }
+        }
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateDataModel": {
+        "surfaceId": "spending",
+        "path": "/merchants",
+        "value": [
+          {
+            "merchant": "Пятёрочка",
+            "count": 18,
+            "amount": 15420.3
+          },
+          {
+            "merchant": "Яндекс Еда",
+            "count": 9,
+            "amount": 8930
+          },
+          {
+            "merchant": "Аптека Горздрав",
+            "count": 4,
+            "amount": 4300
+          }
+        ]
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateComponents": {
+        "surfaceId": "spending",
+        "components": [
+          {
+            "id": "root",
+            "component": "Container",
+            "maxW": "container.lg",
+            "py": "8",
+            "children": ["stack"]
+          },
+          {
+            "id": "stack",
+            "component": "Flex",
+            "direction": "column",
+            "gap": "6",
+            "children": ["title", "grid", "top-title", "table"]
+          },
+          {
+            "id": "title",
+            "component": "Heading",
+            "text": "Расходы за октябрь",
+            "as": "h1",
+            "size": "lg"
+          },
+          {
+            "id": "grid",
+            "component": "Grid",
+            "minChildWidth": "3xs",
+            "gap": "4",
+            "children": ["food", "transport", "cafe", "health"]
+          },
+          {
+            "id": "food",
+            "component": "Flex",
+            "direction": "column",
+            "align": "flex-start",
+            "gap": "2",
+            "bg": "gray.700",
+            "p": "5",
+            "borderRadius": "xl",
+            "borderWidth": "1px",
+            "borderColor": "whiteAlpha.100",
+            "children": ["food-name", "food-amount", "food-change"]
+          },
+          {
+            "id": "food-name",
+            "component": "Text",
+            "text": {
+              "path": "/categories/food/name"
+            },
+            "color": "gray.400",
+            "fontSize": "sm"
+          },
+          {
+            "id": "food-amount",
+            "component": "Text",
+            "text": {
+              "call": "formatCurrency",
+              "args": {
+                "value": {
+                  "path": "/categories/food/amount"
+                },
+                "currency": "RUB"
+              }
+            },
+            "fontSize": "xl",
+            "fontWeight": "bold"
+          },
+          {
+            "id": "food-change",
+            "component": "Tag",
+            "label": {
+              "path": "/categories/food/change"
+            },
+            "size": "sm",
+            "colorScheme": "red"
+          },
+          {
+            "id": "transport",
+            "component": "Flex",
+            "direction": "column",
+            "align": "flex-start",
+            "gap": "2",
+            "bg": "gray.700",
+            "p": "5",
+            "borderRadius": "xl",
+            "borderWidth": "1px",
+            "borderColor": "whiteAlpha.100",
+            "children": ["transport-name", "transport-amount", "transport-change"]
+          },
+          {
+            "id": "transport-name",
+            "component": "Text",
+            "text": {
+              "path": "/categories/transport/name"
+            },
+            "color": "gray.400",
+            "fontSize": "sm"
+          },
+          {
+            "id": "transport-amount",
+            "component": "Text",
+            "text": {
+              "call": "formatCurrency",
+              "args": {
+                "value": {
+                  "path": "/categories/transport/amount"
+                },
+                "currency": "RUB"
+              }
+            },
+            "fontSize": "xl",
+            "fontWeight": "bold"
+          },
+          {
+            "id": "transport-change",
+            "component": "Tag",
+            "label": {
+              "path": "/categories/transport/change"
+            },
+            "size": "sm",
+            "colorScheme": "green"
+          },
+          {
+            "id": "cafe",
+            "component": "Flex",
+            "direction": "column",
+            "align": "flex-start",
+            "gap": "2",
+            "bg": "gray.700",
+            "p": "5",
+            "borderRadius": "xl",
+            "borderWidth": "1px",
+            "borderColor": "whiteAlpha.100",
+            "children": ["cafe-name", "cafe-amount", "cafe-change"]
+          },
+          {
+            "id": "cafe-name",
+            "component": "Text",
+            "text": {
+              "path": "/categories/cafe/name"
+            },
+            "color": "gray.400",
+            "fontSize": "sm"
+          },
+          {
+            "id": "cafe-amount",
+            "component": "Text",
+            "text": {
+              "call": "formatCurrency",
+              "args": {
+                "value": {
+                  "path": "/categories/cafe/amount"
+                },
+                "currency": "RUB"
+              }
+            },
+            "fontSize": "xl",
+            "fontWeight": "bold"
+          },
+          {
+            "id": "cafe-change",
+            "component": "Tag",
+            "label": {
+              "path": "/categories/cafe/change"
+            },
+            "size": "sm",
+            "colorScheme": "red"
+          },
+          {
+            "id": "health",
+            "component": "Flex",
+            "direction": "column",
+            "align": "flex-start",
+            "gap": "2",
+            "bg": "gray.700",
+            "p": "5",
+            "borderRadius": "xl",
+            "borderWidth": "1px",
+            "borderColor": "whiteAlpha.100",
+            "children": ["health-name", "health-amount", "health-change"]
+          },
+          {
+            "id": "health-name",
+            "component": "Text",
+            "text": {
+              "path": "/categories/health/name"
+            },
+            "color": "gray.400",
+            "fontSize": "sm"
+          },
+          {
+            "id": "health-amount",
+            "component": "Text",
+            "text": {
+              "call": "formatCurrency",
+              "args": {
+                "value": {
+                  "path": "/categories/health/amount"
+                },
+                "currency": "RUB"
+              }
+            },
+            "fontSize": "xl",
+            "fontWeight": "bold"
+          },
+          {
+            "id": "health-change",
+            "component": "Tag",
+            "label": {
+              "path": "/categories/health/change"
+            },
+            "size": "sm",
+            "colorScheme": "green"
+          },
+          {
+            "id": "top-title",
+            "component": "Heading",
+            "text": "Крупнейшие получатели",
+            "as": "h2",
+            "size": "sm"
+          },
+          {
+            "id": "table",
+            "component": "Table",
+            "rows": {
+              "path": "/merchants"
+            },
+            "columns": [
+              {
+                "header": "Получатель",
+                "key": "merchant"
+              },
+              {
+                "header": "Операций",
+                "key": "count",
+                "format": "number",
+                "align": "right"
+              },
+              {
+                "header": "Сумма",
+                "key": "amount",
+                "format": "currency",
+                "align": "right"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

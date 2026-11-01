@@ -2,6 +2,7 @@ import type { A2uiMessage } from "@a2ui/web_core/v0_9";
 import {
   createUiKitRuntime,
   LocalTransport,
+  onComponentError,
   type UiKitRuntime,
 } from "@agentic-ui/ui-kit-one-react";
 import { useEffect, useRef, useState } from "react";
@@ -28,7 +29,8 @@ const plain = (value: unknown): unknown =>
 
 /**
  * Renders `messages` from a clean runtime for every new `revision`, and reports actions, data
- * models (on every change), errors and render completion through `events`.
+ * models (on every change), errors (message processing and each surface's expression errors) and
+ * render completion through `events`.
  */
 export function usePreviewRuntime(
   messages: readonly unknown[] | undefined,
@@ -46,7 +48,14 @@ export function usePreviewRuntime(
     const next = createUiKitRuntime({ transport });
     const stops: Array<() => void> = [];
     const watch = (surfaceId: string) => {
-      const dataModel = next.processor.getSurface(surfaceId)?.dataModel;
+      const surface = next.processor.getSurface(surfaceId);
+      // A4-14: expression and catalog errors (a function call failing at evaluation) are reported per
+      // surface, not by the runtime's message processing; they go to the same banner.
+      const failed = surface?.onError.subscribe((error) =>
+        eventsRef.current.onError("runtime", `${surfaceId}: ${error.message}`),
+      );
+      if (failed !== undefined) stops.push(() => failed.unsubscribe());
+      const dataModel = surface?.dataModel;
       if (dataModel === undefined) return;
       const subscription = dataModel.subscribe("/", (value) =>
         eventsRef.current.onDataModel(surfaceId, plain(value)),
@@ -58,6 +67,10 @@ export function usePreviewRuntime(
     stops.push(
       () => created.unsubscribe(),
       next.onError((error) => eventsRef.current.onError("runtime", error.message)),
+      // A4-26: a component that failed to render shows its own placeholder; the page names it too.
+      onComponentError(({ component, id, message }) =>
+        eventsRef.current.onError("render", `${component}${id ? ` «${id}»` : ""}: ${message}`),
+      ),
     );
     stops.push(
       transport.onAction(({ action, dataModel }) =>

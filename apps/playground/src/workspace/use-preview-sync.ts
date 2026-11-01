@@ -10,6 +10,7 @@ const surfaceOf = (messages: readonly unknown[]) =>
 /**
  * The app side of the preview channel (PG-24): renders the last valid messages in every preview,
  * logs actions, answers them with matching mock rules, and collects data models and errors.
+ * Messages of preview tabs from another build are ignored and flagged (PG-28).
  */
 export function usePreviewSync(messages: readonly unknown[] | undefined) {
   const lastValid = useRef<readonly unknown[]>([]);
@@ -55,7 +56,7 @@ export function usePreviewSync(messages: readonly unknown[] | undefined) {
       default:
         return;
     }
-  });
+  }, session().noteOtherBuild);
 
   const render = useCallback(
     (next: readonly unknown[]) => {

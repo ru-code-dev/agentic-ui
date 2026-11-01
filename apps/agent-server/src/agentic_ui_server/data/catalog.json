@@ -1,0 +1,2708 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:agentic-ui:catalog:ui-kit-one:v1",
+  "title": "ui-kit-one",
+  "description": "Components and functions of the ui-kit-one UI kit.",
+  "catalogId": "urn:agentic-ui:catalog:ui-kit-one:v1",
+  "instructions": "ui-kit-one rules:\n- Use only the components, props and token values of this catalog. No free-form styling: no sx, CSS, pixel values or responsive objects.\n- Plan before writing: choose every component id first, emit the root first and each parent before its children, define every id you reference and reuse the exact id string (no renamed or missing ids).\n- Keep varying data (lists, table rows, form values, amounts, statuses) in the data model: one updateDataModel message with the whole data object under its value key; bind content to it with {\"path\": \"/...\"}.\n- A function call has exactly two keys, call and args: omit returnType.\n- Never compute styling from data: no conditions, comparisons or ternaries anywhere; every value is a literal, a binding or a function call.\n- Never ask the user questions and never wait for an answer: make reasonable assumptions about anything missing or unclear and always reply with the complete UI.\n- Surfaces stay on the page for the whole chat (SV-C26): when the user refines a shown surface or acts on it, update that surface (same surfaceId, no new createSurface); create a new surface with a new surfaceId only for a new topic.\n- Style props take exactly one literal token from their list, never a {\"path\"} binding and never a function call: p, px, py, m, mx, my, gap, bg, color, borderRadius, borderWidth, borderColor, shadow, w, maxW, minH, textAlign, minChildWidth, size, fontSize, fontWeight, variant, colorScheme, spacing, boxSize.\n- Setting props are literal values too, never bound: centerContent, direction, align, justify, wrap, columns, as, noOfLines, leftIcon, rightIcon, isFullWidth, type, isRequired, options, currency, locale, closeOnAction, Icon.name.\n- Data bindings and function calls are for content props only: text, label, isDisabled, isLoading, placeholder, helperText, rows, caption, title, Avatar.name, src.\n- State colours: for a few fixed rows write each row explicitly with literal tokens (e.g. Tag colorScheme green / orange / red). In a ChildList template every item gets the same props: give the Tag one fixed colorScheme (or none) and bind only its label.\n- Margin, padding, gap, width and height props exist only here: p, px, py, m, mx, my, gap, w, maxW, minH (Box, Center, Container, Flex, Grid); minChildWidth (Grid); spacing (List); boxSize (Icon).\n- Heading, Text, Button, Input, Checkbox, RadioGroup, Switch, Table, Tag, Modal, Tabs, Avatar have no margin, padding, gap, width or height props: wrap them in Box, Center, Flex, Grid for spacing.\n- The root (id \"root\") is usually Container, the centred page column; centre a page with it, never with auto margins.\n- Id props: children (Box, Center, Container, Flex, Grid, List); trigger, content (Modal); tabs (Tabs). Every id they name must be a component of the same updateComponents message.\n- children (Box, Center, Container, Flex, Grid, List) take an array of ids or ONE template object {\"componentId\": \"<id>\", \"path\": \"/<array>\"} (an object, never an array of templates); inside the template, paths are relative to the item.\n- Validate with checks on Button, Input, Checkbox, RadioGroup: each rule is {\"condition\": <boolean call: required, regex, length, numeric, email, and, or, not>, \"message\": \"...\"}; give the submit Button the same checks so it stays disabled until the form is valid.\n- Use formatCurrency for money amounts (never write a formatted amount by hand).\n- Use formatDate for dates, with the pattern \"dd.MM.yyyy\" (the renderer locale is ru-RU; month names are not declined).\n- Use formatNumber for plain numbers with digit grouping.\n- Use formatString for text that mixes literals and data: only ${/path} placeholders, no expressions, operators or ternaries.\n- Use pluralize for words that agree with a count.\n\nInteractions:\n- Two-way props (Input.value, Checkbox.value, RadioGroup.value, Switch.value, Modal.open, Tabs.selectedIndex): the renderer writes the user's change to the bound path locally, without an agent turn. Always bind them to their own data-model path, never a literal.\n- Triggers (Modal.trigger) open their Modal locally; the trigger's own event action is not sent to the agent.\n- Checks (Button, Input, Checkbox, RadioGroup) are evaluated locally whenever the data changes.\n- Button.action with {\"event\": {\"name\": \"...\", \"context\": {...}}} is sent to the agent with its resolved context, plus the whole data model when createSurface has sendDataModel: true. Set it whenever the surface has two-way props (Input, Checkbox, RadioGroup, Switch, Modal, Tabs). Answer an event with updateDataModel for changed data (keep it small) or updateComponents for a new layout.\n- Button.action with {\"functionCall\": {\"call\": \"...\", \"args\": {...}}} runs locally, without an agent turn (e.g. openUrl).\n- Button.action is required, also on a trigger: give it an event such as {\"event\": {\"name\": \"modal.open\"}}.",
+  "components": {
+    "Box": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/ComponentCommon"
+        },
+        {
+          "$ref": "#/$defs/StyleProps"
+        },
+        {
+          "type": "object",
+          "description": "A plain block container that stacks its children vertically; use it for cards, panels and sections.",
+          "properties": {
+            "component": {
+              "const": "Box"
+            },
+            "children": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/ChildList",
+              "description": "Child component ids in render order, or ONE template object `{ componentId, path }` (an object, not an array) that repeats one component for every item of a data-model array; paths inside the template are relative to the item."
+            }
+          },
+          "required": [
+            "component"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "Center": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/ComponentCommon"
+        },
+        {
+          "$ref": "#/$defs/StyleProps"
+        },
+        {
+          "type": "object",
+          "description": "A container that centers its children horizontally and vertically (empty states, icons, badges).",
+          "properties": {
+            "component": {
+              "const": "Center"
+            },
+            "children": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/ChildList",
+              "description": "Child component ids in render order, or ONE template object `{ componentId, path }` (an object, not an array) that repeats one component for every item of a data-model array; paths inside the template are relative to the item."
+            }
+          },
+          "required": [
+            "component"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "Container": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/ComponentCommon"
+        },
+        {
+          "$ref": "#/$defs/StyleProps"
+        },
+        {
+          "type": "object",
+          "description": "The page column: centered horizontally with side padding; the usual root of a screen. Set `maxW` to a container width such as \"container.md\". Use it (not a Box with auto margins) to center a page.",
+          "properties": {
+            "component": {
+              "const": "Container"
+            },
+            "children": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/ChildList",
+              "description": "Child component ids in render order, or ONE template object `{ componentId, path }` (an object, not an array) that repeats one component for every item of a data-model array; paths inside the template are relative to the item."
+            },
+            "centerContent": {
+              "type": "boolean",
+              "description": "Centers the children horizontally inside the column."
+            }
+          },
+          "required": [
+            "component"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "Flex": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/ComponentCommon"
+        },
+        {
+          "$ref": "#/$defs/StyleProps"
+        },
+        {
+          "type": "object",
+          "description": "A flexbox row or column. Use `gap` for spacing between the children.",
+          "properties": {
+            "component": {
+              "const": "Flex"
+            },
+            "children": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/ChildList",
+              "description": "Child component ids in render order, or ONE template object `{ componentId, path }` (an object, not an array) that repeats one component for every item of a data-model array; paths inside the template are relative to the item."
+            },
+            "direction": {
+              "type": "string",
+              "enum": [
+                "row",
+                "column"
+              ],
+              "description": "Main axis: 'row' places children side by side, 'column' stacks them."
+            },
+            "align": {
+              "type": "string",
+              "enum": [
+                "flex-start",
+                "center",
+                "flex-end",
+                "stretch",
+                "baseline"
+              ],
+              "description": "Alignment of the children across the main axis."
+            },
+            "justify": {
+              "type": "string",
+              "enum": [
+                "flex-start",
+                "center",
+                "flex-end",
+                "space-between",
+                "space-around",
+                "space-evenly"
+              ],
+              "description": "Distribution of the children along the main axis; 'space-between' pushes them to both ends."
+            },
+            "wrap": {
+              "type": "string",
+              "enum": [
+                "nowrap",
+                "wrap"
+              ],
+              "description": "'wrap' lets children wrap onto new lines when they do not fit."
+            }
+          },
+          "required": [
+            "component"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "Grid": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/ComponentCommon"
+        },
+        {
+          "$ref": "#/$defs/StyleProps"
+        },
+        {
+          "type": "object",
+          "description": "A grid of equal-width columns for cards, metrics and key/value pairs. Use `gap` for the gutter; prefer `minChildWidth` for card rows that must also fit a phone.",
+          "properties": {
+            "component": {
+              "const": "Grid"
+            },
+            "children": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/ChildList",
+              "description": "Child component ids in render order, or ONE template object `{ componentId, path }` (an object, not an array) that repeats one component for every item of a data-model array; paths inside the template are relative to the item."
+            },
+            "columns": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 6,
+              "description": "Number of equal-width columns (1-6); children fill the cells row by row."
+            },
+            "minChildWidth": {
+              "type": "string",
+              "enum": [
+                "full",
+                "3xs",
+                "2xs",
+                "xs",
+                "sm",
+                "md",
+                "lg",
+                "xl",
+                "2xl",
+                "3xl",
+                "4xl",
+                "5xl",
+                "6xl",
+                "container.sm",
+                "container.md",
+                "container.lg",
+                "container.xl"
+              ],
+              "description": "Minimum cell width. When set it replaces `columns`: the grid fits as many equal columns as the width allows, so cards collapse to one column on phones. Literal token only; never a binding or function call."
+            }
+          },
+          "required": [
+            "component"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "Heading": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/ComponentCommon"
+        },
+        {
+          "$ref": "#/$defs/ColorProp"
+        },
+        {
+          "type": "object",
+          "description": "A bold title for a page, section or card. It has no margin, padding or size props: wrap it in a layout component for spacing.",
+          "properties": {
+            "component": {
+              "const": "Heading"
+            },
+            "text": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicString",
+              "description": "The heading text."
+            },
+            "as": {
+              "type": "string",
+              "enum": [
+                "h1",
+                "h2",
+                "h3",
+                "h4"
+              ],
+              "description": "Element and outline level (h1 = page title); independent of the visual size."
+            },
+            "size": {
+              "type": "string",
+              "enum": [
+                "xs",
+                "sm",
+                "md",
+                "lg",
+                "xl",
+                "2xl",
+                "3xl",
+                "4xl"
+              ],
+              "description": "Visual size; 'md' and smaller suit card titles, 'xl' and larger suit page titles. Literal token only; never a binding or function call."
+            },
+            "textAlign": {
+              "type": "string",
+              "enum": [
+                "left",
+                "center",
+                "right"
+              ],
+              "description": "Horizontal text alignment. Literal token only; never a binding or function call."
+            }
+          },
+          "required": [
+            "component",
+            "text"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "Text": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/ComponentCommon"
+        },
+        {
+          "$ref": "#/$defs/ColorProp"
+        },
+        {
+          "type": "object",
+          "description": "A paragraph of body text. Use Heading for titles. It has no margin, padding or size props: wrap it in a layout component for spacing.",
+          "properties": {
+            "component": {
+              "const": "Text"
+            },
+            "text": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicString",
+              "description": "The text to display: a literal, a data-model binding, or a function call such as formatCurrency."
+            },
+            "fontSize": {
+              "type": "string",
+              "enum": [
+                "xs",
+                "sm",
+                "md",
+                "lg",
+                "xl",
+                "2xl",
+                "3xl",
+                "4xl",
+                "5xl",
+                "6xl"
+              ],
+              "description": "Font size (md = 1rem). Literal token only; never a binding or function call."
+            },
+            "fontWeight": {
+              "type": "string",
+              "enum": [
+                "light",
+                "normal",
+                "medium",
+                "semibold",
+                "bold"
+              ],
+              "description": "Font weight. Literal token only; never a binding or function call."
+            },
+            "textAlign": {
+              "type": "string",
+              "enum": [
+                "left",
+                "center",
+                "right"
+              ],
+              "description": "Horizontal text alignment. Literal token only; never a binding or function call."
+            },
+            "noOfLines": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Truncates the text with an ellipsis after this many lines."
+            }
+          },
+          "required": [
+            "component",
+            "text"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "Button": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/ComponentCommon"
+        },
+        {
+          "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/Checkable"
+        },
+        {
+          "type": "object",
+          "description": "A pressable button that fires its action.",
+          "properties": {
+            "component": {
+              "const": "Button"
+            },
+            "label": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicString",
+              "description": "The button caption."
+            },
+            "action": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/Action",
+              "description": "What a press does: an `event` sent to the agent (with an optional resolved `context`) or a local `functionCall`. Required, also for a Modal trigger (use an event such as `modal.open`; a trigger press only opens the modal and is not sent)."
+            },
+            "variant": {
+              "type": "string",
+              "enum": [
+                "solid",
+                "outline",
+                "ghost",
+                "link"
+              ],
+              "description": "Visual emphasis: 'solid' for the main action, 'outline' or 'ghost' for secondary ones, 'link' for inline text actions. Literal token only; never a binding or function call."
+            },
+            "colorScheme": {
+              "type": "string",
+              "enum": [
+                "gray",
+                "red",
+                "orange",
+                "yellow",
+                "green",
+                "teal",
+                "blue",
+                "cyan",
+                "purple",
+                "pink"
+              ],
+              "description": "Color palette; 'blue' for primary actions, 'red' for destructive ones. Literal token only; never a binding or function call."
+            },
+            "size": {
+              "type": "string",
+              "enum": [
+                "sm",
+                "md",
+                "lg"
+              ],
+              "description": "Button height and font size. Literal token only; never a binding or function call."
+            },
+            "leftIcon": {
+              "type": "string",
+              "enum": [
+                "add",
+                "arrowBack",
+                "arrowDown",
+                "arrowForward",
+                "arrowUp",
+                "atSign",
+                "attachment",
+                "bell",
+                "calendar",
+                "chat",
+                "check",
+                "checkCircle",
+                "chevronDown",
+                "chevronLeft",
+                "chevronRight",
+                "chevronUp",
+                "close",
+                "copy",
+                "delete",
+                "download",
+                "edit",
+                "email",
+                "externalLink",
+                "info",
+                "infoOutline",
+                "link",
+                "lock",
+                "menu",
+                "minus",
+                "moon",
+                "notAllowed",
+                "phone",
+                "question",
+                "repeat",
+                "search",
+                "settings",
+                "star",
+                "sun",
+                "time",
+                "unlock",
+                "view",
+                "viewOff",
+                "warning",
+                "warningTwo"
+              ],
+              "description": "Icon shown before the label."
+            },
+            "rightIcon": {
+              "type": "string",
+              "enum": [
+                "add",
+                "arrowBack",
+                "arrowDown",
+                "arrowForward",
+                "arrowUp",
+                "atSign",
+                "attachment",
+                "bell",
+                "calendar",
+                "chat",
+                "check",
+                "checkCircle",
+                "chevronDown",
+                "chevronLeft",
+                "chevronRight",
+                "chevronUp",
+                "close",
+                "copy",
+                "delete",
+                "download",
+                "edit",
+                "email",
+                "externalLink",
+                "info",
+                "infoOutline",
+                "link",
+                "lock",
+                "menu",
+                "minus",
+                "moon",
+                "notAllowed",
+                "phone",
+                "question",
+                "repeat",
+                "search",
+                "settings",
+                "star",
+                "sun",
+                "time",
+                "unlock",
+                "view",
+                "viewOff",
+                "warning",
+                "warningTwo"
+              ],
+              "description": "Icon shown after the label."
+            },
+            "isDisabled": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicBoolean",
+              "description": "Disables the button."
+            },
+            "isLoading": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicBoolean",
+              "description": "Shows a spinner and blocks presses."
+            },
+            "isFullWidth": {
+              "type": "boolean",
+              "description": "Stretches the button to the width of its container."
+            }
+          },
+          "required": [
+            "component",
+            "label",
+            "action"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "Input": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/ComponentCommon"
+        },
+        {
+          "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/Checkable"
+        },
+        {
+          "type": "object",
+          "description": "A labeled single-line text field with helper text and validation messages.",
+          "properties": {
+            "component": {
+              "const": "Input"
+            },
+            "label": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicString",
+              "description": "Field label shown above the input."
+            },
+            "value": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicString",
+              "description": "Field value. Bind it to a data-model path: typing writes it back (two-way) — a string, or a number for type 'number' (an empty field writes \"\")."
+            },
+            "placeholder": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicString",
+              "description": "Hint shown while the field is empty."
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "text",
+                "email",
+                "password",
+                "number",
+                "tel"
+              ],
+              "description": "Keyboard and masking: 'password' hides the text, 'number' and 'tel' show numeric keyboards."
+            },
+            "helperText": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicString",
+              "description": "Help text shown under the field while it is valid."
+            },
+            "isRequired": {
+              "type": "boolean",
+              "description": "Marks the label with an asterisk; enforce it with a `required` check."
+            },
+            "isDisabled": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicBoolean",
+              "description": "Disables the field."
+            }
+          },
+          "required": [
+            "component",
+            "label",
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "Checkbox": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/ComponentCommon"
+        },
+        {
+          "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/Checkable"
+        },
+        {
+          "type": "object",
+          "description": "A single checkbox with a label, for consents, options and to-do items.",
+          "properties": {
+            "component": {
+              "const": "Checkbox"
+            },
+            "label": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicString",
+              "description": "Text next to the box."
+            },
+            "value": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicBoolean",
+              "description": "Checked state. Bind it to a data-model path: toggling writes true/false back (two-way)."
+            },
+            "colorScheme": {
+              "type": "string",
+              "enum": [
+                "gray",
+                "red",
+                "orange",
+                "yellow",
+                "green",
+                "teal",
+                "blue",
+                "cyan",
+                "purple",
+                "pink"
+              ],
+              "description": "Color of the checked box. Literal token only; never a binding or function call."
+            },
+            "isDisabled": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicBoolean",
+              "description": "Disables the checkbox."
+            }
+          },
+          "required": [
+            "component",
+            "label",
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "RadioGroup": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/ComponentCommon"
+        },
+        {
+          "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/Checkable"
+        },
+        {
+          "type": "object",
+          "description": "A labeled group of mutually exclusive options (one choice).",
+          "properties": {
+            "component": {
+              "const": "RadioGroup"
+            },
+            "label": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicString",
+              "description": "Question or caption of the group."
+            },
+            "options": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "label": {
+                    "type": "string",
+                    "description": "Text shown for the option."
+                  },
+                  "value": {
+                    "type": "string",
+                    "description": "Value written to the bound path when the option is chosen."
+                  }
+                },
+                "required": [
+                  "label",
+                  "value"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1,
+              "description": "The choices, in display order (literal)."
+            },
+            "value": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicString",
+              "description": "The chosen option `value`. Bind it to a data-model path: choosing writes the value back (two-way)."
+            },
+            "direction": {
+              "type": "string",
+              "enum": [
+                "row",
+                "column"
+              ],
+              "description": "'column' stacks the options, 'row' places them side by side."
+            },
+            "colorScheme": {
+              "type": "string",
+              "enum": [
+                "gray",
+                "red",
+                "orange",
+                "yellow",
+                "green",
+                "teal",
+                "blue",
+                "cyan",
+                "purple",
+                "pink"
+              ],
+              "description": "Color of the selected radio. Literal token only; never a binding or function call."
+            },
+            "isDisabled": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicBoolean",
+              "description": "Disables every option."
+            }
+          },
+          "required": [
+            "component",
+            "label",
+            "options",
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "Switch": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/ComponentCommon"
+        },
+        {
+          "type": "object",
+          "description": "An on/off toggle with a label, for settings that take effect immediately.",
+          "properties": {
+            "component": {
+              "const": "Switch"
+            },
+            "label": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicString",
+              "description": "Text describing the setting."
+            },
+            "value": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicBoolean",
+              "description": "On/off state. Bind it to a data-model path: toggling writes true/false back (two-way)."
+            },
+            "colorScheme": {
+              "type": "string",
+              "enum": [
+                "gray",
+                "red",
+                "orange",
+                "yellow",
+                "green",
+                "teal",
+                "blue",
+                "cyan",
+                "purple",
+                "pink"
+              ],
+              "description": "Track color when on. Literal token only; never a binding or function call."
+            },
+            "isDisabled": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicBoolean",
+              "description": "Disables the switch."
+            }
+          },
+          "required": [
+            "component",
+            "label",
+            "value"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "List": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/ComponentCommon"
+        },
+        {
+          "type": "object",
+          "description": "A vertical list of items; each child becomes one list item.",
+          "properties": {
+            "component": {
+              "const": "List"
+            },
+            "children": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/ChildList",
+              "description": "The items: component ids, or ONE template object `{ componentId, path }` (an object, not an array) that repeats one component for every item of a data-model array; paths inside the template are relative to the item."
+            },
+            "variant": {
+              "type": "string",
+              "enum": [
+                "unordered",
+                "ordered",
+                "plain"
+              ],
+              "description": "'unordered' shows bullets, 'ordered' shows numbers, 'plain' shows no marker. Literal token only; never a binding or function call."
+            },
+            "spacing": {
+              "type": "string",
+              "enum": [
+                "0",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "8",
+                "10",
+                "12",
+                "16",
+                "20",
+                "24",
+                "0.5",
+                "1.5",
+                "2.5"
+              ],
+              "description": "Space between items. Literal token only; never a binding or function call."
+            }
+          },
+          "required": [
+            "component",
+            "children"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "Table": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/ComponentCommon"
+        },
+        {
+          "type": "object",
+          "description": "A data table whose rows come from a data-model array.",
+          "properties": {
+            "component": {
+              "const": "Table"
+            },
+            "columns": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "header": {
+                    "type": "string",
+                    "description": "Column header text."
+                  },
+                  "key": {
+                    "type": "string",
+                    "description": "Property of each row object shown in this column."
+                  },
+                  "align": {
+                    "type": "string",
+                    "enum": [
+                      "left",
+                      "center",
+                      "right"
+                    ],
+                    "description": "Cell alignment; numbers and money read best right-aligned."
+                  },
+                  "format": {
+                    "type": "string",
+                    "enum": [
+                      "text",
+                      "number",
+                      "currency",
+                      "date"
+                    ],
+                    "description": "'currency' formats numbers as money, 'date' formats ISO date strings, 'number' adds digit grouping; default 'text'."
+                  }
+                },
+                "required": [
+                  "header",
+                  "key"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1,
+              "description": "Column definitions, in display order (literal)."
+            },
+            "rows": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicValue",
+              "description": "Row objects keyed by the column `key`s. Bind it to a data-model array: `{ \"path\": \"/transactions\" }`."
+            },
+            "variant": {
+              "type": "string",
+              "enum": [
+                "simple",
+                "striped"
+              ],
+              "description": "'striped' shades every other row. Literal token only; never a binding or function call."
+            },
+            "size": {
+              "type": "string",
+              "enum": [
+                "sm",
+                "md",
+                "lg"
+              ],
+              "description": "Cell padding and font size. Literal token only; never a binding or function call."
+            },
+            "caption": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicString",
+              "description": "Caption shown under the table."
+            },
+            "currency": {
+              "type": "string",
+              "pattern": "^[A-Z]{3}$",
+              "description": "ISO 4217 currency of 'currency' columns; RUB when omitted."
+            },
+            "locale": {
+              "type": "string",
+              "pattern": "^[A-Za-z]{2,3}(?:-[A-Za-z0-9]{1,8})*$",
+              "description": "BCP 47 locale of 'number', 'currency' and 'date' columns; ru-RU when omitted."
+            }
+          },
+          "required": [
+            "component",
+            "columns",
+            "rows"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "Tag": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/ComponentCommon"
+        },
+        {
+          "type": "object",
+          "description": "A small inline label for a status or category.",
+          "properties": {
+            "component": {
+              "const": "Tag"
+            },
+            "label": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicString",
+              "description": "Tag text (statuses, categories, counts)."
+            },
+            "colorScheme": {
+              "type": "string",
+              "enum": [
+                "gray",
+                "red",
+                "orange",
+                "yellow",
+                "green",
+                "teal",
+                "blue",
+                "cyan",
+                "purple",
+                "pink"
+              ],
+              "description": "Color palette; e.g. 'green' for success, 'orange' for pending, 'red' for errors. In a ChildList template every item gets the same palette: keep it neutral (or omit it) and bind only the label. Literal token only; never a binding or function call."
+            },
+            "variant": {
+              "type": "string",
+              "enum": [
+                "solid",
+                "subtle",
+                "outline"
+              ],
+              "description": "Fill style. Literal token only; never a binding or function call."
+            },
+            "size": {
+              "type": "string",
+              "enum": [
+                "sm",
+                "md",
+                "lg"
+              ],
+              "description": "Height and font size of the tag. Literal token only; never a binding or function call."
+            }
+          },
+          "required": [
+            "component",
+            "label"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "Modal": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/ComponentCommon"
+        },
+        {
+          "type": "object",
+          "description": "A dialog with a close button, opened by its trigger; Escape or the close button dismisses it.",
+          "properties": {
+            "component": {
+              "const": "Modal"
+            },
+            "trigger": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/ComponentId",
+              "description": "Component rendered in place that opens the modal when pressed, locally — usually a Button with an event action such as `modal.open` (that press is not sent to the agent)."
+            },
+            "content": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/ComponentId",
+              "description": "Component shown in the modal body (often a Flex column)."
+            },
+            "title": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicString",
+              "description": "Heading shown in the modal header."
+            },
+            "size": {
+              "type": "string",
+              "enum": [
+                "xs",
+                "sm",
+                "md",
+                "lg",
+                "xl",
+                "2xl",
+                "3xl",
+                "4xl",
+                "5xl",
+                "6xl",
+                "full"
+              ],
+              "description": "Width of the dialog. Literal token only; never a binding or function call."
+            },
+            "open": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicBoolean",
+              "description": "Open state for programmatic control. Bind it to a data-model path: opening and closing write true/false back (two-way)."
+            },
+            "closeOnAction": {
+              "type": "boolean",
+              "description": "Closes the modal after any event action fired inside its content (e.g. a confirm button); true when omitted."
+            }
+          },
+          "required": [
+            "component",
+            "trigger",
+            "content"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "Tabs": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/ComponentCommon"
+        },
+        {
+          "type": "object",
+          "description": "Tabbed panels; one child is visible at a time.",
+          "properties": {
+            "component": {
+              "const": "Tabs"
+            },
+            "tabs": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicString",
+                    "description": "Tab caption."
+                  },
+                  "child": {
+                    "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/ComponentId",
+                    "description": "Component shown while the tab is selected."
+                  }
+                },
+                "required": [
+                  "title",
+                  "child"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1,
+              "description": "The tabs, in display order."
+            },
+            "variant": {
+              "type": "string",
+              "enum": [
+                "line",
+                "enclosed",
+                "soft-rounded"
+              ],
+              "description": "'line' underlines the selected tab, 'enclosed' draws folder tabs, 'soft-rounded' uses pills. Literal token only; never a binding or function call."
+            },
+            "colorScheme": {
+              "type": "string",
+              "enum": [
+                "gray",
+                "red",
+                "orange",
+                "yellow",
+                "green",
+                "teal",
+                "blue",
+                "cyan",
+                "purple",
+                "pink"
+              ],
+              "description": "Color of the selected tab. Literal token only; never a binding or function call."
+            },
+            "selectedIndex": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicNumber",
+              "description": "Zero-based index of the selected tab. Bind it to a data-model path: switching tabs writes the index back (two-way)."
+            }
+          },
+          "required": [
+            "component",
+            "tabs"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "Avatar": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/ComponentCommon"
+        },
+        {
+          "type": "object",
+          "description": "A round picture or initials of a person or company.",
+          "properties": {
+            "component": {
+              "const": "Avatar"
+            },
+            "name": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicString",
+              "description": "Person or company name; its initials are shown when there is no image, and it is the accessible label."
+            },
+            "src": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicString",
+              "description": "Image URL (https)."
+            },
+            "size": {
+              "type": "string",
+              "enum": [
+                "2xs",
+                "xs",
+                "sm",
+                "md",
+                "lg",
+                "xl",
+                "2xl"
+              ],
+              "description": "Avatar diameter: xs 1.5rem … md 3rem … 2xl 8rem. Literal token only; never a binding or function call."
+            }
+          },
+          "required": [
+            "component",
+            "name"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "Icon": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/ComponentCommon"
+        },
+        {
+          "$ref": "#/$defs/ColorProp"
+        },
+        {
+          "type": "object",
+          "description": "A decorative icon from the kit's icon set.",
+          "properties": {
+            "component": {
+              "const": "Icon"
+            },
+            "name": {
+              "type": "string",
+              "enum": [
+                "add",
+                "arrowBack",
+                "arrowDown",
+                "arrowForward",
+                "arrowUp",
+                "atSign",
+                "attachment",
+                "bell",
+                "calendar",
+                "chat",
+                "check",
+                "checkCircle",
+                "chevronDown",
+                "chevronLeft",
+                "chevronRight",
+                "chevronUp",
+                "close",
+                "copy",
+                "delete",
+                "download",
+                "edit",
+                "email",
+                "externalLink",
+                "info",
+                "infoOutline",
+                "link",
+                "lock",
+                "menu",
+                "minus",
+                "moon",
+                "notAllowed",
+                "phone",
+                "question",
+                "repeat",
+                "search",
+                "settings",
+                "star",
+                "sun",
+                "time",
+                "unlock",
+                "view",
+                "viewOff",
+                "warning",
+                "warningTwo"
+              ],
+              "description": "Which icon to show."
+            },
+            "boxSize": {
+              "type": "string",
+              "enum": [
+                "3",
+                "4",
+                "5",
+                "6",
+                "8",
+                "10",
+                "12"
+              ],
+              "description": "Square box size (4 = 1rem, 8 = 2rem). Literal token only; never a binding or function call."
+            }
+          },
+          "required": [
+            "component",
+            "name"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    }
+  },
+  "functions": {
+    "required": {
+      "type": "object",
+      "description": "Checks that the value is not null, undefined, or empty.",
+      "properties": {
+        "call": {
+          "const": "required"
+        },
+        "args": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "description": "The value to check."
+            }
+          },
+          "required": [
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        "returnType": {
+          "const": "boolean"
+        }
+      },
+      "required": [
+        "call",
+        "args"
+      ],
+      "unevaluatedProperties": false
+    },
+    "regex": {
+      "type": "object",
+      "description": "Checks that the value matches a regular expression string.",
+      "properties": {
+        "call": {
+          "const": "regex"
+        },
+        "args": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicString"
+            },
+            "pattern": {
+              "type": "string",
+              "description": "The regex pattern to match against."
+            }
+          },
+          "required": [
+            "value",
+            "pattern"
+          ],
+          "unevaluatedProperties": false
+        },
+        "returnType": {
+          "const": "boolean"
+        }
+      },
+      "required": [
+        "call",
+        "args"
+      ],
+      "unevaluatedProperties": false
+    },
+    "length": {
+      "type": "object",
+      "description": "Checks string length constraints.",
+      "properties": {
+        "call": {
+          "const": "length"
+        },
+        "args": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicString"
+            },
+            "min": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "The minimum allowed length."
+            },
+            "max": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "The maximum allowed length."
+            }
+          },
+          "required": [
+            "value"
+          ],
+          "unevaluatedProperties": false,
+          "anyOf": [
+            {
+              "required": [
+                "min"
+              ]
+            },
+            {
+              "required": [
+                "max"
+              ]
+            }
+          ]
+        },
+        "returnType": {
+          "const": "boolean"
+        }
+      },
+      "required": [
+        "call",
+        "args"
+      ],
+      "unevaluatedProperties": false
+    },
+    "numeric": {
+      "type": "object",
+      "description": "Checks numeric range constraints.",
+      "properties": {
+        "call": {
+          "const": "numeric"
+        },
+        "args": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicNumber"
+            },
+            "min": {
+              "type": "number",
+              "description": "The minimum allowed value."
+            },
+            "max": {
+              "type": "number",
+              "description": "The maximum allowed value."
+            }
+          },
+          "required": [
+            "value"
+          ],
+          "unevaluatedProperties": false,
+          "anyOf": [
+            {
+              "required": [
+                "min"
+              ]
+            },
+            {
+              "required": [
+                "max"
+              ]
+            }
+          ]
+        },
+        "returnType": {
+          "const": "boolean"
+        }
+      },
+      "required": [
+        "call",
+        "args"
+      ],
+      "unevaluatedProperties": false
+    },
+    "email": {
+      "type": "object",
+      "description": "Checks that the value is a valid email address.",
+      "properties": {
+        "call": {
+          "const": "email"
+        },
+        "args": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicString"
+            }
+          },
+          "required": [
+            "value"
+          ],
+          "unevaluatedProperties": false
+        },
+        "returnType": {
+          "const": "boolean"
+        }
+      },
+      "required": [
+        "call",
+        "args"
+      ],
+      "unevaluatedProperties": false
+    },
+    "formatString": {
+      "type": "object",
+      "description": "Performs string interpolation of data model values and other functions in the catalog functions list and returns the resulting string. The value string can contain interpolated expressions in the `${expression}` format. Supported expression types include: JSON Pointer paths to the data model (e.g., `${/absolute/path}` or `${relative/path}`), and client-side function calls (e.g., `${now()}`). Function arguments must be named (e.g., `${formatDate(value:${/currentDate}, format:'MM-dd')}`). To include a literal `${` sequence, escape it as `\\${`. In ui-kit-one use only data placeholders such as `${/order/id}` or `${name}` inside a template: no operators, comparisons or ternaries (`${/read ? 'a' : 'b'}` is not evaluated).",
+      "properties": {
+        "call": {
+          "const": "formatString"
+        },
+        "args": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicString"
+            }
+          },
+          "required": [
+            "value"
+          ],
+          "unevaluatedProperties": false
+        },
+        "returnType": {
+          "const": "string"
+        }
+      },
+      "required": [
+        "call",
+        "args"
+      ],
+      "unevaluatedProperties": false
+    },
+    "formatNumber": {
+      "type": "object",
+      "description": "Formats a number with the specified grouping and decimal precision.",
+      "properties": {
+        "call": {
+          "const": "formatNumber"
+        },
+        "args": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicNumber",
+              "description": "The number to format."
+            },
+            "decimals": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicNumber",
+              "description": "Optional. The number of decimal places to show. Defaults to 0 or 2 depending on locale."
+            },
+            "grouping": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicBoolean",
+              "description": "Optional. If true, uses locale-specific grouping separators (e.g. '1,000'). If false, returns raw digits (e.g. '1000'). Defaults to true."
+            }
+          },
+          "required": [
+            "value"
+          ],
+          "unevaluatedProperties": false
+        },
+        "returnType": {
+          "const": "string"
+        }
+      },
+      "required": [
+        "call",
+        "args"
+      ],
+      "unevaluatedProperties": false
+    },
+    "formatCurrency": {
+      "type": "object",
+      "description": "Formats a number as a currency string.",
+      "properties": {
+        "call": {
+          "const": "formatCurrency"
+        },
+        "args": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicNumber",
+              "description": "The monetary amount."
+            },
+            "currency": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicString",
+              "description": "The ISO 4217 currency code (e.g., 'USD', 'EUR')."
+            },
+            "decimals": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicNumber",
+              "description": "Optional. The number of decimal places to show. Defaults to 0 or 2 depending on locale."
+            },
+            "grouping": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicBoolean",
+              "description": "Optional. If true, uses locale-specific grouping separators (e.g. '1,000'). If false, returns raw digits (e.g. '1000'). Defaults to true."
+            }
+          },
+          "required": [
+            "currency",
+            "value"
+          ],
+          "unevaluatedProperties": false
+        },
+        "returnType": {
+          "const": "string"
+        }
+      },
+      "required": [
+        "call",
+        "args"
+      ],
+      "unevaluatedProperties": false
+    },
+    "formatDate": {
+      "type": "object",
+      "description": "Formats a timestamp into a string using a pattern.",
+      "properties": {
+        "call": {
+          "const": "formatDate"
+        },
+        "args": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicValue",
+              "description": "The date to format."
+            },
+            "format": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicString",
+              "description": "A Unicode TR35 date pattern string.\n\nToken Reference:\n- Year: 'yy' (26), 'yyyy' (2026)\n- Month: 'M' (1), 'MM' (01), 'MMM' (Jan), 'MMMM' (January)\n- Day: 'd' (1), 'dd' (01), 'E' (Tue), 'EEEE' (Tuesday)\n- Hour (12h): 'h' (1-12), 'hh' (01-12) - requires 'a' for AM/PM\n- Hour (24h): 'H' (0-23), 'HH' (00-23) - Military Time\n- Minute: 'mm' (00-59)\n- Second: 'ss' (00-59)\n- Period: 'a' (AM/PM)\n\nExamples:\n- 'MMM dd, yyyy' -> 'Jan 16, 2026'\n- 'HH:mm' -> '14:30' (Military)\n- 'h:mm a' -> '2:30 PM'\n- 'EEEE, d MMMM' -> 'Friday, 16 January'"
+            }
+          },
+          "required": [
+            "format",
+            "value"
+          ],
+          "unevaluatedProperties": false
+        },
+        "returnType": {
+          "const": "string"
+        }
+      },
+      "required": [
+        "call",
+        "args"
+      ],
+      "unevaluatedProperties": false
+    },
+    "pluralize": {
+      "type": "object",
+      "description": "Returns a localized string based on the Common Locale Data Repository (CLDR) plural category of the count (zero, one, two, few, many, other). Requires an 'other' fallback. For English, just use 'one' and 'other'.",
+      "properties": {
+        "call": {
+          "const": "pluralize"
+        },
+        "args": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicNumber",
+              "description": "The numeric value used to determine the plural category."
+            },
+            "zero": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicString",
+              "description": "String for the 'zero' category (e.g., 0 items)."
+            },
+            "one": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicString",
+              "description": "String for the 'one' category (e.g., 1 item)."
+            },
+            "two": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicString",
+              "description": "String for the 'two' category (used in Arabic, Welsh, etc.)."
+            },
+            "few": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicString",
+              "description": "String for the 'few' category (e.g., small groups in Slavic languages)."
+            },
+            "many": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicString",
+              "description": "String for the 'many' category (e.g., large groups in various languages)."
+            },
+            "other": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicString",
+              "description": "The default/fallback string (used for general plural cases)."
+            }
+          },
+          "required": [
+            "value",
+            "other"
+          ],
+          "unevaluatedProperties": false
+        },
+        "returnType": {
+          "const": "string"
+        }
+      },
+      "required": [
+        "call",
+        "args"
+      ],
+      "unevaluatedProperties": false
+    },
+    "openUrl": {
+      "type": "object",
+      "description": "Opens the specified URL in a browser or handler. This function has no return value.",
+      "properties": {
+        "call": {
+          "const": "openUrl"
+        },
+        "args": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "format": "uri",
+              "description": "The URL to open."
+            }
+          },
+          "required": [
+            "url"
+          ],
+          "additionalProperties": false
+        },
+        "returnType": {
+          "const": "void"
+        }
+      },
+      "required": [
+        "call",
+        "args"
+      ],
+      "unevaluatedProperties": false
+    },
+    "and": {
+      "type": "object",
+      "description": "Performs a logical AND operation on a list of boolean values.",
+      "properties": {
+        "call": {
+          "const": "and"
+        },
+        "args": {
+          "type": "object",
+          "properties": {
+            "values": {
+              "type": "array",
+              "items": {
+                "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicBoolean"
+              },
+              "minItems": 2,
+              "description": "The list of boolean values to evaluate."
+            }
+          },
+          "required": [
+            "values"
+          ],
+          "unevaluatedProperties": false
+        },
+        "returnType": {
+          "const": "boolean"
+        }
+      },
+      "required": [
+        "call",
+        "args"
+      ],
+      "unevaluatedProperties": false
+    },
+    "or": {
+      "type": "object",
+      "description": "Performs a logical OR operation on a list of boolean values.",
+      "properties": {
+        "call": {
+          "const": "or"
+        },
+        "args": {
+          "type": "object",
+          "properties": {
+            "values": {
+              "type": "array",
+              "items": {
+                "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicBoolean"
+              },
+              "minItems": 2,
+              "description": "The list of boolean values to evaluate."
+            }
+          },
+          "required": [
+            "values"
+          ],
+          "unevaluatedProperties": false
+        },
+        "returnType": {
+          "const": "boolean"
+        }
+      },
+      "required": [
+        "call",
+        "args"
+      ],
+      "unevaluatedProperties": false
+    },
+    "not": {
+      "type": "object",
+      "description": "Performs a logical NOT operation on a boolean value.",
+      "properties": {
+        "call": {
+          "const": "not"
+        },
+        "args": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "https://a2ui.org/specification/v0_9/common_types.json#/$defs/DynamicBoolean",
+              "description": "The boolean value to negate."
+            }
+          },
+          "required": [
+            "value"
+          ],
+          "unevaluatedProperties": false
+        },
+        "returnType": {
+          "const": "boolean"
+        }
+      },
+      "required": [
+        "call",
+        "args"
+      ],
+      "unevaluatedProperties": false
+    }
+  },
+  "$defs": {
+    "StyleProps": {
+      "type": "object",
+      "properties": {
+        "p": {
+          "type": "string",
+          "enum": [
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10",
+            "12",
+            "16",
+            "20",
+            "24",
+            "0.5",
+            "1.5",
+            "2.5"
+          ],
+          "description": "Padding on all sides (e.g. \"4\" = 1rem). Literal token only; never a binding or function call."
+        },
+        "px": {
+          "type": "string",
+          "enum": [
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10",
+            "12",
+            "16",
+            "20",
+            "24",
+            "0.5",
+            "1.5",
+            "2.5"
+          ],
+          "description": "Horizontal padding (e.g. \"4\" = 1rem). Literal token only; never a binding or function call."
+        },
+        "py": {
+          "type": "string",
+          "enum": [
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10",
+            "12",
+            "16",
+            "20",
+            "24",
+            "0.5",
+            "1.5",
+            "2.5"
+          ],
+          "description": "Vertical padding (e.g. \"4\" = 1rem). Literal token only; never a binding or function call."
+        },
+        "m": {
+          "type": "string",
+          "enum": [
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10",
+            "12",
+            "16",
+            "20",
+            "24",
+            "0.5",
+            "1.5",
+            "2.5"
+          ],
+          "description": "Margin on all sides (e.g. \"4\" = 1rem). Literal token only; never a binding or function call."
+        },
+        "mx": {
+          "type": "string",
+          "enum": [
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10",
+            "12",
+            "16",
+            "20",
+            "24",
+            "0.5",
+            "1.5",
+            "2.5"
+          ],
+          "description": "Horizontal margin (e.g. \"4\" = 1rem). Literal token only; never a binding or function call."
+        },
+        "my": {
+          "type": "string",
+          "enum": [
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10",
+            "12",
+            "16",
+            "20",
+            "24",
+            "0.5",
+            "1.5",
+            "2.5"
+          ],
+          "description": "Vertical margin (e.g. \"4\" = 1rem). Literal token only; never a binding or function call."
+        },
+        "gap": {
+          "type": "string",
+          "enum": [
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10",
+            "12",
+            "16",
+            "20",
+            "24",
+            "0.5",
+            "1.5",
+            "2.5"
+          ],
+          "description": "Gap between children (e.g. \"4\" = 1rem). Literal token only; never a binding or function call."
+        },
+        "bg": {
+          "type": "string",
+          "enum": [
+            "black",
+            "white",
+            "transparent",
+            "gray.50",
+            "gray.100",
+            "gray.200",
+            "gray.300",
+            "gray.400",
+            "gray.500",
+            "gray.600",
+            "gray.700",
+            "gray.800",
+            "gray.900",
+            "red.50",
+            "red.100",
+            "red.200",
+            "red.300",
+            "red.400",
+            "red.500",
+            "red.600",
+            "red.700",
+            "red.800",
+            "red.900",
+            "orange.50",
+            "orange.100",
+            "orange.200",
+            "orange.300",
+            "orange.400",
+            "orange.500",
+            "orange.600",
+            "orange.700",
+            "orange.800",
+            "orange.900",
+            "yellow.50",
+            "yellow.100",
+            "yellow.200",
+            "yellow.300",
+            "yellow.400",
+            "yellow.500",
+            "yellow.600",
+            "yellow.700",
+            "yellow.800",
+            "yellow.900",
+            "green.50",
+            "green.100",
+            "green.200",
+            "green.300",
+            "green.400",
+            "green.500",
+            "green.600",
+            "green.700",
+            "green.800",
+            "green.900",
+            "teal.50",
+            "teal.100",
+            "teal.200",
+            "teal.300",
+            "teal.400",
+            "teal.500",
+            "teal.600",
+            "teal.700",
+            "teal.800",
+            "teal.900",
+            "blue.50",
+            "blue.100",
+            "blue.200",
+            "blue.300",
+            "blue.400",
+            "blue.500",
+            "blue.600",
+            "blue.700",
+            "blue.800",
+            "blue.900",
+            "cyan.50",
+            "cyan.100",
+            "cyan.200",
+            "cyan.300",
+            "cyan.400",
+            "cyan.500",
+            "cyan.600",
+            "cyan.700",
+            "cyan.800",
+            "cyan.900",
+            "purple.50",
+            "purple.100",
+            "purple.200",
+            "purple.300",
+            "purple.400",
+            "purple.500",
+            "purple.600",
+            "purple.700",
+            "purple.800",
+            "purple.900",
+            "pink.50",
+            "pink.100",
+            "pink.200",
+            "pink.300",
+            "pink.400",
+            "pink.500",
+            "pink.600",
+            "pink.700",
+            "pink.800",
+            "pink.900",
+            "whiteAlpha.50",
+            "whiteAlpha.100",
+            "whiteAlpha.200",
+            "whiteAlpha.300",
+            "whiteAlpha.400",
+            "whiteAlpha.500",
+            "whiteAlpha.600",
+            "whiteAlpha.700",
+            "whiteAlpha.800",
+            "whiteAlpha.900",
+            "blackAlpha.50",
+            "blackAlpha.100",
+            "blackAlpha.200",
+            "blackAlpha.300",
+            "blackAlpha.400",
+            "blackAlpha.500",
+            "blackAlpha.600",
+            "blackAlpha.700",
+            "blackAlpha.800",
+            "blackAlpha.900"
+          ],
+          "description": "Background color (e.g. \"gray.700\"). Literal token only; never a binding or function call."
+        },
+        "color": {
+          "type": "string",
+          "enum": [
+            "black",
+            "white",
+            "transparent",
+            "gray.50",
+            "gray.100",
+            "gray.200",
+            "gray.300",
+            "gray.400",
+            "gray.500",
+            "gray.600",
+            "gray.700",
+            "gray.800",
+            "gray.900",
+            "red.50",
+            "red.100",
+            "red.200",
+            "red.300",
+            "red.400",
+            "red.500",
+            "red.600",
+            "red.700",
+            "red.800",
+            "red.900",
+            "orange.50",
+            "orange.100",
+            "orange.200",
+            "orange.300",
+            "orange.400",
+            "orange.500",
+            "orange.600",
+            "orange.700",
+            "orange.800",
+            "orange.900",
+            "yellow.50",
+            "yellow.100",
+            "yellow.200",
+            "yellow.300",
+            "yellow.400",
+            "yellow.500",
+            "yellow.600",
+            "yellow.700",
+            "yellow.800",
+            "yellow.900",
+            "green.50",
+            "green.100",
+            "green.200",
+            "green.300",
+            "green.400",
+            "green.500",
+            "green.600",
+            "green.700",
+            "green.800",
+            "green.900",
+            "teal.50",
+            "teal.100",
+            "teal.200",
+            "teal.300",
+            "teal.400",
+            "teal.500",
+            "teal.600",
+            "teal.700",
+            "teal.800",
+            "teal.900",
+            "blue.50",
+            "blue.100",
+            "blue.200",
+            "blue.300",
+            "blue.400",
+            "blue.500",
+            "blue.600",
+            "blue.700",
+            "blue.800",
+            "blue.900",
+            "cyan.50",
+            "cyan.100",
+            "cyan.200",
+            "cyan.300",
+            "cyan.400",
+            "cyan.500",
+            "cyan.600",
+            "cyan.700",
+            "cyan.800",
+            "cyan.900",
+            "purple.50",
+            "purple.100",
+            "purple.200",
+            "purple.300",
+            "purple.400",
+            "purple.500",
+            "purple.600",
+            "purple.700",
+            "purple.800",
+            "purple.900",
+            "pink.50",
+            "pink.100",
+            "pink.200",
+            "pink.300",
+            "pink.400",
+            "pink.500",
+            "pink.600",
+            "pink.700",
+            "pink.800",
+            "pink.900",
+            "whiteAlpha.50",
+            "whiteAlpha.100",
+            "whiteAlpha.200",
+            "whiteAlpha.300",
+            "whiteAlpha.400",
+            "whiteAlpha.500",
+            "whiteAlpha.600",
+            "whiteAlpha.700",
+            "whiteAlpha.800",
+            "whiteAlpha.900",
+            "blackAlpha.50",
+            "blackAlpha.100",
+            "blackAlpha.200",
+            "blackAlpha.300",
+            "blackAlpha.400",
+            "blackAlpha.500",
+            "blackAlpha.600",
+            "blackAlpha.700",
+            "blackAlpha.800",
+            "blackAlpha.900"
+          ],
+          "description": "Text color inherited by the children. Literal token only; never a binding or function call."
+        },
+        "borderRadius": {
+          "type": "string",
+          "enum": [
+            "none",
+            "sm",
+            "base",
+            "md",
+            "lg",
+            "xl",
+            "2xl",
+            "3xl",
+            "full"
+          ],
+          "description": "Corner radius. Literal token only; never a binding or function call."
+        },
+        "borderWidth": {
+          "type": "string",
+          "enum": [
+            "0",
+            "1px",
+            "2px",
+            "4px"
+          ],
+          "description": "Solid border width on all sides. Literal token only; never a binding or function call."
+        },
+        "borderColor": {
+          "type": "string",
+          "enum": [
+            "black",
+            "white",
+            "transparent",
+            "gray.50",
+            "gray.100",
+            "gray.200",
+            "gray.300",
+            "gray.400",
+            "gray.500",
+            "gray.600",
+            "gray.700",
+            "gray.800",
+            "gray.900",
+            "red.50",
+            "red.100",
+            "red.200",
+            "red.300",
+            "red.400",
+            "red.500",
+            "red.600",
+            "red.700",
+            "red.800",
+            "red.900",
+            "orange.50",
+            "orange.100",
+            "orange.200",
+            "orange.300",
+            "orange.400",
+            "orange.500",
+            "orange.600",
+            "orange.700",
+            "orange.800",
+            "orange.900",
+            "yellow.50",
+            "yellow.100",
+            "yellow.200",
+            "yellow.300",
+            "yellow.400",
+            "yellow.500",
+            "yellow.600",
+            "yellow.700",
+            "yellow.800",
+            "yellow.900",
+            "green.50",
+            "green.100",
+            "green.200",
+            "green.300",
+            "green.400",
+            "green.500",
+            "green.600",
+            "green.700",
+            "green.800",
+            "green.900",
+            "teal.50",
+            "teal.100",
+            "teal.200",
+            "teal.300",
+            "teal.400",
+            "teal.500",
+            "teal.600",
+            "teal.700",
+            "teal.800",
+            "teal.900",
+            "blue.50",
+            "blue.100",
+            "blue.200",
+            "blue.300",
+            "blue.400",
+            "blue.500",
+            "blue.600",
+            "blue.700",
+            "blue.800",
+            "blue.900",
+            "cyan.50",
+            "cyan.100",
+            "cyan.200",
+            "cyan.300",
+            "cyan.400",
+            "cyan.500",
+            "cyan.600",
+            "cyan.700",
+            "cyan.800",
+            "cyan.900",
+            "purple.50",
+            "purple.100",
+            "purple.200",
+            "purple.300",
+            "purple.400",
+            "purple.500",
+            "purple.600",
+            "purple.700",
+            "purple.800",
+            "purple.900",
+            "pink.50",
+            "pink.100",
+            "pink.200",
+            "pink.300",
+            "pink.400",
+            "pink.500",
+            "pink.600",
+            "pink.700",
+            "pink.800",
+            "pink.900",
+            "whiteAlpha.50",
+            "whiteAlpha.100",
+            "whiteAlpha.200",
+            "whiteAlpha.300",
+            "whiteAlpha.400",
+            "whiteAlpha.500",
+            "whiteAlpha.600",
+            "whiteAlpha.700",
+            "whiteAlpha.800",
+            "whiteAlpha.900",
+            "blackAlpha.50",
+            "blackAlpha.100",
+            "blackAlpha.200",
+            "blackAlpha.300",
+            "blackAlpha.400",
+            "blackAlpha.500",
+            "blackAlpha.600",
+            "blackAlpha.700",
+            "blackAlpha.800",
+            "blackAlpha.900"
+          ],
+          "description": "Border color; needs `borderWidth`. Literal token only; never a binding or function call."
+        },
+        "shadow": {
+          "type": "string",
+          "enum": [
+            "none",
+            "xs",
+            "sm",
+            "base",
+            "md",
+            "lg",
+            "xl",
+            "2xl",
+            "inner",
+            "dark-lg"
+          ],
+          "description": "Box shadow. Literal token only; never a binding or function call."
+        },
+        "w": {
+          "type": "string",
+          "enum": [
+            "full",
+            "3xs",
+            "2xs",
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "2xl",
+            "3xl",
+            "4xl",
+            "5xl",
+            "6xl",
+            "container.sm",
+            "container.md",
+            "container.lg",
+            "container.xl"
+          ],
+          "description": "Width (\"full\" = 100% of the parent). Literal token only; never a binding or function call."
+        },
+        "maxW": {
+          "type": "string",
+          "enum": [
+            "full",
+            "3xs",
+            "2xs",
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "2xl",
+            "3xl",
+            "4xl",
+            "5xl",
+            "6xl",
+            "container.sm",
+            "container.md",
+            "container.lg",
+            "container.xl"
+          ],
+          "description": "Maximum width (\"container.md\" etc. for page columns). Literal token only; never a binding or function call."
+        },
+        "minH": {
+          "type": "string",
+          "enum": [
+            "full",
+            "3xs",
+            "2xs",
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "2xl",
+            "3xl",
+            "4xl",
+            "5xl",
+            "6xl",
+            "container.sm",
+            "container.md",
+            "container.lg",
+            "container.xl"
+          ],
+          "description": "Minimum height. Literal token only; never a binding or function call."
+        },
+        "textAlign": {
+          "type": "string",
+          "enum": [
+            "left",
+            "center",
+            "right"
+          ],
+          "description": "Horizontal alignment of inline content. Literal token only; never a binding or function call."
+        }
+      }
+    },
+    "ColorProp": {
+      "type": "object",
+      "properties": {
+        "color": {
+          "type": "string",
+          "enum": [
+            "black",
+            "white",
+            "transparent",
+            "gray.50",
+            "gray.100",
+            "gray.200",
+            "gray.300",
+            "gray.400",
+            "gray.500",
+            "gray.600",
+            "gray.700",
+            "gray.800",
+            "gray.900",
+            "red.50",
+            "red.100",
+            "red.200",
+            "red.300",
+            "red.400",
+            "red.500",
+            "red.600",
+            "red.700",
+            "red.800",
+            "red.900",
+            "orange.50",
+            "orange.100",
+            "orange.200",
+            "orange.300",
+            "orange.400",
+            "orange.500",
+            "orange.600",
+            "orange.700",
+            "orange.800",
+            "orange.900",
+            "yellow.50",
+            "yellow.100",
+            "yellow.200",
+            "yellow.300",
+            "yellow.400",
+            "yellow.500",
+            "yellow.600",
+            "yellow.700",
+            "yellow.800",
+            "yellow.900",
+            "green.50",
+            "green.100",
+            "green.200",
+            "green.300",
+            "green.400",
+            "green.500",
+            "green.600",
+            "green.700",
+            "green.800",
+            "green.900",
+            "teal.50",
+            "teal.100",
+            "teal.200",
+            "teal.300",
+            "teal.400",
+            "teal.500",
+            "teal.600",
+            "teal.700",
+            "teal.800",
+            "teal.900",
+            "blue.50",
+            "blue.100",
+            "blue.200",
+            "blue.300",
+            "blue.400",
+            "blue.500",
+            "blue.600",
+            "blue.700",
+            "blue.800",
+            "blue.900",
+            "cyan.50",
+            "cyan.100",
+            "cyan.200",
+            "cyan.300",
+            "cyan.400",
+            "cyan.500",
+            "cyan.600",
+            "cyan.700",
+            "cyan.800",
+            "cyan.900",
+            "purple.50",
+            "purple.100",
+            "purple.200",
+            "purple.300",
+            "purple.400",
+            "purple.500",
+            "purple.600",
+            "purple.700",
+            "purple.800",
+            "purple.900",
+            "pink.50",
+            "pink.100",
+            "pink.200",
+            "pink.300",
+            "pink.400",
+            "pink.500",
+            "pink.600",
+            "pink.700",
+            "pink.800",
+            "pink.900",
+            "whiteAlpha.50",
+            "whiteAlpha.100",
+            "whiteAlpha.200",
+            "whiteAlpha.300",
+            "whiteAlpha.400",
+            "whiteAlpha.500",
+            "whiteAlpha.600",
+            "whiteAlpha.700",
+            "whiteAlpha.800",
+            "whiteAlpha.900",
+            "blackAlpha.50",
+            "blackAlpha.100",
+            "blackAlpha.200",
+            "blackAlpha.300",
+            "blackAlpha.400",
+            "blackAlpha.500",
+            "blackAlpha.600",
+            "blackAlpha.700",
+            "blackAlpha.800",
+            "blackAlpha.900"
+          ],
+          "description": "Text or icon color (e.g. \"gray.400\"); omit it to inherit the current text color. Literal token only; never a binding or function call."
+        }
+      }
+    },
+    "theme": {
+      "type": "object",
+      "properties": {},
+      "additionalProperties": false
+    },
+    "anyComponent": {
+      "oneOf": [
+        {
+          "$ref": "#/components/Box"
+        },
+        {
+          "$ref": "#/components/Center"
+        },
+        {
+          "$ref": "#/components/Container"
+        },
+        {
+          "$ref": "#/components/Flex"
+        },
+        {
+          "$ref": "#/components/Grid"
+        },
+        {
+          "$ref": "#/components/Heading"
+        },
+        {
+          "$ref": "#/components/Text"
+        },
+        {
+          "$ref": "#/components/Button"
+        },
+        {
+          "$ref": "#/components/Input"
+        },
+        {
+          "$ref": "#/components/Checkbox"
+        },
+        {
+          "$ref": "#/components/RadioGroup"
+        },
+        {
+          "$ref": "#/components/Switch"
+        },
+        {
+          "$ref": "#/components/List"
+        },
+        {
+          "$ref": "#/components/Table"
+        },
+        {
+          "$ref": "#/components/Tag"
+        },
+        {
+          "$ref": "#/components/Modal"
+        },
+        {
+          "$ref": "#/components/Tabs"
+        },
+        {
+          "$ref": "#/components/Avatar"
+        },
+        {
+          "$ref": "#/components/Icon"
+        }
+      ],
+      "discriminator": {
+        "propertyName": "component"
+      }
+    },
+    "anyFunction": {
+      "oneOf": [
+        {
+          "$ref": "#/functions/required"
+        },
+        {
+          "$ref": "#/functions/regex"
+        },
+        {
+          "$ref": "#/functions/length"
+        },
+        {
+          "$ref": "#/functions/numeric"
+        },
+        {
+          "$ref": "#/functions/email"
+        },
+        {
+          "$ref": "#/functions/formatString"
+        },
+        {
+          "$ref": "#/functions/formatNumber"
+        },
+        {
+          "$ref": "#/functions/formatCurrency"
+        },
+        {
+          "$ref": "#/functions/formatDate"
+        },
+        {
+          "$ref": "#/functions/pluralize"
+        },
+        {
+          "$ref": "#/functions/openUrl"
+        },
+        {
+          "$ref": "#/functions/and"
+        },
+        {
+          "$ref": "#/functions/or"
+        },
+        {
+          "$ref": "#/functions/not"
+        }
+      ]
+    }
+  }
+}

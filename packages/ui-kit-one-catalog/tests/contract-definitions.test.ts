@@ -6,7 +6,16 @@ import {
   FUNCTION_APIS,
   TWO_WAY_BINDINGS,
   iconNames,
-  tokens,
+  boxSizes,
+  colorSchemes,
+  colorTokens,
+  fontSizes,
+  fontWeights,
+  palettes,
+  radii,
+  shadows,
+  sizes,
+  space,
 } from "../src/index.ts";
 
 type AnyDef = { typeName: string; innerType?: z.ZodTypeAny; type?: z.ZodTypeAny };
@@ -38,7 +47,7 @@ function* props(
 const shapeOf = (schema: z.ZodTypeAny) =>
   (schema as z.AnyZodObject).shape as Record<string, z.ZodTypeAny>;
 
-describe("component contracts", () => {
+describe("component contracts [INT-01, PR-01]", () => {
   it("describe every component and every prop (the prompt and CONTRACTS.md are built from them)", () => {
     const missing: string[] = [];
     for (const api of COMPONENT_APIS) {
@@ -95,27 +104,27 @@ describe("component contracts", () => {
   });
 });
 
-describe("tokens", () => {
+describe("tokens [INT-01, PR-01]", () => {
   it("define every token group copied from the Chakra UI v1 theme", () => {
-    expect(Object.keys(tokens.space)).toContain("4");
-    expect(tokens.space["4"]).toBe("1rem");
-    expect(tokens.palettes.blue[500]).toBe("#3182ce");
-    expect(tokens.radii.lg).toBe("0.5rem");
-    expect(tokens.fontSizes.md).toBe("1rem");
-    expect(tokens.fontWeights.bold).toBe(700);
-    expect(tokens.shadows.md).toContain("rgba");
-    expect(tokens.sizes.full).toBe("100%");
-    expect(tokens.sizes["container.lg"]).toBe("1024px");
-    expect(tokens.boxSizes.icon["8"]).toBe("2rem");
-    expect(tokens.boxSizes.avatar.md).toBe("3rem");
+    expect(Object.keys(space)).toContain("4");
+    expect(space["4"]).toBe("1rem");
+    expect(palettes.blue[500]).toBe("#3182ce");
+    expect(radii.lg).toBe("0.5rem");
+    expect(fontSizes.md).toBe("1rem");
+    expect(fontWeights.bold).toBe(700);
+    expect(shadows.md).toContain("rgba");
+    expect(sizes.full).toBe("100%");
+    expect(sizes["container.lg"]).toBe("1024px");
+    expect(boxSizes.icon["8"]).toBe("2rem");
+    expect(boxSizes.avatar.md).toBe("3rem");
   });
 
   it("derive color tokens as palette.shade plus base colors", () => {
-    expect(tokens.colorTokens).toContain("gray.700");
-    expect(tokens.colorTokens).toContain("whiteAlpha.300");
-    expect(tokens.colorTokens).toContain("white");
-    expect(tokens.colorTokens).toHaveLength(3 + 12 * 10);
-    expect(tokens.colorSchemes).toEqual([
+    expect(colorTokens).toContain("gray.700");
+    expect(colorTokens).toContain("whiteAlpha.300");
+    expect(colorTokens).toContain("white");
+    expect(colorTokens).toHaveLength(3 + 12 * 10);
+    expect(colorSchemes).toEqual([
       "gray",
       "red",
       "orange",

@@ -18,9 +18,10 @@
     }
   },
   "scripts": {
+    "check:generated": "node scripts/check-generated.ts",
     "typecheck": "tsgo -p tsconfig.json && tsgo -p tsconfig.test.json",
-    "test": "vp test run",
-    "build": "tsdown",
+    "test": "vp test run --reporter=verbose",
+    "build": "tsdown && node scripts/build-mapping.ts",
     "docs": "tsdown && node scripts/build-mapping.ts"
   },
   "dependencies": {

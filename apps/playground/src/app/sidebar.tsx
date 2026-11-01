@@ -1,8 +1,9 @@
-import { Blocks, Gauge, LayoutPanelLeft, RotateCcw } from "lucide-react";
+import { Blocks, Bot, Gauge, LayoutPanelLeft, PlugZap, RotateCcw } from "lucide-react";
 import { Badge } from "../components/ui/badge.tsx";
 import { Button } from "../components/ui/button.tsx";
 import { ScrollArea } from "../components/ui/scroll-area.tsx";
 import { componentExamples, compositions, type Example } from "../examples.ts";
+import { INTEGRATION_NAV } from "../integration/nav.ts";
 import { cn } from "../lib/utils.ts";
 import { useSession } from "../state/session-store.ts";
 import { useWorkspace } from "../state/workspace-store.ts";
@@ -12,7 +13,39 @@ const PAGES = [
   { to: "/", label: "Workspace", icon: LayoutPanelLeft },
   { to: "/components", label: "Components", icon: Blocks },
   { to: "/llm-context", label: "LLM context", icon: Gauge },
+  { to: "/agent", label: "Agent", icon: Bot },
 ] as const;
+
+/** SV-C26: the Integration section (how a consumer project uses @agentic-ui/a2ui-react). */
+function IntegrationNav({ pathname }: { pathname: string }) {
+  return (
+    <nav aria-label="Интеграция" className="flex flex-col gap-0.5 px-2 pb-2">
+      <h2 className="flex items-center gap-2 px-2.5 pb-1 pt-1 font-medium text-[11px] text-muted-foreground uppercase tracking-wider">
+        <PlugZap className="size-3.5" />
+        Интеграция
+      </h2>
+      {INTEGRATION_NAV.map(({ slug, title }) => {
+        const to = `/integration/${slug}`;
+        const active = pathname === to || (pathname === "/integration" && slug === "full-chat");
+        return (
+          <Link
+            key={slug}
+            to={to}
+            aria-current={active ? "page" : undefined}
+            className={cn(
+              "flex h-7 items-center rounded-md px-2.5 text-[12.5px] outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring",
+              active
+                ? "bg-white/[0.07] text-foreground"
+                : "text-muted-foreground hover:bg-white/[0.04] hover:text-foreground",
+            )}
+          >
+            {title}
+          </Link>
+        );
+      })}
+    </nav>
+  );
+}
 
 function ExampleItem({ example, active }: { example: Example; active: boolean }) {
   return (
@@ -65,7 +98,7 @@ function Section({
   );
 }
 
-/** Left navigation: pages, the 20 compositions and the 19 component snippets (PG-01, PG-02). */
+/** Left navigation: pages, the 24 compositions and the 19 component snippets (PG-01, PG-02). */
 export function Sidebar({ pathname }: { pathname: string }) {
   const selectedId = useWorkspace((state) => state.selectedId);
   const resetAll = () => {
@@ -106,6 +139,7 @@ export function Sidebar({ pathname }: { pathname: string }) {
           );
         })}
       </nav>
+      <IntegrationNav pathname={pathname} />
       <ScrollArea className="min-h-0 flex-1 border-t">
         <div className="px-2 pb-4">
           <Section title="Compositions" examples={compositions} selectedId={selectedId} />

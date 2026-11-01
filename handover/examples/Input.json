@@ -1,0 +1,68 @@
+{
+  "name": "Input",
+  "description": "Поле ввода e-mail с подсказкой и проверками.",
+  "messages": [
+    {
+      "version": "v0.9",
+      "createSurface": {
+        "surfaceId": "input",
+        "catalogId": "urn:agentic-ui:catalog:ui-kit-one:v1",
+        "sendDataModel": true
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateDataModel": {
+        "surfaceId": "input",
+        "path": "/form",
+        "value": {
+          "email": ""
+        }
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateComponents": {
+        "surfaceId": "input",
+        "components": [
+          {
+            "id": "root",
+            "component": "Input",
+            "label": "Электронная почта",
+            "value": {
+              "path": "/form/email"
+            },
+            "type": "email",
+            "placeholder": "name@example.ru",
+            "helperText": "Пришлём на неё выписку",
+            "isRequired": true,
+            "checks": [
+              {
+                "condition": {
+                  "call": "required",
+                  "args": {
+                    "value": {
+                      "path": "/form/email"
+                    }
+                  }
+                },
+                "message": "Введите адрес почты"
+              },
+              {
+                "condition": {
+                  "call": "email",
+                  "args": {
+                    "value": {
+                      "path": "/form/email"
+                    }
+                  }
+                },
+                "message": "Адрес почты указан неверно"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -2,7 +2,18 @@
 
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
-import * as React from "react";
+import {
+  type CSSProperties,
+  type Context,
+  type ElementRef,
+  type ReactElement,
+  createContext,
+  forwardRef,
+  useContext,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { cn } from "~/lib/utils";
 
 export type SegmentedControlSize = "default" | "lg" | "sm";
@@ -19,18 +30,18 @@ export const segmentedControlItemLayoutClassName =
 export const segmentedControlIndicatorSurfaceClassName =
   "rounded-md bg-background shadow-sm/5 dark:bg-input";
 
-const SegmentedControlContext: React.Context<SegmentedControlSize> =
-  React.createContext<SegmentedControlSize>("default");
+const SegmentedControlContext: Context<SegmentedControlSize> =
+  createContext<SegmentedControlSize>("default");
 
-export const SegmentedControl = React.forwardRef<
-  React.ElementRef<typeof SegmentedControlContext.Provider>,
+export const SegmentedControl = forwardRef<
+  ElementRef<typeof SegmentedControlContext.Provider>,
   useRender.ComponentProps<"div"> & {
     size?: SegmentedControlSize;
   }
 >(function SegmentedControl(
   { className, children, render, size = "default", ...props },
   ref,
-): React.ReactElement {
+): ReactElement {
   const defaultProps = {
     children: (
       <>
@@ -58,13 +69,13 @@ export const SegmentedControl = React.forwardRef<
   );
 });
 
-export const SegmentedControlItem = React.forwardRef<
+export const SegmentedControlItem = forwardRef<
   HTMLElement,
   useRender.ComponentProps<"button"> & {
     size?: SegmentedControlSize;
   }
->(function SegmentedControlItem({ className, render, size, ...props }, ref): React.ReactElement {
-  const contextSize = React.useContext(SegmentedControlContext);
+>(function SegmentedControlItem({ className, render, size, ...props }, ref): ReactElement {
+  const contextSize = useContext(SegmentedControlContext);
   const resolvedSize = size ?? contextSize;
 
   const defaultProps = {
@@ -144,11 +155,11 @@ function measureItem(item: HTMLElement, root: HTMLElement): ActiveItemRect {
   };
 }
 
-function SegmentedControlIndicator(): React.ReactElement {
-  const ref = React.useRef<HTMLSpanElement>(null);
-  const [rect, setRect] = React.useState<ActiveItemRect | null>(null);
+function SegmentedControlIndicator(): ReactElement {
+  const ref = useRef<HTMLSpanElement>(null);
+  const [rect, setRect] = useState<ActiveItemRect | null>(null);
 
-  React.useLayoutEffect(() => {
+  useLayoutEffect(() => {
     const root = ref.current?.parentElement;
     if (!root) {
       return;
@@ -205,7 +216,7 @@ function SegmentedControlIndicator(): React.ReactElement {
           "--active-item-left": `${rect?.left ?? 0}px`,
           "--active-item-top": `${rect?.top ?? 0}px`,
           "--active-item-width": `${rect?.width ?? 0}px`,
-        } as React.CSSProperties
+        } as CSSProperties
       }
     />
   );

@@ -1,0 +1,168 @@
+{
+  "name": "Подтверждение перевода",
+  "description": "Кнопка-триггер открывает Modal локально (её событие modal.open не уходит агенту); кнопка «Подтвердить» внутри отправляет событие и закрывает окно.",
+  "messages": [
+    {
+      "version": "v0.9",
+      "createSurface": {
+        "surfaceId": "transfer",
+        "catalogId": "urn:agentic-ui:catalog:ui-kit-one:v1",
+        "sendDataModel": true
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateDataModel": {
+        "surfaceId": "transfer",
+        "path": "/",
+        "value": {
+          "transfer": {
+            "id": "tr-7781",
+            "recipient": "Анна Смирнова",
+            "card": "•• 4821",
+            "amount": 15000,
+            "fee": 0
+          }
+        }
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateComponents": {
+        "surfaceId": "transfer",
+        "components": [
+          {
+            "id": "root",
+            "component": "Container",
+            "maxW": "container.sm",
+            "py": "8",
+            "children": ["card"]
+          },
+          {
+            "id": "card",
+            "component": "Flex",
+            "direction": "column",
+            "gap": "4",
+            "bg": "gray.700",
+            "p": "6",
+            "borderRadius": "xl",
+            "borderWidth": "1px",
+            "borderColor": "whiteAlpha.100",
+            "children": ["title", "recipient", "amount", "confirm-modal"]
+          },
+          {
+            "id": "title",
+            "component": "Heading",
+            "text": "Перевод по номеру карты",
+            "as": "h1",
+            "size": "md"
+          },
+          {
+            "id": "recipient",
+            "component": "Text",
+            "text": {
+              "call": "formatString",
+              "args": {
+                "value": "${/transfer/recipient}, карта ${/transfer/card}"
+              }
+            },
+            "color": "gray.300"
+          },
+          {
+            "id": "amount",
+            "component": "Text",
+            "text": {
+              "call": "formatCurrency",
+              "args": {
+                "value": {
+                  "path": "/transfer/amount"
+                },
+                "currency": "RUB"
+              }
+            },
+            "fontSize": "2xl",
+            "fontWeight": "bold"
+          },
+          {
+            "id": "confirm-modal",
+            "component": "Modal",
+            "trigger": "open-confirm",
+            "content": "confirm-body",
+            "title": "Подтвердите перевод",
+            "size": "md"
+          },
+          {
+            "id": "open-confirm",
+            "component": "Button",
+            "label": "Перевести",
+            "colorScheme": "blue",
+            "isFullWidth": true,
+            "action": {
+              "event": {
+                "name": "modal.open"
+              }
+            }
+          },
+          {
+            "id": "confirm-body",
+            "component": "Flex",
+            "direction": "column",
+            "gap": "4",
+            "children": ["confirm-text", "confirm-fee", "confirm-actions"]
+          },
+          {
+            "id": "confirm-text",
+            "component": "Text",
+            "text": {
+              "call": "formatString",
+              "args": {
+                "value": "Получатель: ${/transfer/recipient}"
+              }
+            }
+          },
+          {
+            "id": "confirm-fee",
+            "component": "Text",
+            "text": "Комиссия не взимается",
+            "fontSize": "sm",
+            "color": "gray.400"
+          },
+          {
+            "id": "confirm-actions",
+            "component": "Flex",
+            "justify": "flex-end",
+            "gap": "3",
+            "children": ["confirm-cancel", "confirm-send"]
+          },
+          {
+            "id": "confirm-cancel",
+            "component": "Button",
+            "label": "Отмена",
+            "variant": "ghost",
+            "action": {
+              "event": {
+                "name": "transfer.cancel"
+              }
+            }
+          },
+          {
+            "id": "confirm-send",
+            "component": "Button",
+            "label": "Подтвердить",
+            "colorScheme": "blue",
+            "action": {
+              "event": {
+                "name": "transfer.confirm",
+                "context": {
+                  "transferId": {
+                    "path": "/transfer/id"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

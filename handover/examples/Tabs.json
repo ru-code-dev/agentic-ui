@@ -1,0 +1,59 @@
+{
+  "name": "Tabs",
+  "description": "Вкладки с номером выбранной вкладки в модели данных.",
+  "messages": [
+    {
+      "version": "v0.9",
+      "createSurface": {
+        "surfaceId": "tabs",
+        "catalogId": "urn:agentic-ui:catalog:ui-kit-one:v1",
+        "sendDataModel": true
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateDataModel": {
+        "surfaceId": "tabs",
+        "path": "/ui",
+        "value": {
+          "tab": 0
+        }
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateComponents": {
+        "surfaceId": "tabs",
+        "components": [
+          {
+            "id": "root",
+            "component": "Tabs",
+            "selectedIndex": {
+              "path": "/ui/tab"
+            },
+            "tabs": [
+              {
+                "title": "Обзор",
+                "child": "overview"
+              },
+              {
+                "title": "Реквизиты",
+                "child": "details"
+              }
+            ]
+          },
+          {
+            "id": "overview",
+            "component": "Text",
+            "text": "Остаток на счёте обновляется в реальном времени."
+          },
+          {
+            "id": "details",
+            "component": "Text",
+            "text": "Счёт 40817 810 0 0000 1234567, БИК 044525225."
+          }
+        ]
+      }
+    }
+  ]
+}

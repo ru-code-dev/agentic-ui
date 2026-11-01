@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vite-plus/test";
 
 async function load(base: string) {
   vi.stubEnv("BASE_URL", base);
@@ -10,7 +10,7 @@ afterEach(() => {
   vi.unstubAllEnvs();
 });
 
-describe("base path", () => {
+describe("base path [PG-27]", () => {
   it("is a no-op at the domain root", async () => {
     const { toAppPath, toUrlPath, publicUrl } = await load("/");
     expect(toUrlPath("/components")).toBe("/components");

@@ -1,8 +1,10 @@
 import { Catalog, type ComponentApi, type FunctionApi } from "@a2ui/web_core/v0_9";
 import { z } from "zod";
 import { CATALOG_ID } from "./catalog-id.ts";
-import { COMPONENT_APIS } from "./components/index.ts";
-import { FUNCTION_APIS } from "./functions.ts";
+import { COMPONENT_APIS, COMPONENT_ROLES } from "./components/index.ts";
+import { assertCompleteContract } from "./contract-checks.ts";
+import { FUNCTION_APIS, FUNCTION_USES } from "./functions.ts";
+import { buildInstructions, type ContractSource } from "./rules/index.ts";
 
 export const PROTOCOL_VERSION = "v0.9";
 
@@ -11,19 +13,21 @@ const COMMON_TYPES_URI = "https://a2ui.org/specification/v0_9/common_types.json"
 /** ui-kit-one has no per-surface theme properties: the kit owns its look. */
 const ThemeSchema = z.object({}).strict().describe("ui-kit-one accepts no theme properties.");
 
-/** Rules for agents, shipped in the catalog document (`instructions`) and so in every prompt. */
-export const CATALOG_INSTRUCTIONS = [
-  "ui-kit-one rules:",
-  "- Use only the components, props and token values of this catalog. There is no free-form styling: no sx, CSS, pixel values or responsive objects.",
-  "- Start every screen with one root component; Container is the usual page column.",
-  '- Keep varying data (lists, table rows, form values, amounts) in updateDataModel and bind props to it with {"path": "/..."}; inside a ChildList template use paths relative to the item.',
-  "- Inputs, Checkbox, RadioGroup, Switch, Modal.open and Tabs.selectedIndex write user changes back to their bound path; bind them, do not use literals.",
-  "- Set sendDataModel: true in createSurface whenever the surface has inputs, so actions carry the form data.",
-  '- Every Button needs an action. A Button used as a Modal trigger opens the modal by itself; give it an event action such as {"event": {"name": "modal.open"}}.',
-  "- Validate inputs with checks (required, email, regex, length, numeric); give a submit Button the same checks to keep it disabled until the form is valid.",
-  '- Format money with formatCurrency (or a Table column with format "currency"); never hard-code formatted amounts.',
-  '- Format dates with formatDate and the pattern "dd.MM.yyyy" (the renderer locale is ru-RU and month names are not declined), or a Table column with format "date".',
-].join("\n");
+assertCompleteContract(COMPONENT_APIS);
+
+/** The contract and its metadata, as the rule generators read it (SV-C22). */
+export const CONTRACT_SOURCE: ContractSource = {
+  components: COMPONENT_APIS,
+  functions: FUNCTION_APIS,
+  roles: COMPONENT_ROLES,
+  functionUses: FUNCTION_USES,
+};
+
+/**
+ * Rules for agents, shipped in the catalog document (`instructions`) and so in every prompt:
+ * generated from the prop kinds, component roles and function uses (src/rules/).
+ */
+export const CATALOG_INSTRUCTIONS = buildInstructions(CONTRACT_SOURCE);
 
 /** Options shared by the contract catalog and every renderer catalog of this contract. */
 export const CATALOG_OPTIONS = {
@@ -37,16 +41,33 @@ export const CATALOG_OPTIONS = {
   instructions: CATALOG_INSTRUCTIONS,
 };
 
-/** The contract: component and function APIs without implementations. */
-export const uiKitOneContract = new Catalog<ComponentApi, FunctionApi>(
-  CATALOG_ID,
-  PROTOCOL_VERSION,
-  COMPONENT_APIS,
-  FUNCTION_APIS,
-  CATALOG_OPTIONS,
-);
+/**
+ * A contract catalog for `source`: completeness-checked, with instructions generated from it. The
+ * shipped contract is `createContract(CONTRACT_SOURCE)`; tests feed fixture sources through the
+ * same path (catalog.json → prompt → rules → interactions).
+ */
+export function createContract(source: ContractSource): Catalog<ComponentApi, FunctionApi> {
+  assertCompleteContract(source.components);
+  const roleless = source.components.filter((api) => source.roles[api.name] === undefined);
+  if (roleless.length > 0)
+    throw new Error(
+      `No role (components/index.ts COMPONENT_ROLES): ${roleless.map((api) => api.name).join(", ")}`,
+    );
+  return new Catalog<ComponentApi, FunctionApi>(
+    CATALOG_ID,
+    PROTOCOL_VERSION,
+    [...source.components],
+    [...source.functions],
+    { ...CATALOG_OPTIONS, instructions: buildInstructions(source) },
+  );
+}
 
-/** The spec-compliant v0.9 catalog document (`dist/catalog.json`). */
-export function buildCatalogJson(): Record<string, unknown> {
-  return uiKitOneContract.toJson();
+/** The contract: component and function APIs without implementations. */
+export const uiKitOneContract = createContract(CONTRACT_SOURCE);
+
+/** The spec-compliant v0.9 catalog document (`dist/catalog.json`) of `contract`. */
+export function buildCatalogJson(
+  contract: Catalog<ComponentApi, FunctionApi> = uiKitOneContract,
+): Record<string, unknown> {
+  return contract.toJson();
 }

@@ -1,6 +1,7 @@
 import type { z } from "zod";
 import { iconNames } from "../icons.ts";
-import * as tokens from "../tokens/index.ts";
+import { propMeta, type PropKind } from "../prop-kinds.ts";
+import { colorTokens, spaceTokens } from "../tokens/index.ts";
 
 /** Documentation of one prop, read from its Zod schema. */
 export interface PropDoc {
@@ -9,13 +10,15 @@ export interface PropDoc {
   readonly required: boolean;
   readonly values: string;
   readonly description: string;
+  /** Prop kind (prop-kinds.ts); absent for item fields of array props. */
+  readonly kind?: PropKind;
   readonly items?: readonly PropDoc[];
 }
 
 /** Enums documented by name instead of listing every value. */
 const NAMED_ENUMS = new Map<readonly string[], string>([
-  [tokens.colorTokens, "color token"],
-  [tokens.spaceTokens, "space token"],
+  [colorTokens, "color token"],
+  [spaceTokens, "space token"],
   [iconNames, "icon name"],
 ]);
 
@@ -29,6 +32,12 @@ function describeRef(description: string | undefined): { ref: string | undefined
 }
 
 export function propDoc(name: string, schema: z.ZodTypeAny): PropDoc {
+  const kind = propMeta(schema)?.kind;
+  const doc = describeProp(name, schema);
+  return kind === undefined ? doc : { ...doc, kind };
+}
+
+function describeProp(name: string, schema: z.ZodTypeAny): PropDoc {
   let current = schema;
   let required = true;
   let description = schema.description;
@@ -110,11 +119,11 @@ export const cell = (value: string) =>
 export function propsTable(props: readonly PropDoc[]): string {
   const rows = props.map(
     (p) =>
-      `| \`${p.name}\` | ${p.type} | ${p.required ? "yes" : "no"} | ${cell(p.values)} | ${cell(p.description)} |`,
+      `| \`${p.name}\` | ${cell(p.kind ?? "")} | ${p.type} | ${p.required ? "yes" : "no"} | ${cell(p.values)} | ${cell(p.description)} |`,
   );
   return [
-    "| Prop | Type | Required | Values | Description |",
-    "|---|---|---|---|---|",
+    "| Prop | Kind | Type | Required | Values | Description |",
+    "|---|---|---|---|---|---|",
     ...rows,
   ].join("\n");
 }

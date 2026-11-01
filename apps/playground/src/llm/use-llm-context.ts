@@ -6,7 +6,7 @@ import {
 } from "@agentic-ui/ui-kit-one-catalog/prompt";
 import { useDeferredValue, useMemo, useState } from "react";
 import { parseMessages } from "../editor/parse-messages.ts";
-import { compositions } from "../examples.ts";
+import { compositions, DEFAULT_PROMPT_EXAMPLES, promptExamples } from "../examples.ts";
 import { useSession } from "../state/session-store.ts";
 import { useWorkspace } from "../state/workspace-store.ts";
 import { turnPayloads } from "./payloads.ts";
@@ -15,7 +15,6 @@ import { useCounter } from "./use-counter.ts";
 
 const CATALOG_JSON = buildCatalogJson();
 const ALL_COMPONENTS = COMPONENT_APIS.map((api) => api.name);
-const DEFAULT_EXAMPLES = 5;
 
 export interface LlmControls {
   readonly components: readonly string[];
@@ -26,7 +25,7 @@ export interface LlmControls {
 
 export const DEFAULT_CONTROLS: LlmControls = {
   components: ALL_COMPONENTS,
-  examples: DEFAULT_EXAMPLES,
+  examples: DEFAULT_PROMPT_EXAMPLES,
   format: "direct-json",
   instructions: "",
 };
@@ -34,7 +33,7 @@ export const DEFAULT_CONTROLS: LlmControls = {
 const assemble = (controls: LlmControls) =>
   assembleSystemPrompt(CATALOG_JSON, {
     format: controls.format,
-    examples: compositions.slice(0, controls.examples),
+    examples: promptExamples.slice(0, controls.examples),
     ...(controls.components.length === ALL_COMPONENTS.length
       ? {}
       : { components: controls.components }),

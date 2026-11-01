@@ -1,0 +1,242 @@
+{
+  "name": "Кредитное предложение",
+  "description": "Предодобренный кредит: ставка, срок, платёж, условия и согласие.",
+  "messages": [
+    {
+      "version": "v0.9",
+      "createSurface": {
+        "surfaceId": "loan",
+        "catalogId": "urn:agentic-ui:catalog:ui-kit-one:v1",
+        "sendDataModel": true
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateDataModel": {
+        "surfaceId": "loan",
+        "path": "/offer",
+        "value": {
+          "amount": 750000,
+          "rate": "14,9%",
+          "term": "36 месяцев",
+          "payment": 25960,
+          "conditions": [
+            {
+              "text": "Без залога и поручителей"
+            },
+            {
+              "text": "Досрочное погашение без комиссии"
+            },
+            {
+              "text": "Решение за 2 минуты"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateDataModel": {
+        "surfaceId": "loan",
+        "path": "/agree",
+        "value": false
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateComponents": {
+        "surfaceId": "loan",
+        "components": [
+          {
+            "id": "root",
+            "component": "Container",
+            "maxW": "container.md",
+            "py": "8",
+            "children": ["card"]
+          },
+          {
+            "id": "card",
+            "component": "Flex",
+            "direction": "column",
+            "gap": "5",
+            "bg": "gray.700",
+            "p": "8",
+            "borderRadius": "xl",
+            "borderWidth": "1px",
+            "borderColor": "whiteAlpha.100",
+            "children": ["badge-row", "title", "terms", "conditions", "agree", "apply"]
+          },
+          {
+            "id": "badge-row",
+            "component": "Flex",
+            "children": ["badge"]
+          },
+          {
+            "id": "badge",
+            "component": "Tag",
+            "label": "Предодобрено",
+            "colorScheme": "green",
+            "variant": "solid"
+          },
+          {
+            "id": "title",
+            "component": "Heading",
+            "text": {
+              "call": "formatCurrency",
+              "args": {
+                "value": {
+                  "path": "/offer/amount"
+                },
+                "currency": "RUB"
+              }
+            },
+            "as": "h1",
+            "size": "xl"
+          },
+          {
+            "id": "terms",
+            "component": "Grid",
+            "minChildWidth": "3xs",
+            "gap": "4",
+            "children": ["rate", "term", "payment"]
+          },
+          {
+            "id": "rate",
+            "component": "Flex",
+            "direction": "column",
+            "gap": "1",
+            "bg": "gray.800",
+            "p": "4",
+            "borderRadius": "lg",
+            "children": ["rate-l", "rate-v"]
+          },
+          {
+            "id": "rate-l",
+            "component": "Text",
+            "text": "Ставка",
+            "fontSize": "sm",
+            "color": "gray.400"
+          },
+          {
+            "id": "rate-v",
+            "component": "Text",
+            "text": {
+              "path": "/offer/rate"
+            },
+            "fontSize": "lg",
+            "fontWeight": "semibold"
+          },
+          {
+            "id": "term",
+            "component": "Flex",
+            "direction": "column",
+            "gap": "1",
+            "bg": "gray.800",
+            "p": "4",
+            "borderRadius": "lg",
+            "children": ["term-l", "term-v"]
+          },
+          {
+            "id": "term-l",
+            "component": "Text",
+            "text": "Срок",
+            "fontSize": "sm",
+            "color": "gray.400"
+          },
+          {
+            "id": "term-v",
+            "component": "Text",
+            "text": {
+              "path": "/offer/term"
+            },
+            "fontSize": "lg",
+            "fontWeight": "semibold"
+          },
+          {
+            "id": "payment",
+            "component": "Flex",
+            "direction": "column",
+            "gap": "1",
+            "bg": "gray.800",
+            "p": "4",
+            "borderRadius": "lg",
+            "children": ["payment-l", "payment-v"]
+          },
+          {
+            "id": "payment-l",
+            "component": "Text",
+            "text": "Платёж в месяц",
+            "fontSize": "sm",
+            "color": "gray.400"
+          },
+          {
+            "id": "payment-v",
+            "component": "Text",
+            "text": {
+              "call": "formatCurrency",
+              "args": {
+                "value": {
+                  "path": "/offer/payment"
+                },
+                "currency": "RUB"
+              }
+            },
+            "fontSize": "lg",
+            "fontWeight": "semibold"
+          },
+          {
+            "id": "conditions",
+            "component": "List",
+            "variant": "unordered",
+            "spacing": "2",
+            "children": {
+              "componentId": "condition",
+              "path": "/offer/conditions"
+            }
+          },
+          {
+            "id": "condition",
+            "component": "Text",
+            "text": {
+              "path": "text"
+            },
+            "color": "gray.300"
+          },
+          {
+            "id": "agree",
+            "component": "Checkbox",
+            "label": "Согласен с условиями кредитного договора",
+            "value": {
+              "path": "/agree"
+            }
+          },
+          {
+            "id": "apply",
+            "component": "Button",
+            "label": "Оформить кредит",
+            "colorScheme": "green",
+            "isFullWidth": true,
+            "action": {
+              "event": {
+                "name": "loan.apply",
+                "context": {
+                  "amount": {
+                    "path": "/offer/amount"
+                  }
+                }
+              }
+            },
+            "checks": [
+              {
+                "condition": {
+                  "path": "/agree"
+                },
+                "message": "Примите условия договора"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -3,14 +3,16 @@ import { Component, type ReactNode } from "react";
 interface Props {
   readonly children: ReactNode;
   readonly onError: (message: string) => void;
+  /** What to show instead of the children after a render error (default: nothing). */
+  readonly fallback?: ((message: string) => ReactNode) | undefined;
 }
 
-/** Keeps a component that throws while rendering from blanking the whole preview. */
-export class RenderBoundary extends Component<Props, { failed: boolean }> {
-  override state = { failed: false };
+/** Keeps a component that throws while rendering from blanking the whole preview (or app). */
+export class RenderBoundary extends Component<Props, { failed: string | undefined }> {
+  override state: { failed: string | undefined } = { failed: undefined };
 
-  static getDerivedStateFromError(): { failed: boolean } {
-    return { failed: true };
+  static getDerivedStateFromError(error: unknown): { failed: string } {
+    return { failed: error instanceof Error ? error.message : String(error) };
   }
 
   override componentDidCatch(error: Error): void {
@@ -18,6 +20,7 @@ export class RenderBoundary extends Component<Props, { failed: boolean }> {
   }
 
   override render(): ReactNode {
-    return this.state.failed ? null : this.props.children;
+    if (this.state.failed === undefined) return this.props.children;
+    return this.props.fallback?.(this.state.failed) ?? null;
   }
 }

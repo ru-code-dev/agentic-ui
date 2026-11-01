@@ -8,15 +8,17 @@
   "scripts": {
     "dev": "vp dev",
     "build": "vp build",
+    "build:subpath": "PLAYGROUND_BASE=/agentic-ui/ vp build",
     "preview": "vp preview",
     "typecheck": "tsgo -p tsconfig.json",
     "e2e": "playwright test",
     "e2e:update": "playwright test --update-snapshots",
-    "test": "vp test run"
+    "test": "vp test run --reporter=verbose"
   },
   "dependencies": {
     "@a2ui/agent": "0.0.2",
     "@a2ui/web_core": "0.14.0",
+    "@agentic-ui/a2ui-react": "workspace:*",
     "@agentic-ui/ui-kit-one-catalog": "workspace:*",
     "@agentic-ui/ui-kit-one-react": "workspace:*",
     "@base-ui/react": "1.6.0",

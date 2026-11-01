@@ -1,12 +1,12 @@
 "use client";
 
-import * as React from "react";
+import { type ElementRef, type ReactElement, forwardRef } from "react";
 
 import { ScrollArea as ScrollAreaPrimitive } from "@base-ui/react/scroll-area";
 import { cn } from "~/lib/utils";
 
-export const ScrollArea = React.forwardRef<
-  React.ElementRef<typeof ScrollAreaPrimitive.Root>,
+export const ScrollArea = forwardRef<
+  ElementRef<typeof ScrollAreaPrimitive.Root>,
   ScrollAreaPrimitive.Root.Props & {
     scrollFade?: boolean;
     scrollbarGutter?: boolean;
@@ -26,7 +26,7 @@ export const ScrollArea = React.forwardRef<
     ...props
   },
   ref,
-): React.ReactElement {
+): ReactElement {
   return (
     <ScrollAreaPrimitive.Root ref={ref} className={cn("size-full min-h-0", className)} {...props}>
       <ScrollAreaPrimitive.Viewport
@@ -55,10 +55,10 @@ export const ScrollArea = React.forwardRef<
   );
 });
 
-export const ScrollBar = React.forwardRef<
-  React.ElementRef<typeof ScrollAreaPrimitive.Scrollbar>,
+export const ScrollBar = forwardRef<
+  ElementRef<typeof ScrollAreaPrimitive.Scrollbar>,
   ScrollAreaPrimitive.Scrollbar.Props
->(function ScrollBar({ className, orientation = "vertical", ...props }, ref): React.ReactElement {
+>(function ScrollBar({ className, orientation = "vertical", ...props }, ref): ReactElement {
   return (
     <ScrollAreaPrimitive.Scrollbar
       ref={ref}

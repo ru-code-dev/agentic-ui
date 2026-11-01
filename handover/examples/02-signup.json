@@ -1,0 +1,261 @@
+{
+  "name": "Регистрация",
+  "description": "Анкета нового клиента: кнопка активна только когда все поля заполнены верно.",
+  "messages": [
+    {
+      "version": "v0.9",
+      "createSurface": {
+        "surfaceId": "signup",
+        "catalogId": "urn:agentic-ui:catalog:ui-kit-one:v1",
+        "sendDataModel": true
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateDataModel": {
+        "surfaceId": "signup",
+        "path": "/form",
+        "value": {
+          "name": "",
+          "email": "",
+          "phone": "",
+          "password": "",
+          "plan": "standard",
+          "news": false
+        }
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateComponents": {
+        "surfaceId": "signup",
+        "components": [
+          {
+            "id": "root",
+            "component": "Container",
+            "maxW": "container.sm",
+            "py": "8",
+            "children": ["card"]
+          },
+          {
+            "id": "card",
+            "component": "Flex",
+            "direction": "column",
+            "gap": "4",
+            "bg": "gray.700",
+            "p": "8",
+            "borderRadius": "xl",
+            "borderWidth": "1px",
+            "borderColor": "whiteAlpha.100",
+            "children": ["title", "name", "email", "phone", "password", "plan", "news", "submit"]
+          },
+          {
+            "id": "title",
+            "component": "Heading",
+            "text": "Откройте счёт за 5 минут",
+            "as": "h1",
+            "size": "lg"
+          },
+          {
+            "id": "name",
+            "component": "Input",
+            "label": "ФИО",
+            "value": {
+              "path": "/form/name"
+            },
+            "placeholder": "Иванова Анна Сергеевна",
+            "isRequired": true,
+            "checks": [
+              {
+                "condition": {
+                  "call": "required",
+                  "args": {
+                    "value": {
+                      "path": "/form/name"
+                    }
+                  }
+                },
+                "message": "Укажите ФИО"
+              }
+            ]
+          },
+          {
+            "id": "email",
+            "component": "Input",
+            "label": "Электронная почта",
+            "value": {
+              "path": "/form/email"
+            },
+            "type": "email",
+            "isRequired": true,
+            "checks": [
+              {
+                "condition": {
+                  "call": "required",
+                  "args": {
+                    "value": {
+                      "path": "/form/email"
+                    }
+                  }
+                },
+                "message": "Укажите почту"
+              },
+              {
+                "condition": {
+                  "call": "email",
+                  "args": {
+                    "value": {
+                      "path": "/form/email"
+                    }
+                  }
+                },
+                "message": "Адрес почты указан неверно"
+              }
+            ]
+          },
+          {
+            "id": "phone",
+            "component": "Input",
+            "label": "Телефон",
+            "value": {
+              "path": "/form/phone"
+            },
+            "type": "tel",
+            "placeholder": "+79991234567",
+            "helperText": "Пришлём код подтверждения",
+            "isRequired": true,
+            "checks": [
+              {
+                "condition": {
+                  "call": "regex",
+                  "args": {
+                    "value": {
+                      "path": "/form/phone"
+                    },
+                    "pattern": "^\\+7\\d{10}$"
+                  }
+                },
+                "message": "Формат: +7 и 10 цифр"
+              }
+            ]
+          },
+          {
+            "id": "password",
+            "component": "Input",
+            "label": "Пароль",
+            "value": {
+              "path": "/form/password"
+            },
+            "type": "password",
+            "isRequired": true,
+            "checks": [
+              {
+                "condition": {
+                  "call": "length",
+                  "args": {
+                    "value": {
+                      "path": "/form/password"
+                    },
+                    "min": 8
+                  }
+                },
+                "message": "Не короче 8 символов"
+              }
+            ]
+          },
+          {
+            "id": "plan",
+            "component": "RadioGroup",
+            "label": "Тариф",
+            "value": {
+              "path": "/form/plan"
+            },
+            "direction": "row",
+            "options": [
+              {
+                "label": "Стандарт",
+                "value": "standard"
+              },
+              {
+                "label": "Премиум",
+                "value": "premium"
+              },
+              {
+                "label": "Студенческий",
+                "value": "student"
+              }
+            ]
+          },
+          {
+            "id": "news",
+            "component": "Switch",
+            "label": "Получать новости и предложения банка",
+            "value": {
+              "path": "/form/news"
+            }
+          },
+          {
+            "id": "submit",
+            "component": "Button",
+            "label": "Создать аккаунт",
+            "colorScheme": "blue",
+            "isFullWidth": true,
+            "action": {
+              "event": {
+                "name": "signup.submit"
+              }
+            },
+            "checks": [
+              {
+                "condition": {
+                  "call": "required",
+                  "args": {
+                    "value": {
+                      "path": "/form/name"
+                    }
+                  }
+                },
+                "message": "ФИО"
+              },
+              {
+                "condition": {
+                  "call": "email",
+                  "args": {
+                    "value": {
+                      "path": "/form/email"
+                    }
+                  }
+                },
+                "message": "Почта"
+              },
+              {
+                "condition": {
+                  "call": "regex",
+                  "args": {
+                    "value": {
+                      "path": "/form/phone"
+                    },
+                    "pattern": "^\\+7\\d{10}$"
+                  }
+                },
+                "message": "Телефон"
+              },
+              {
+                "condition": {
+                  "call": "length",
+                  "args": {
+                    "value": {
+                      "path": "/form/password"
+                    },
+                    "min": 8
+                  }
+                },
+                "message": "Пароль"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

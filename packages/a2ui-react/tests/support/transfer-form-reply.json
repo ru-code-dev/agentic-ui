@@ -1,0 +1,198 @@
+{
+  "$comment": "A6-02: a real model reply to «форма перевода по номеру телефона» (A6 review; status ok, attempts 1): a number field with numeric checks and an empty amount in the data model.",
+  "text": "Форма перевода по номеру телефона готова: два поля (телефон в формате `+7` и сумма с проверкой диапазона от 1 до 600 000 ₽) и кнопка «Перевести», которая остаётся неактивной, пока поля не пройдут валидацию. Нажатие кнопки отправляет событие `transfer.submit` с телефоном и суммой.",
+  "messages": [
+    {
+      "version": "v0.9",
+      "createSurface": {
+        "surfaceId": "phone-transfer",
+        "catalogId": "urn:agentic-ui:catalog:ui-kit-one:v1",
+        "sendDataModel": true
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateDataModel": {
+        "surfaceId": "phone-transfer",
+        "path": "/form",
+        "value": {
+          "phone": "",
+          "amount": ""
+        }
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateComponents": {
+        "surfaceId": "phone-transfer",
+        "components": [
+          {
+            "id": "root",
+            "component": "Container",
+            "maxW": "container.sm",
+            "py": "10",
+            "children": ["card"]
+          },
+          {
+            "id": "card",
+            "component": "Flex",
+            "direction": "column",
+            "gap": "5",
+            "bg": "gray.700",
+            "p": "8",
+            "borderRadius": "xl",
+            "borderWidth": "1px",
+            "borderColor": "whiteAlpha.100",
+            "children": ["title", "subtitle", "phone", "amount", "submit"]
+          },
+          {
+            "id": "title",
+            "component": "Heading",
+            "text": "Перевод по номеру телефона",
+            "as": "h1",
+            "size": "lg"
+          },
+          {
+            "id": "subtitle",
+            "component": "Text",
+            "text": "Отправим деньги на карту получателя по его номеру телефона.",
+            "color": "gray.400"
+          },
+          {
+            "id": "phone",
+            "component": "Input",
+            "label": "Телефон получателя",
+            "value": {
+              "path": "/form/phone"
+            },
+            "type": "tel",
+            "placeholder": "+79991234567",
+            "helperText": "Номер телефона получателя, на карту которого придёт перевод",
+            "isRequired": true,
+            "checks": [
+              {
+                "condition": {
+                  "call": "required",
+                  "args": {
+                    "value": {
+                      "path": "/form/phone"
+                    }
+                  }
+                },
+                "message": "Введите номер телефона"
+              },
+              {
+                "condition": {
+                  "call": "regex",
+                  "args": {
+                    "value": {
+                      "path": "/form/phone"
+                    },
+                    "pattern": "^\\+7\\d{10}$"
+                  }
+                },
+                "message": "Формат: +7 и 10 цифр"
+              }
+            ]
+          },
+          {
+            "id": "amount",
+            "component": "Input",
+            "label": "Сумма перевода",
+            "value": {
+              "path": "/form/amount"
+            },
+            "type": "number",
+            "placeholder": "1000",
+            "helperText": "От 1 ₽ до 600 000 ₽ за один перевод",
+            "isRequired": true,
+            "checks": [
+              {
+                "condition": {
+                  "call": "required",
+                  "args": {
+                    "value": {
+                      "path": "/form/amount"
+                    }
+                  }
+                },
+                "message": "Укажите сумму перевода"
+              },
+              {
+                "condition": {
+                  "call": "numeric",
+                  "args": {
+                    "value": {
+                      "path": "/form/amount"
+                    },
+                    "min": 1
+                  }
+                },
+                "message": "Минимальная сумма — 1 ₽"
+              },
+              {
+                "condition": {
+                  "call": "numeric",
+                  "args": {
+                    "value": {
+                      "path": "/form/amount"
+                    },
+                    "max": 600000
+                  }
+                },
+                "message": "Максимальная сумма — 600 000 ₽"
+              }
+            ]
+          },
+          {
+            "id": "submit",
+            "component": "Button",
+            "label": "Перевести",
+            "colorScheme": "blue",
+            "isFullWidth": true,
+            "action": {
+              "event": {
+                "name": "transfer.submit",
+                "context": {
+                  "phone": {
+                    "path": "/form/phone"
+                  },
+                  "amount": {
+                    "path": "/form/amount"
+                  }
+                }
+              }
+            },
+            "checks": [
+              {
+                "condition": {
+                  "call": "regex",
+                  "args": {
+                    "value": {
+                      "path": "/form/phone"
+                    },
+                    "pattern": "^\\+7\\d{10}$"
+                  }
+                },
+                "message": "Проверьте номер телефона"
+              },
+              {
+                "condition": {
+                  "call": "numeric",
+                  "args": {
+                    "value": {
+                      "path": "/form/amount"
+                    },
+                    "min": 1,
+                    "max": 600000
+                  }
+                },
+                "message": "Сумма должна быть от 1 до 600 000 ₽"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -8,7 +8,7 @@ const here = createRequire(import.meta.url);
 const packageDir = (name: string, from = here) => dirname(from.resolve(`${name}/package.json`));
 const requireFrom = (dir: string) => createRequire(join(dir, "package.json"));
 
-describe("dependency graph", () => {
+describe("dependency graph [INT-04]", () => {
   it("shares one zod between the renderer, the contract and the A2UI libraries", () => {
     const own = here.resolve("zod");
     const contractDir = fileURLToPath(new URL("../../ui-kit-one-catalog/", import.meta.url));

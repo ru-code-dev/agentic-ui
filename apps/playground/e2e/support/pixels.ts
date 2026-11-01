@@ -3,8 +3,12 @@ import { fileURLToPath } from "node:url";
 import pixelmatch from "pixelmatch";
 import { PNG } from "pngjs";
 
+/**
+ * TOOL-I7: e2e screenshots go to the gitignored WORKFLOW/tmp (SV-C18), never into the tracked
+ * docs/screenshots/spike/ (a `pnpm check` must leave the tree clean; the committed images stay as they are).
+ */
 const screenshotsDir = fileURLToPath(
-  new URL("../../../../docs/screenshots/spike/", import.meta.url),
+  new URL("../../../../WORKFLOW/tmp/screenshots/spike/", import.meta.url),
 );
 
 /** Decodes a PNG and crops `inset` pixels from every side. */
@@ -24,7 +28,7 @@ export function differingPixels(a: PNG, b: PNG): number {
   return pixelmatch(a.data, b.data, undefined, a.width, a.height, { threshold: 0.1 });
 }
 
-/** Saves a human-browsable screenshot under docs/screenshots/spike. */
+/** Saves a human-browsable screenshot under WORKFLOW/tmp/screenshots/spike. */
 export function saveScreenshot(name: string, buffer: Buffer): void {
   mkdirSync(screenshotsDir, { recursive: true });
   writeFileSync(`${screenshotsDir}${name}.png`, buffer);

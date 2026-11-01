@@ -5,7 +5,7 @@ import { failOnConsoleNoise } from "./support/console-guard.ts";
 import { components, data, surface } from "./support/messages.ts";
 import { renderMessages } from "./support/render-messages.tsx";
 
-describe("two-way bindings and checks", () => {
+describe("two-way bindings and checks [PR-01]", () => {
   failOnConsoleNoise();
 
   it("Input writes typed text to the data model and shows check messages after editing", async () => {

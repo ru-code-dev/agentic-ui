@@ -1,0 +1,186 @@
+{
+  "name": "Вход",
+  "description": "Вход в интернет-банк по почте и паролю с проверкой полей.",
+  "messages": [
+    {
+      "version": "v0.9",
+      "createSurface": {
+        "surfaceId": "login",
+        "catalogId": "urn:agentic-ui:catalog:ui-kit-one:v1",
+        "sendDataModel": true
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateDataModel": {
+        "surfaceId": "login",
+        "path": "/form",
+        "value": {
+          "email": "",
+          "password": "",
+          "remember": true
+        }
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateComponents": {
+        "surfaceId": "login",
+        "components": [
+          {
+            "id": "root",
+            "component": "Container",
+            "maxW": "container.sm",
+            "py": "10",
+            "children": ["card"]
+          },
+          {
+            "id": "card",
+            "component": "Flex",
+            "direction": "column",
+            "gap": "5",
+            "bg": "gray.700",
+            "p": "8",
+            "borderRadius": "xl",
+            "borderWidth": "1px",
+            "borderColor": "whiteAlpha.100",
+            "children": ["title", "subtitle", "email", "password", "remember", "submit"]
+          },
+          {
+            "id": "title",
+            "component": "Heading",
+            "text": "Вход в интернет-банк",
+            "as": "h1",
+            "size": "lg"
+          },
+          {
+            "id": "subtitle",
+            "component": "Text",
+            "text": "Используйте почту, указанную при открытии счёта.",
+            "color": "gray.400"
+          },
+          {
+            "id": "email",
+            "component": "Input",
+            "label": "Электронная почта",
+            "value": {
+              "path": "/form/email"
+            },
+            "type": "email",
+            "placeholder": "name@example.ru",
+            "isRequired": true,
+            "checks": [
+              {
+                "condition": {
+                  "call": "required",
+                  "args": {
+                    "value": {
+                      "path": "/form/email"
+                    }
+                  }
+                },
+                "message": "Введите адрес почты"
+              },
+              {
+                "condition": {
+                  "call": "email",
+                  "args": {
+                    "value": {
+                      "path": "/form/email"
+                    }
+                  }
+                },
+                "message": "Адрес почты указан неверно"
+              }
+            ]
+          },
+          {
+            "id": "password",
+            "component": "Input",
+            "label": "Пароль",
+            "value": {
+              "path": "/form/password"
+            },
+            "type": "password",
+            "isRequired": true,
+            "checks": [
+              {
+                "condition": {
+                  "call": "length",
+                  "args": {
+                    "value": {
+                      "path": "/form/password"
+                    },
+                    "min": 8
+                  }
+                },
+                "message": "Не короче 8 символов"
+              }
+            ]
+          },
+          {
+            "id": "remember",
+            "component": "Checkbox",
+            "label": "Запомнить меня на этом устройстве",
+            "value": {
+              "path": "/form/remember"
+            }
+          },
+          {
+            "id": "submit",
+            "component": "Button",
+            "label": "Войти",
+            "colorScheme": "blue",
+            "isFullWidth": true,
+            "action": {
+              "event": {
+                "name": "login.submit",
+                "context": {
+                  "email": {
+                    "path": "/form/email"
+                  }
+                }
+              }
+            },
+            "checks": [
+              {
+                "condition": {
+                  "call": "required",
+                  "args": {
+                    "value": {
+                      "path": "/form/email"
+                    }
+                  }
+                },
+                "message": "Введите почту"
+              },
+              {
+                "condition": {
+                  "call": "email",
+                  "args": {
+                    "value": {
+                      "path": "/form/email"
+                    }
+                  }
+                },
+                "message": "Неверная почта"
+              },
+              {
+                "condition": {
+                  "call": "length",
+                  "args": {
+                    "value": {
+                      "path": "/form/password"
+                    },
+                    "min": 8
+                  }
+                },
+                "message": "Короткий пароль"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

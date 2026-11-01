@@ -1,0 +1,75 @@
+[
+  {
+    "version": "v0.9",
+    "deleteSurface": {
+      "surfaceId": "agent-fallback"
+    }
+  },
+  {
+    "version": "v0.9",
+    "createSurface": {
+      "surfaceId": "agent-fallback",
+      "catalogId": "urn:agentic-ui:catalog:ui-kit-one:v1"
+    }
+  },
+  {
+    "version": "v0.9",
+    "updateComponents": {
+      "surfaceId": "agent-fallback",
+      "components": [
+        {
+          "id": "root",
+          "component": "Container",
+          "maxW": "container.sm",
+          "py": "8",
+          "children": [
+            "card"
+          ]
+        },
+        {
+          "id": "card",
+          "component": "Flex",
+          "direction": "column",
+          "align": "center",
+          "gap": "4",
+          "p": "8",
+          "children": [
+            "icon",
+            "title",
+            "body",
+            "retry"
+          ]
+        },
+        {
+          "id": "icon",
+          "component": "Icon",
+          "name": "warning",
+          "boxSize": "10"
+        },
+        {
+          "id": "title",
+          "component": "Heading",
+          "text": "Не удалось построить интерфейс",
+          "size": "md",
+          "textAlign": "center"
+        },
+        {
+          "id": "body",
+          "component": "Text",
+          "text": "Агент не смог подготовить корректный интерфейс. Попробуйте ещё раз.",
+          "textAlign": "center"
+        },
+        {
+          "id": "retry",
+          "component": "Button",
+          "label": "Повторить",
+          "action": {
+            "event": {
+              "name": "agent.retry"
+            }
+          }
+        }
+      ]
+    }
+  }
+]

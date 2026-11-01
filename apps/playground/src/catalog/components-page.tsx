@@ -25,11 +25,11 @@ export function ComponentsPage() {
               className="group flex flex-col overflow-hidden rounded-xl border bg-card transition-colors hover:border-white/15"
               data-testid={`card-${example.name}`}
             >
-              <div className="relative h-44 overflow-hidden bg-[#1a202c]">
+              <div className="relative h-44 overflow-hidden bg-(--kit-page-bg)">
                 <div className="absolute inset-0 flex items-center justify-center overflow-hidden p-4 [&_[data-ui-kit-root]]:max-w-full">
                   <SnippetPreview messages={example.messages} />
                 </div>
-                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-[#1a202c] to-transparent" />
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-(--kit-page-bg) to-transparent" />
               </div>
               <Link
                 to={`/components/${example.name}`}

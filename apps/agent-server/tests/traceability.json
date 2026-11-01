@@ -1,0 +1,224 @@
+{
+  "$comment": "DEC-032: Python test (path under apps/agent-server/tests/::Class.test_name) -> requirement IDs it proves. Checked by pnpm check:trace (scripts/traceability). New tests may instead carry [ID] tags in their docstring.",
+  "tests": {
+    "integration/test_fake_qwen.py::FakeQwenTest.test_b1_crash_then_restart": ["P2-tiers"],
+    "integration/test_fake_qwen.py::FakeQwenTest.test_c1_garbage_never_hangs": ["P2-tiers"],
+    "integration/test_fake_qwen.py::FakeQwenTest.test_flow_permission_auto_approved_without_mode": [
+      "SV-C10"
+    ],
+    "integration/test_fake_qwen.py::FakeQwenTest.test_flow_scripted_replies_per_turn": ["P2-tiers"],
+    "integration/test_fake_qwen.py::FakeQwenTest.test_hold_cancel": ["P2-tiers"],
+    "integration/test_fake_qwen.py::FakeQwenTest.test_ok": ["P2-tiers", "SV-C13"],
+    "integration/test_fake_qwen.py::FakeQwenTest.test_rpc_errors": ["P2-tiers"],
+    "integration/test_fake_qwen.py::FakeQwenTest.test_start_error": ["P2-tiers"],
+    "integration/test_fake_qwen.py::FakeQwenTest.test_start_hang_times_out": ["P2-tiers"],
+    "integration/test_real_qwen_fake_llm.py::RealQwenFakeLlmTest.test_auto_approve_picks_allow_always_in_qwen_default_mode": [
+      "SV-C10"
+    ],
+    "integration/test_real_qwen_fake_llm.py::RealQwenFakeLlmTest.test_auto_approve_without_any_mode": [
+      "SV-C10"
+    ],
+    "integration/test_real_qwen_fake_llm.py::RealQwenFakeLlmTest.test_cancel_during_delayed_reply": [
+      "SV-C6"
+    ],
+    "integration/test_real_qwen_fake_llm.py::RealQwenFakeLlmTest.test_check_agent_cli": [
+      "P2-check-agent",
+      "SV-C13"
+    ],
+    "integration/test_real_qwen_fake_llm.py::RealQwenFakeLlmTest.test_initialize_and_session_shape": [
+      "SV-C5"
+    ],
+    "integration/test_real_qwen_fake_llm.py::RealQwenFakeLlmTest.test_one_turn_lean_prompt_no_tools_no_followup_call": [
+      "SV-C24"
+    ],
+    "integration/test_real_qwen_fake_llm.py::RealQwenFakeLlmTest.test_optional_set_mode_yolo": [
+      "P2-tiers"
+    ],
+    "integration/test_real_qwen_fake_llm.py::RealQwenFakeLlmTest.test_question_rejected_turn_completes": [
+      "SV-C14"
+    ],
+    "integration/test_real_qwen_fake_llm.py::RealQwenFakeLlmTest.test_skipped_authenticate_still_works": [
+      "P2-tiers"
+    ],
+    "integration/test_real_qwen_llm.py::RealQwenLlmTest.test_1_reply_ok_and_cancel": [
+      "SV-C6",
+      "P2-tiers"
+    ],
+    "integration/test_real_qwen_llm.py::RealQwenLlmTest.test_2_check_agent_cli": ["P2-check-agent"],
+    "unit/test_client.py::ClientTest.test_authenticate_is_optional": ["P2-client"],
+    "unit/test_client.py::ClientTest.test_cancel_is_a_notification": ["P2-client"],
+    "unit/test_client.py::ClientTest.test_initialize_payload_exact": ["SV-C5", "P2-client"],
+    "unit/test_client.py::ClientTest.test_permission_request_auto_answered_allow_always": [
+      "P2-client"
+    ],
+    "unit/test_client.py::ClientTest.test_prompt_returns_stop_reason_and_streams_updates": [
+      "P2-client"
+    ],
+    "unit/test_client.py::ClientTest.test_protocol_version_mismatch": ["P2-client"],
+    "unit/test_client.py::ClientTest.test_question_permission_rejected_and_turn_completes": [
+      "SV-C14"
+    ],
+    "unit/test_client.py::ClientTest.test_set_mode_falls_back_to_set_config_option": ["P2-client"],
+    "unit/test_client.py::ClientTest.test_set_mode_other_errors_propagate": ["P2-client"],
+    "unit/test_client.py::ClientTest.test_suppress_updates": ["P2-client"],
+    "unit/test_client.py::ClientTest.test_unknown_client_requests_get_32601_and_turn_completes": [
+      "P2-client"
+    ],
+    "unit/test_config.py::ConfigTest.test_args_use_shlex": ["P2-config"],
+    "unit/test_config.py::ConfigTest.test_bad_values_name_the_key": ["P2-config"],
+    "unit/test_config.py::ConfigTest.test_coercion": ["P2-config"],
+    "unit/test_config.py::ConfigTest.test_config_path_from_env": ["P2-config"],
+    "unit/test_config.py::ConfigTest.test_defaults": ["SV-C4", "SV-C15", "P2-config"],
+    "unit/test_config.py::ConfigTest.test_describe_masks_secrets_and_omits_environ": ["SV-C16"],
+    "unit/test_config.py::ConfigTest.test_env_beats_toml_and_argv_beats_env": ["P2-config"],
+    "unit/test_config.py::ConfigTest.test_model_apply_validated": ["SV-C15"],
+    "unit/test_config.py::ConfigTest.test_settings_are_frozen_and_repr_hides_environ": [
+      "P2-config"
+    ],
+    "unit/test_config.py::ConfigTest.test_system_settings_json": ["P2-config"],
+    "unit/test_config.py::ConfigTest.test_toml_overrides": ["P2-config"],
+    "unit/test_config.py::ConfigTest.test_unknown_set_key_names_the_key": ["P2-config"],
+    "unit/test_config.py::ConfigTest.test_unknown_toml_key_names_the_key": ["P2-config"],
+    "unit/test_config.py::ConfigTest.test_xdg_dirs": ["P2-config"],
+    "unit/test_example_config.py::ExampleConfigTest.test_dev_config_only_adds_neutral_provider_flags": [
+      "SV-C15"
+    ],
+    "unit/test_example_config.py::ExampleConfigTest.test_example_lists_every_setting": [
+      "P2-config"
+    ],
+    "unit/test_example_config.py::ExampleConfigTest.test_example_values_equal_code_defaults": [
+      "SV-C4"
+    ],
+    "unit/test_hygiene.py::HygieneTest.test_every_python_file_within_250_lines": ["SV-C3"],
+    "unit/test_hygiene.py::HygieneTest.test_no_silent_except": ["SV-C16"],
+    "unit/test_hygiene.py::HygieneTest.test_only_config_reads_the_environment": ["SV-C4"],
+    "unit/test_hygiene.py::HygieneTest.test_only_process_spawns": ["SV-C4"],
+    "unit/test_hygiene.py::HygieneTest.test_runs_on_python_313": ["SV-C1"],
+    "unit/test_hygiene.py::HygieneTest.test_stdlib_imports_only": ["SV-C1"],
+    "unit/test_jsonrpc.py::JsonRpcTest.test_concurrent_writes_do_not_interleave": ["P2-jsonrpc"],
+    "unit/test_jsonrpc.py::JsonRpcTest.test_eof_fails_pending": ["P2-jsonrpc"],
+    "unit/test_jsonrpc.py::JsonRpcTest.test_error_response_raises_rpc_error": ["P2-jsonrpc"],
+    "unit/test_jsonrpc.py::JsonRpcTest.test_handler_exception_gets_32603_and_typed_errors_keep_code": [
+      "P2-jsonrpc"
+    ],
+    "unit/test_jsonrpc.py::JsonRpcTest.test_inbound_request_answered": ["P2-jsonrpc"],
+    "unit/test_jsonrpc.py::JsonRpcTest.test_large_line_accepted": ["P2-jsonrpc"],
+    "unit/test_jsonrpc.py::JsonRpcTest.test_non_json_line_skipped": ["P2-jsonrpc"],
+    "unit/test_jsonrpc.py::JsonRpcTest.test_out_of_order_responses": ["P2-jsonrpc"],
+    "unit/test_jsonrpc.py::JsonRpcTest.test_request_response_and_integer_ids_from_1": [
+      "P2-jsonrpc"
+    ],
+    "unit/test_jsonrpc.py::JsonRpcTest.test_response_with_method_is_not_matched": ["P2-jsonrpc"],
+    "unit/test_jsonrpc.py::JsonRpcTest.test_session_update_with_empty_id_is_a_notification": [
+      "P2-jsonrpc"
+    ],
+    "unit/test_jsonrpc.py::JsonRpcTest.test_timeout": ["P2-jsonrpc"],
+    "unit/test_jsonrpc.py::JsonRpcTest.test_unknown_inbound_request_gets_32601": ["P2-jsonrpc"],
+    "unit/test_log.py::LogTest.test_env_secrets_redacted_in_records": ["SV-C16"],
+    "unit/test_log.py::LogTest.test_level": ["SV-C16"],
+    "unit/test_log.py::LogTest.test_redact_text_and_short_values_ignored": ["SV-C16"],
+    "unit/test_logging.py::LoggingTest.test_crash_logged_with_exit_code_and_stderr": ["SV-C16"],
+    "unit/test_logging.py::LoggingTest.test_stderr_streamed_live_and_lifecycle_logged_without_secrets": [
+      "SV-C16"
+    ],
+    "unit/test_main.py::MainTest.test_check_agent_failure_exit_code": ["P2-check-agent"],
+    "unit/test_main.py::MainTest.test_check_agent_reports_json": ["P2-check-agent"],
+    "unit/test_main.py::MainTest.test_config_error_exit_code_2": ["P2-check-agent"],
+    "unit/test_main.py::MainTest.test_env_config_source": ["P2-check-agent"],
+    "unit/test_manager.py::ManagerTest.test_cancel_reaches_busy_session_while_another_waits": [
+      "SV-C11"
+    ],
+    "unit/test_manager.py::ManagerTest.test_different_chats_parallel_in_separate_processes": [
+      "SV-C11"
+    ],
+    "unit/test_manager.py::ManagerTest.test_idle_reaper_closes_and_forgets": ["SV-C19"],
+    "unit/test_manager.py::ManagerTest.test_lru_eviction_at_cap_skips_busy": ["SV-C19"],
+    "unit/test_manager.py::ManagerTest.test_one_process_per_chat_no_pool_or_spares": ["SV-C19"],
+    "unit/test_manager.py::ManagerTest.test_queue_overflow": ["SV-C11"],
+    "unit/test_manager.py::ManagerTest.test_same_chat_serialized_fifo": ["SV-C11"],
+    "unit/test_manager.py::ManagerTest.test_shutdown_closes_all": ["P2-session"],
+    "unit/test_manager.py::ManagerTest.test_two_waiters_do_not_deadlock": ["SV-C11"],
+    "unit/test_manager.py::ManagerTest.test_waits_for_a_slot_when_all_busy": ["SV-C19"],
+    "unit/test_model.py::ModelTest.test_falls_back_to_session_set_model": ["SV-C15"],
+    "unit/test_model.py::ModelTest.test_missing_method_is_a_warning_and_the_turn_works": ["SV-C15"],
+    "unit/test_model.py::ModelTest.test_no_model_configured_never_touches_the_model": ["SV-C15"],
+    "unit/test_model_policy.py::ModelPolicyTest.test_detector_catches_providers_models_urls_and_keys": [
+      "SV-C17"
+    ],
+    "unit/test_model_policy.py::ModelPolicyTest.test_no_committed_file_names_a_provider_or_model": [
+      "SV-C17"
+    ],
+    "unit/test_permissions.py::ChooseOptionTest.test_only_allow_once": ["SV-C10"],
+    "unit/test_permissions.py::ChooseOptionTest.test_qwen_options_pick_allow_always_project": [
+      "SV-C10"
+    ],
+    "unit/test_permissions.py::QuestionTest.test_detection_rules": ["SV-C14"],
+    "unit/test_permissions.py::QuestionTest.test_question_rejected_with_reject_once": ["SV-C14"],
+    "unit/test_permissions.py::QuestionTest.test_question_without_reject_option_is_cancelled": [
+      "SV-C14"
+    ],
+    "unit/test_resources.py::ResourcesTest.test_agent_files": ["P2-resources"],
+    "unit/test_resources.py::ResourcesTest.test_bundled_prompt_extracted_once": ["P2-resources"],
+    "unit/test_resources.py::ResourcesTest.test_override_file": ["P2-resources"],
+    "unit/test_session.py::SessionTest.test_authenticate_failure_is_a_warning": ["P2-session"],
+    "unit/test_session.py::SessionTest.test_cancel_ignored_kills_after_grace": [
+      "SV-C6",
+      "P2-session"
+    ],
+    "unit/test_session.py::SessionTest.test_cancel_returns_cancelled": ["SV-C6", "P2-session"],
+    "unit/test_session.py::SessionTest.test_configured_mode_set_when_advertised_and_skipped_when_missing": [
+      "P2-session"
+    ],
+    "unit/test_session.py::SessionTest.test_exit_during_start_reports_stderr_tail": ["P2-session"],
+    "unit/test_session.py::SessionTest.test_late_prompt_error_after_cancel_reported_as_cancelled": [
+      "P2-session"
+    ],
+    "unit/test_session.py::SessionTest.test_no_mode_configured_never_calls_set_mode": ["SV-C10"],
+    "unit/test_session.py::SessionTest.test_question_rejected_and_turn_completes": ["SV-C14"],
+    "unit/test_session.py::SessionTest.test_rpc_error_during_start": ["P2-session"],
+    "unit/test_session.py::SessionTest.test_spawn_error": ["P2-session"],
+    "unit/test_session.py::SessionTest.test_start_ok": ["P2-session"],
+    "unit/test_session.py::SessionTest.test_start_timeout_kills_process": ["P2-session"],
+    "unit/test_session.py::SessionTest.test_stdout_garbage_before_initialize_tolerated": [
+      "P2-session"
+    ],
+    "unit/test_session.py::SessionTest.test_turn_collects_text_tools_usage": ["P2-session"],
+    "unit/test_session.py::SessionTest.test_turn_timeout_cancels": ["P2-session"],
+    "unit/test_session_restart.py::SessionRestartTest.test_caller_cancellation_kills_the_turn": [
+      "P2-session"
+    ],
+    "unit/test_session_restart.py::SessionRestartTest.test_close_terminates_process": [
+      "P2-session"
+    ],
+    "unit/test_session_restart.py::SessionRestartTest.test_crash_mid_turn": ["P2-session"],
+    "unit/test_session_restart.py::SessionRestartTest.test_restart_after_crash_uses_session_load_with_replay_suppressed": [
+      "P2-session"
+    ],
+    "unit/test_session_restart.py::SessionRestartTest.test_restart_falls_back_to_session_new_when_load_fails": [
+      "P2-session"
+    ],
+    "unit/test_spawn.py::SpawnTest.test_agent_env_beats_inherited": ["P2-spawn"],
+    "unit/test_spawn.py::SpawnTest.test_bare_command_runs_directly": ["P2-spawn"],
+    "unit/test_spawn.py::SpawnTest.test_default_argv_has_no_provider_or_model_flags": ["SV-C15"],
+    "unit/test_spawn.py::SpawnTest.test_empty_home_omitted": ["P2-spawn"],
+    "unit/test_spawn.py::SpawnTest.test_env_name_aliases": ["P2-spawn"],
+    "unit/test_spawn.py::SpawnTest.test_js_entry_runs_with_node": ["P2-spawn"],
+    "unit/test_spawn.py::SpawnTest.test_passthrough_only_when_not_inheriting": ["P2-spawn"],
+    "unit/test_spawn.py::SpawnTest.test_registry_rows_written_last": ["P2-spawn"],
+    "unit/test_spawn.py::SpawnTest.test_repr_hides_env_values": ["P2-spawn"],
+    "unit/test_spawn.py::SpawnTest.test_tls_insecure": ["P2-spawn"],
+    "unit/test_spawn.py::SpawnTest.test_ts_entry_uses_strip_types": ["P2-spawn"],
+    "unit/test_turn.py::TurnCollectorTest.test_chunks_concatenated": ["P2-turn"],
+    "unit/test_turn.py::TurnCollectorTest.test_final_empty_chunk_with_usage": ["P2-turn"],
+    "unit/test_turn.py::TurnCollectorTest.test_permission_carries_raw_input_without_tool_call_frame": [
+      "P2-turn"
+    ],
+    "unit/test_turn.py::TurnCollectorTest.test_plan_and_usage_update": ["P2-turn"],
+    "unit/test_turn.py::TurnCollectorTest.test_question_permission_recorded_as_question": [
+      "P2-turn"
+    ],
+    "unit/test_turn.py::TurnCollectorTest.test_thoughts_kept_separate": ["P2-turn"],
+    "unit/test_turn.py::TurnCollectorTest.test_tool_call_lifecycle": ["P2-turn"],
+    "unit/test_turn.py::TurnCollectorTest.test_unknown_kinds_counted_not_fatal": ["P2-turn"]
+  }
+}

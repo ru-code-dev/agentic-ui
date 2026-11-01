@@ -23,6 +23,10 @@ const EVENTS: Record<string, readonly string[]> = {
   "18-bank-bill-payment": ["bill.pay"],
   "19-bank-fraud-alert": ["fraud.confirm", "fraud.block"],
   "20-bank-spending-summary": [],
+  "21-order-statuses": ["orders.refresh"],
+  "22-payment-history": ["payment.repeat"],
+  "23-transfer-confirm-modal": ["transfer.confirm", "transfer.cancel"],
+  "24-task-checklist": ["checklist.save"],
 };
 
 const json = (value: unknown) => JSON.stringify(value);
@@ -33,8 +37,8 @@ const components = (messages: readonly Record<string, unknown>[]) =>
         ?.components ?? [],
   );
 
-describe("example compositions", () => {
-  it("are the 20 compositions of the spec, each with a name and description", () => {
+describe("example compositions [INT-06, PR-01]", () => {
+  it("are the 24 compositions of the spec, each with a name and description [INT-06, EX-01..24]", () => {
     expect(
       compositions.map((example) => example.file.replace(/^compositions\/|\.json$/g, "")),
     ).toEqual(Object.keys(EVENTS));
@@ -44,7 +48,7 @@ describe("example compositions", () => {
     }
   });
 
-  it("fire exactly the action events the spec lists (plus modal.open on Modal triggers)", () => {
+  it("fire exactly the action events the spec lists (plus modal.open on Modal triggers) [EX-01..24]", () => {
     for (const example of compositions) {
       const events = [...json(example.messages).matchAll(/"event":\{"name":"([^"]+)"/g)].map(
         (match) => match[1],

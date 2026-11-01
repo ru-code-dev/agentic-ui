@@ -1,0 +1,185 @@
+{
+  "name": "Подозрительная операция",
+  "description": "Предупреждение службы безопасности с выбором действия.",
+  "messages": [
+    {
+      "version": "v0.9",
+      "createSurface": {
+        "surfaceId": "fraud",
+        "catalogId": "urn:agentic-ui:catalog:ui-kit-one:v1"
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateDataModel": {
+        "surfaceId": "fraud",
+        "path": "/operation",
+        "value": {
+          "merchant": "ALIEXPRESS*SHOP",
+          "amount": 23990,
+          "place": "Шэньчжэнь, Китай",
+          "time": "24.10.2026, 03:12",
+          "card": "•• 4821"
+        }
+      }
+    },
+    {
+      "version": "v0.9",
+      "updateComponents": {
+        "surfaceId": "fraud",
+        "components": [
+          {
+            "id": "root",
+            "component": "Container",
+            "maxW": "container.sm",
+            "py": "8",
+            "children": ["card"]
+          },
+          {
+            "id": "card",
+            "component": "Flex",
+            "direction": "column",
+            "gap": "5",
+            "bg": "gray.700",
+            "p": "8",
+            "borderRadius": "xl",
+            "borderWidth": "2px",
+            "borderColor": "orange.400",
+            "children": ["icon", "title", "text", "details", "actions"]
+          },
+          {
+            "id": "icon",
+            "component": "Icon",
+            "name": "warning",
+            "color": "orange.300",
+            "boxSize": "10"
+          },
+          {
+            "id": "title",
+            "component": "Heading",
+            "text": "Это вы совершили операцию?",
+            "as": "h1",
+            "size": "md"
+          },
+          {
+            "id": "text",
+            "component": "Text",
+            "text": "Мы приостановили списание и ждём вашего решения.",
+            "color": "gray.300"
+          },
+          {
+            "id": "details",
+            "component": "Grid",
+            "columns": 2,
+            "gap": "3",
+            "bg": "gray.800",
+            "p": "4",
+            "borderRadius": "lg",
+            "children": ["m-l", "m", "a-l", "a", "p-l", "p", "t-l", "t"]
+          },
+          {
+            "id": "m-l",
+            "component": "Text",
+            "text": "Магазин",
+            "color": "gray.400"
+          },
+          {
+            "id": "m",
+            "component": "Text",
+            "text": {
+              "path": "/operation/merchant"
+            }
+          },
+          {
+            "id": "a-l",
+            "component": "Text",
+            "text": "Сумма",
+            "color": "gray.400"
+          },
+          {
+            "id": "a",
+            "component": "Text",
+            "text": {
+              "call": "formatCurrency",
+              "args": {
+                "value": {
+                  "path": "/operation/amount"
+                },
+                "currency": "RUB"
+              }
+            },
+            "fontWeight": "bold"
+          },
+          {
+            "id": "p-l",
+            "component": "Text",
+            "text": "Место",
+            "color": "gray.400"
+          },
+          {
+            "id": "p",
+            "component": "Text",
+            "text": {
+              "path": "/operation/place"
+            }
+          },
+          {
+            "id": "t-l",
+            "component": "Text",
+            "text": "Время",
+            "color": "gray.400"
+          },
+          {
+            "id": "t",
+            "component": "Text",
+            "text": {
+              "path": "/operation/time"
+            }
+          },
+          {
+            "id": "actions",
+            "component": "Flex",
+            "gap": "3",
+            "children": ["mine", "block"]
+          },
+          {
+            "id": "mine",
+            "component": "Button",
+            "label": "Это я",
+            "variant": "outline",
+            "isFullWidth": true,
+            "leftIcon": "check",
+            "action": {
+              "event": {
+                "name": "fraud.confirm",
+                "context": {
+                  "card": {
+                    "path": "/operation/card"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": "block",
+            "component": "Button",
+            "label": "Заблокировать карту",
+            "colorScheme": "red",
+            "isFullWidth": true,
+            "leftIcon": "lock",
+            "action": {
+              "event": {
+                "name": "fraud.block",
+                "context": {
+                  "card": {
+                    "path": "/operation/card"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

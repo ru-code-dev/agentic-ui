@@ -1,6 +1,13 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { compositions, findExample, mockRulePresets, type Example } from "../examples.ts";
+import {
+  DEFAULT_PROMPT_EXAMPLES,
+  compositions,
+  findExample,
+  mockRulePresets,
+  type Example,
+} from "../examples.ts";
+import { newId } from "../lib/new-id.ts";
 
 export interface MockRule {
   readonly id: string;
@@ -49,7 +56,7 @@ const initial = {
   landscape: false,
   fitToPane: true,
   mockRules: presetRules(),
-  promptExamples: 5,
+  promptExamples: DEFAULT_PROMPT_EXAMPLES,
 };
 
 /** Workspace state persisted in localStorage (PG-15): editor, selection, device, mock rules. */
@@ -70,7 +77,7 @@ export const useWorkspace = create<WorkspaceState>()(
         set((state) => ({
           mockRules: [
             ...state.mockRules,
-            { id: crypto.randomUUID(), event: "", messages: "[]", enabled: true, ...rule },
+            { id: newId(), event: "", messages: "[]", enabled: true, ...rule },
           ],
         })),
       updateRule: (id, patch) =>

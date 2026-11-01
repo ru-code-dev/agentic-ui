@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { type ElementRef, type ReactElement, forwardRef } from "react";
 
 import { Tooltip as TooltipPrimitive } from "@base-ui/react/tooltip";
 import { cn } from "~/lib/utils";
@@ -12,14 +12,14 @@ export const TooltipProvider: typeof TooltipPrimitive.Provider = TooltipPrimitiv
 
 export const Tooltip: typeof TooltipPrimitive.Root = TooltipPrimitive.Root;
 
-export const TooltipTrigger = React.forwardRef<HTMLButtonElement, TooltipPrimitive.Trigger.Props>(
-  function TooltipTrigger(props, ref): React.ReactElement {
+export const TooltipTrigger = forwardRef<HTMLButtonElement, TooltipPrimitive.Trigger.Props>(
+  function TooltipTrigger(props, ref): ReactElement {
     return <TooltipPrimitive.Trigger ref={ref} data-slot="tooltip-trigger" {...props} />;
   },
 );
 
-export const TooltipPopup = React.forwardRef<
-  React.ElementRef<typeof TooltipPrimitive.Popup>,
+export const TooltipPopup = forwardRef<
+  ElementRef<typeof TooltipPrimitive.Popup>,
   TooltipPrimitive.Popup.Props & {
     align?: TooltipPrimitive.Positioner.Props["align"];
     side?: TooltipPrimitive.Positioner.Props["side"];
@@ -39,7 +39,7 @@ export const TooltipPopup = React.forwardRef<
     ...props
   },
   ref,
-): React.ReactElement {
+): ReactElement {
   return (
     <TooltipPrimitive.Portal {...portalProps}>
       <TooltipPrimitive.Positioner

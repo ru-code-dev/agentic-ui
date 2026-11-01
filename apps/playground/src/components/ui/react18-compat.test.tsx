@@ -5,17 +5,8 @@ import { afterEach, beforeEach, describe, expect, it, vi, type MockInstance } fr
 import { Badge } from "./badge.tsx";
 import { Button } from "./button.tsx";
 import { Checkbox } from "./checkbox.tsx";
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from "./empty.tsx";
 import { Input } from "./input.tsx";
-import { Kbd, KbdGroup } from "./kbd.tsx";
-import { Label } from "./label.tsx";
+import { Kbd } from "./kbd.tsx";
 import { ScrollArea } from "./scroll-area.tsx";
 import { SegmentedControl, SegmentedControlItem } from "./segmented-control.tsx";
 import { Select, SelectItem, SelectPopup, SelectTrigger, SelectValue } from "./select.tsx";
@@ -37,16 +28,8 @@ const CASES: readonly Case[] = [
   ["Badge", (ref) => <Badge ref={ref}>Новое</Badge>],
   ["Button", (ref) => <Button ref={ref}>Сохранить</Button>],
   ["Checkbox", (ref) => <Checkbox ref={ref} aria-label="Согласен" />],
-  ["Empty", (ref) => <Empty ref={ref}>Пусто</Empty>],
-  ["EmptyHeader", (ref) => <EmptyHeader ref={ref}>Заголовок</EmptyHeader>],
-  ["EmptyMedia", (ref) => <EmptyMedia ref={ref}>•</EmptyMedia>],
-  ["EmptyTitle", (ref) => <EmptyTitle ref={ref}>Нет данных</EmptyTitle>],
-  ["EmptyDescription", (ref) => <EmptyDescription ref={ref}>Описание</EmptyDescription>],
-  ["EmptyContent", (ref) => <EmptyContent ref={ref}>Содержимое</EmptyContent>],
   ["Input", (ref) => <Input ref={ref} aria-label="Имя" />],
   ["Kbd", (ref) => <Kbd ref={ref}>⌘</Kbd>],
-  ["KbdGroup", (ref) => <KbdGroup ref={ref}>⌘S</KbdGroup>],
-  ["Label", (ref) => <Label ref={ref}>Подпись</Label>],
   ["ScrollArea", (ref) => <ScrollArea ref={ref}>Прокрутка</ScrollArea>],
   ["SegmentedControl", (ref) => <SegmentedControl ref={ref}>Сегменты</SegmentedControl>],
   [
